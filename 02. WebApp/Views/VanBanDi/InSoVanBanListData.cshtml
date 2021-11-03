@@ -1,0 +1,85 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.v_InSoVanBanDiListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+    var typeUser = (string)ViewBag.typeUser;
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.lstVanBanDi != null && Model.lstVanBanDi.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.lstVanBanDi)
+    {
+        index++;
+        <tr>
+
+            @*<td align="center">@index</td>*@
+            <td align="center">@item.SoKyHieu</td>
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(item.NgayBanHanh)</td>
+            <td class="tal">
+                @Html.Raw(item.TenLoaiVanBan)
+                @Html.Raw(!string.IsNullOrEmpty(item.TrichYeu) ? "</br>" + item.TrichYeu : "")
+            </td>
+            <td class="tal">@Html.Raw(item.NguoiKy)</td>
+            <td class="tal">@Html.Raw(item.ListDonViNhanNoiBo)</td>
+            <td class="tal">@Html.Raw(item.ListDonViNhanLT)</td>
+            <td class="tal">@Html.Raw(item.LstDonViNhanBanLuu)</td>
+            <td align="center">@item.SoBanPhatHanh</td>
+            <td class="tal">
+                @Html.Raw("")
+            </td>
+        </tr>
+    }
+
+}
+@if (Model != null && Model.lstVanBanDi == null || Model.lstVanBanDi.Count == 0)
+{
+    <tr>
+        <td colspan="12" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="12">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("InSoVanBanListData", "VanBanDi", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   PhamViTimKiem = Model.PhamViTimKiem,
+                   TuKhoa = Model.TuKhoa,
+                   SoVanBanDiID = Model.SoVanBanDiID,
+                   NamVaoSo = Model.NamVaoSo,
+                   CoQuanBanHanhID = Model.CoQuanBanHanhID,
+                   TuNgayNVB = Model.TuNgayNVB,
+                   DenNgayNVB = Model.DenNgayNVB,
+                   DonViNhanNoiBoID = Model.DonViNhanBanLuuID,
+                   NguoiKyID = Model.NguoiKyID,
+                   DonViNhanLT = Model.DonViNhanLT,
+                   LoaiVanBanID = Model.LoaiVanBanID,
+                   DonViNhanBanLuuID = Model.DonViNhanBanLuuID,
+                   tab = Model.tab
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem văn bản
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+

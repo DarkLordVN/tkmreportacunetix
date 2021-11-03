@@ -1,0 +1,31 @@
+﻿@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstNguoiNhan = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiNhan;
+    var lstLanhDaoCuc = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstLanhDaoCuc;
+    var lstdonvinhanidselected = (string)ViewBag.lstdonvinhanidselected;
+}
+
+<select class="mdb-select-nn mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListNguoiNhanID" id="ListNguoiNhanID" multiple searchable="Chọn người nhận...">
+    <option value="" disabled selected>-- Chọn người nhận --</option>
+    @if (lstLanhDaoCuc != null && lstLanhDaoCuc.Count > 0)
+    {
+        foreach (var item in lstLanhDaoCuc)
+        {
+            <option value="@item.ID" @(!string.IsNullOrEmpty(lstdonvinhanidselected) && lstdonvinhanidselected.Contains("," + item.ID.ToString() + ",") ? "selected" : "")>@item.ChucVuVaTen</option>
+        }
+    }
+    @if (lstNguoiNhan != null && lstNguoiNhan.Count > 0)
+    {
+        foreach (var item in lstNguoiNhan)
+        {
+            <option value="@item.ID" @(!string.IsNullOrEmpty(lstdonvinhanidselected) && lstdonvinhanidselected.Contains("," + item.ID.ToString() + ",") ? "selected" : "")>@item.ChucVuVaTen</option>
+        }
+    }
+</select>
+
+ <script>
+     $(document).ready(function () {
+         $('.mdb-select-nn').materialSelect();
+     });
+ </script>

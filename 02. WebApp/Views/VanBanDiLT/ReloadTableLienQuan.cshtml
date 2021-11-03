@@ -1,0 +1,16 @@
+﻿@using TKM.Utils.Enums
+@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstVanBanLienQuan = (List<MaDinhDanhCoQuanLTViewModel>)ViewBag.maDinhDanhCoQuanLT;
+    var lstDescription = (Dictionary<int,string>)ViewBag.lstDescription;
+}
+@if (lstVanBanLienQuan != null && lstVanBanLienQuan.Count > 0)
+{
+    foreach (var item in lstVanBanLienQuan)
+    {
+
+        @Html.Raw("<" + item.Title + "> , ") 
+
+    }
+}

@@ -1,0 +1,50 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.CoQuanBanHanhVanBanListView
+@if (Model != null && Model.LstCoQuanBanHanhVanBan != null && Model.LstCoQuanBanHanhVanBan.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.LstCoQuanBanHanhVanBan)
+    {
+        index++;
+        <tr>
+            <td style="text-align:center">@index</td>
+            @*<td style="text-align:center">@item.MaCoQuan</td>*@
+            <td style="text-align:center">@item.TenCoQuan</td>
+            <td style="text-align:center">@string.Format("{0:dd/MM/yyy}", item.NgayCapNhat)</td>
+            <td style="text-align:center">@item.NguoiCapNhat</td>
+            <td style="text-align:center">@item.ThuTu</td>
+            <td style="text-align:center" class="t_action">
+                <a title="Sửa" onclick="location.href='@Url.Action("Update", "CoQuanBanHanhVanBan", new { id = item.ID })'"><span class="icon-holder"><i class="c-orange-500 fa fa-edit"></i></span></a>
+            </td>
+            <td style="text-align:center" class="t_action">
+                <a title="Xóa" data-toggle="modal" data-target="#delModal" onclick="setDeleteId(@item.ID);"><span class="icon-holder"><i class="c-brown-500 fa fa-trash"></i></span></a>
+            </td>
+        </tr>
+    }
+    if (Model.PageNumber > 0 && Model.PageSize > 0 && (Model.PageSize != null && Model.PageSize < Model.TotalItem))
+    {
+        <tr class="pagination-ys" align="left">
+            <td colspan="12">
+                @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail",
+               new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TenCoQuanBanHanhVanBan = Model.TenCoQuanBanHanhVanBan,
+                   ColumnName = Model.ColumnName,
+                   OrderBy = Model.OrderBy
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua" }))
+            </td>
+        </tr>
+    }
+    else
+    {
+        <tr class="pagination-ys" align="left"> <td colspan="12"><p style="color: #0c7bbe;">Tổng số bản ghi: @Model.TotalItem</p></td> </tr>
+    }
+}
+@if (Model != null && Model.LstCoQuanBanHanhVanBan != null && Model.LstCoQuanBanHanhVanBan.Count <= 0)
+{
+    <tr>
+        <td colspan="9" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}

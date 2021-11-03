@@ -1,0 +1,55 @@
+﻿@using TKM.BLL
+@model VanBanDenViewModel
+@{
+    Layout = null;
+    var lstNguoiDung = (List<NguoiDungViewModel>)ViewBag.lstNguoiDung;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@using (Ajax.BeginForm("ThuHoi", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onThuHoiSuccess"
+}, new { @id = "fFormTH" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+    <div class="form-group row">
+        <label class="col-sm-4 col-form-label" for="ListNguoiDungThuHoiID">
+            Chọn người muốn thu hồi <span class="c-red-500">(*)</span>
+        </label>
+        <select class="mdb-select md-form col-sm-8 md-outline colorful-select dropdown-primary m-0 p-0" name="ListNguoiDungThuHoiID" id="ListNguoiDungThuHoiID" multiple searchable="Chọn người dùng...">
+            <option value="" disabled selected>-- Chọn người dùng --</option>
+            @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                {
+                    foreach (var item in lstNguoiDung)
+                    {
+                    <option value="@item.ID">@item.ChucVuVaTen</option>
+
+                }
+            }
+        </select>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary">Đồng ý</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+
+}
+<script>
+    $(document).ready(function () {
+        //$('.select2').select2();
+        $('.mdb-select').materialSelect();
+    });
+    $('#fFormTH').on('submit', function () {
+        var valueOfNguoiDungThuHoi = $('#ListNguoiDungThuHoiID').val().filter(v => v != '').length;
+        if (valueOfNguoiDungThuHoi == 0) {
+            toastr.error('Bạn phải chọn ít nhất 1 người dùng muốn thu hồi!');
+            return false;
+        }
+    })
+</script>

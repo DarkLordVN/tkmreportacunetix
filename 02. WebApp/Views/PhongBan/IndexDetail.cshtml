@@ -1,0 +1,189 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.PhongBanListView
+@{
+    ViewBag.Title = "Danh sách phòng ban";
+}
+@section Css {
+    <style></style>
+}
+<div class="container-fluid bgc-white pl-3 pr-3 pt-1">
+    <div class="row">
+        <div class="col-md-12 p-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bgc-white p-0">
+                    <li class="breadcrumb-item"><a href="/Home/Index"><span class="icon-holder"><i class="fa fa-home"></i></span></a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="/PhongBan/Index"><span class="icon-holder"><i class=""></i></span>@ViewBag.Title</a></li>
+                </ol>
+            </nav>
+            <h4 class="title c-grey-900 mB-20 pB-10">@ViewBag.Title <a href="/PhongBan/Add" title="Thêm mới" class="float-right btn-add btn cur-p btn-outline-success"><span class="icon-holder"><i class="fa fa-plus"></i> </span><span class="text-button">Thêm mới</span></a></h4>
+
+            <!-- ./Information of page info success warning danger-->
+            @if (TempData["AlertData"] != null)
+            {
+                <div class="alert @TempData["AlertType"]">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                    <a id="lblMessage"></a>
+                </div>
+            }
+            <!-- ./Information of page for Search -->
+            <div class="masonry-item">
+                <div class="bgc-white p-10 bd">
+                    <h6 class="c-grey-900 font-weight-bold">Tìm kiếm</h6>
+                    <div class="mT-20" id="search">
+                        @using (Html.BeginForm("Index", "PhongBan", new { }, FormMethod.Get, new { @id = "frmMain" }))
+                        {
+                            <div class="form-group row">
+                                <label for="txtMaPB" class="col-sm-2 col-form-label text-right">Mã phòng ban</label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.MaPhongBan, new { @placeholder = "Mã phòng ban", @class = "form-control", @id = "txtMaPB" })
+                                   
+                                </div>
+                                <label for="txtTenPB" class="col-sm-2 col-form-label text-right">Tên phòng ban</label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(model => model.TenPhongBan, new { @placeholder = "Tên phòng ban", @class = "form-control", @id = "txtTenPB" })
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label text-right">Trạng thái</label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.TrangThai, new List<SelectListItem>
+                                                {
+                                                    new SelectListItem{Text="--- Tất cả ---", Value=""},
+                                                    new SelectListItem{Text="Có Sử dụng", Value="1"},
+                                                    new SelectListItem{Text="Có Sử dụng", Value="2"}
+                                                }, new { @class = "form-control", @id = "trangthai" })
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="submit" id="btnSearch" class="btn btn-primary float-right btn-search"><span class="icon-holder"><i class="ti-search"></i> </span>Tìm kiếm</button>
+                                    </div>
+                                </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- ./Information of page for Results -->
+            <div class="masonry-item mT-10">
+                <div class="bgc-white">
+                    <h6 class="c-grey-900 font-weight-bold">Kết quả</h6>
+                    <table id="tbl" class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã phòng ban</th>
+                                <th>Tên phòng ban</th>
+                                <th>Trạng thái</th>
+                                <th>Ghi chú</th>
+                                <th class="t_action">Sửa</th>
+                                <th class="t_action">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.LstPhongBan != null && Model.LstPhongBan.Count() > 0)
+                            {
+                                var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+                                foreach (var item in Model.LstPhongBan)
+                                {
+                                    index++;
+                                    <tr>
+                                        <td>@index</td>
+                                        <td>@item.MaPhongBan</td>
+                                        <td>@item.TenPhongBan</td>
+                                        <td align="center">@Html.Raw(item.TenTrangThai)</td>
+                                        <td>@item.GhiChu</td>
+                                        <td class="t_action">
+                                            <a title="Sửa" onclick="location.href='@Url.Action("Update", "PhongBan", new { id = item.ID })'"><span class="icon-holder"><i class="c-orange-500 fa fa-edit"></i></span></a>
+                                        </td>
+                                        <td class="t_action">
+                                            <a title="Xóa" data-toggle="modal" data-target="#delModal" onclick="setDeleteId(@item.ID);"><span class="icon-holder"><i class="c-brown-500 fa fa-trash"></i></span></a>
+                                        </td>
+                                    </tr>
+                                }
+                                if (Model.PageNumber > 0 && Model.PageSize > 0 && (Model.PageSize != null && Model.PageSize < Model.TotalItem))
+                                {
+                                    <tr class="pagination-ys" align="left">
+                                        <td colspan="12">
+                                            @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("Index", "PhongBan",
+                                                   new
+                                                   {
+                                                       pnum,
+                                                       psize = Model.PageSize,
+                                                       TenPhongBan = Model.TenPhongBan
+                                                   }))
+                                            <p style="color: #0c7bbe;">Tổng số bản ghi: @Model.TotalItem</p>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="pagination-ys" align="left"> <td colspan="12"><p style="color: #0c7bbe;">Tổng số bản ghi: @Model.TotalItem</p></td> </tr>
+                                }
+                            }
+                            @if (Model != null && Model.LstPhongBan != null && Model.LstPhongBan.Count <= 0)
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xác nhận xóa?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">Bạn có chắc chắn xóa phòng ban này không?</div>
+            <div class="modal-footer">
+                <input type="hidden" id="delModalId" />
+                <button id="btnDel" type="button" class="btn btn-primary">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        $("#btnDel").on("click", function () {
+            $.ajax({
+                url: '/PhongBan/DeletePhongBan',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: $("#delModalId").val() }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    alert(data)
+                    location.reload();
+                },
+                error: function (xhr) {
+                    swal("Đã có lỗi xảy ra", {icon: "error",});
+                }
+            });
+        });
+
+        $(function () {
+            $("#frmMain").submit(function (event) {
+                if( !check_AlphaNumber(this.MaPhongBan) || !check_AlphaNumber(this.TenPhongBan)){
+                    event.preventDefault();
+                    return
+                }
+            });
+        });
+    </script>
+}

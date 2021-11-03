@@ -1,0 +1,55 @@
+﻿@using TKM.DAO.EntityFramework
+@model DmMaDinhDanhCoQuan
+@{
+    Layout = null;
+}
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label>Tên mã định danh cơ quan: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model!=null ? Model.TenDinhDanhCoQuan:"")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label>Trực thuộc: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.TrucThuoc : "")
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label>Thứ tự: </label>
+        </div>
+        <div class="col-md-9">
+            @Model.ThuTu
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label>Trạng thái: </label>
+        </div>
+        <div class="col-md-9">
+            @Html.Raw(Model != null && Model.TrangThai == true ? "<span class='badge badge-success'>Có Sử dụng</span>" : "<span class='badge badge-danger'>Không sử dụng</span>")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,50 @@
+﻿@model List<TKM.BLL.HoSoCongViecYKienViewModel>
+@{ 
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="tac">
+                <p class="mt-0 mb-0 tac"><a href="javascript://" title="@item.NguoiGui"><i class="fal fa-user-tag mr-1"></i> @item.NguoiGui </a></p>
+            </td>
+            <td class="tac">@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayTao)</td>
+            <td class="tac">
+                <p class="mt-0 mb-0 tac"><a href="javascript://" title="@item.NguoiNhan"><i class="fal fa-user-tag mr-1"></i> @item.NguoiNhan </a></p>
+            </td>
+            <td class="tal">@item.NoiDungYKien</td>
+            <td class="tac">
+                @if (!string.IsNullOrEmpty(item.FileDinhKem))
+                {
+                    if (item.FileDinhKem.Contains("[--]"))
+                    {
+                        var arrFile = item.FileDinhKem.Split(new string[] { "[--]" }, StringSplitOptions.None);
+                        foreach (var itemFile in arrFile)
+                        {
+                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@itemFile"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File đính kèm" data-original-title="File đính kèm"></i></span></a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.FileDinhKem) ? item.FileDinhKem : "")"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title="File đính kèm"></i></span></a>
+                    }
+
+                }
+            </td>
+            <td>
+                @if (item.NguoiGuiID != SessionInfo.CurrentUser.ID)
+                {
+                    <a href="javascript://" title="Phản hồi" onclick="onTraoDoiYKien(@item.HoSoCongViecID,@item.NguoiGuiID)" class="btn btn-sm btn-default br-50pt"><span><i class="fal fa-reply"></i></span></a>
+                }
+            </td>
+        </tr>
+
+    }
+
+}
+<style>
+    #t-quatrinh table td, table th{font-size:100% !important}
+    .small, small{font-size:100% !important}
+</style>

@@ -1,0 +1,110 @@
+﻿@using TKM.BLL
+@model TKM.BLL.BaoCaoTongHopListView
+@{
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    var dataChart = (string)ViewBag.dataChart;
+    var arrdataChart = dataChart.Split('|');
+    var item_1 = Convert.ToDouble(arrdataChart[0]);
+    var item_2= Convert.ToDouble(arrdataChart[1]);
+}
+<!-- Card -->
+<div class="card card-cascade narrower">
+
+    <!-- Section: Chart -->
+    <section>
+
+        <!-- Grid row -->
+        <div class="row mb-4">
+
+            <!-- Grid column -->
+            <div class="col-xl-5 col-md-12 mr-0 pr-0">
+
+                <!-- Card image -->
+                <div class="view view-cascade gradient-card-header warning-color">
+                    <h6 class="h6-responsive font-weight-bold mb-0 brown-text text-uppercase">Vấn đề đang xử lý</h6>
+                </div>
+                <!-- Card image -->
+                <!-- Card content -->
+                <div class="card-body card-body-cascade pr-0 pb-0">
+
+                    <!-- Panel data -->
+                    <div class="card-body pt-2 px-0">
+                        @if (Model != null && Model.LstResultDataProblemDetail != null && Model.LstResultDataProblemDetail.Count > 0)
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach(var item in Model.LstResultDataProblemDetail)
+                                {
+                                    <li class="list-group-item px-0">
+                                        <a class="text-truncate d-block" title="@(item.problemname)" href="/BaoCao/ChiTietVanDe">
+                                            @(item.problemname)
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                            <a class="btn btn-sm grey lighten-3 btn-rounded waves-effect float-right font-weight-bold dark-grey-text btn-dash mt-3" href="/BaoCao/ChiTietVanDe">
+                                Xem thêm ...
+                            </a>
+
+                        }else
+                        {
+                            @Html.Raw("Không có dữ liệu...")
+                        }
+                    </div>
+                    <!-- /Panel data -->
+                </div>
+
+                <!-- Card content -->
+            </div>
+            <!-- Grid column -->
+            <!-- Grid column -->
+            <div class="col-xl-7 col-md-12 mb-4">
+
+                <!-- Card image -->
+                <div class="view view-cascade bg-white py-4">
+                    <h6 class="text-center text-uppercase">Hồ sơ công việc</h6>
+                    <div id="chartHSCV"></div>
+                </div>
+
+                <!-- Card image -->
+            </div>
+
+            <!-- Grid column -->
+        </div>
+
+        <!-- Grid row -->
+
+    </section>
+    <!-- Section: Chart -->
+
+</div>
+<!-- Card -->
+<script>
+    var optionsHSCV = {
+        chart: {
+            type: 'donut',
+        },
+        legend: {
+            position: 'bottom'
+        },
+        labels: ['Chưa xử lý', 'Đã hoàn thành'],
+        colors: ['#fb3', '#00c851'],
+        series: [@item_1,@item_2],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    }
+    var chartHSCV = new ApexCharts(
+         document.querySelector("#chartHSCV"),
+         optionsHSCV
+     );
+    chartHSCV.render();
+</script>

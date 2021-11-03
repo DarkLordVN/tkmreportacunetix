@@ -1,0 +1,54 @@
+﻿@using TKM.BLL
+@model HoSoCongViecTrangThaiNguoiDungViewModel
+@{
+    Layout = null;
+    //var lstTrangThaiVanBan = (Dictionary<int, string>)ViewBag.lstTrangThaiVanBan;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@using (Ajax.BeginForm("PopupUpdateStatusUser", "HoSoCongViec", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onUpdateStatusUserSuccess"
+}, new { @id = "fForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ID" value="@Model.ID" />
+    <input type="hidden" name="HoSoCongViecID" value="@Model.HoSoCongViecID" />
+    <div class="form-group row">
+        <label for="MoTaCongViec" class="col-sm-3 col-form-label">Trạng thái xử lý <span class="c-red-500">(*)</span></label>
+        <div class="col-sm-9">
+            <select class="mdb-select mdb-select-csa md-form md-outline colorful-select dropdown-primary m-0 p-0" id="TrangThaiXuLy" name="TrangThaiXuLy" searchable="Nhập từ khóa..">
+                <option value="0"> -- Chọn --</option>
+                <option value="1" @(Model.TrangThaiXuLy == 1 ? "selected" : "")>Chưa xử lý</option>
+                <option value="2" @(Model.ID == 0 || Model.TrangThaiXuLy == 2 ? "selected" : "")>Đang xử lý</option>
+                <option value="3" @(Model.TrangThaiXuLy == 3 ? "selected" : "")>Hoàn thành</option>
+            </select>
+        </div>
+    </div>
+   
+    <div class="form-group row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+
+}
+<style>
+    .picker__box .picker__table .picker__day--infocus{text-align:center !important;}
+</style>
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-csa').materialSelect();
+    });
+   
+    $('#fForm').on('submit', function () {
+        var TrangThaiXuLy = $('#TrangThaiXuLy').val();
+        if (TrangThaiXuLy == '' || TrangThaiXuLy == '0') {
+            toastr.error('Bạn chưa chọn trạng thái văn bản!');
+            return false;
+        };
+    })
+   
+</script>

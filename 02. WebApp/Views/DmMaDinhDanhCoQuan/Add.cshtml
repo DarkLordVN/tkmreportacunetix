@@ -1,0 +1,86 @@
+﻿@model TKM.BLL.DmMaDinhDanhCoQuanViewModel
+
+@{
+    ViewBag.Title = "Thêm mới mã định danh cơ quan";
+}
+
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/DmMaDinhDanhCoQuan/Index">Quản lý mã định danh cơ quan</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!--Thông báo-->
+        @if (TempData["AlertData"] != null)
+        {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <!--Form thêm mới-->
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @using (Html.BeginForm("Add", "DmMaDinhDanhCoQuan", null))
+                            {
+
+                                @Html.AntiForgeryToken()
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            @Html.TextBoxFor(model => model.TenDinhDanhCoQuan, new { @class = "form-control", @id = "TenDinhDanhCoQuan" })
+                                            @Html.ValidationMessageFor(model => model.TenDinhDanhCoQuan, "", new { @class = "alert-danger" })
+                                            <label for="TenDinhDanhCoQuan">Tên định danh cơ quan <span class="c-red-500">(*)</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        @Html.TextAreaFor(model => model.TrucThuoc, new { @class = "form-control", @id = "TrucThuoc", rows = 4, @placeholder = "Trực thuộc" })
+                                        @Html.ValidationMessageFor(model => model.TrucThuoc, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            @Html.TextBoxFor(model => model.ThuTu, new { @class = "form-control", @id = "ThuTu", @placeholder = "Thứ tự", @Value = 0, @Type = "number" })
+                                            @Html.ValidationMessageFor(model => model.ThuTu, "", new { @class = "alert-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            <div class="form-check form-check-inline px-3 my-3">
+                                                <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                                <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+
+                                    <div class="text-right col-sm-12">
+                                        <button type="submit" class="btn btn-primary">Lưu</button>
+                                        <a class="btn cur-p btn-light" href="/DmMaDinhDanhCoQuan/Index">Hủy bỏ</a>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

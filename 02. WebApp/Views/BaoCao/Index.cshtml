@@ -1,0 +1,494 @@
+﻿@using PagedList.Mvc;
+
+@model TKM.BLL.BaoCaoTongHopListView
+@{
+    ViewBag.Title = "Tổng số lượng vấn đề của nhóm thiết bị";
+}
+@section Css {
+    <style></style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/BaoCao/Index">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row lighten-4">
+                                <div class="col p-3">
+                                    <div class="form-group row">
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   value=""
+                                                   id="chkBieuDo" checked />
+                                            <label class="form-check-label" for="chkBieuDo">
+                                                Biểu đồ
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   value=""
+                                                   id="chkChiTiet" checked />
+                                            <label class="form-check-label" for="chkChiTiet">
+                                                Danh sách chi tiết
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-0">
+                                        <label for="TrangThai" class="col-sm-2 col-form-label">Nhóm thiết bị</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="ddlGroupName" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="" disabled>--- Tất cả ---</option>
+                                                    if (Model.LstGroupData != null && Model.LstGroupData.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstGroupData)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        @*<label for="TrangThai" class="col-sm-2 col-form-label">Trạng thái</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="srTrangThai" searchable="Nhập từ khóa..">
+                                                <option value="">--- Tất cả ---</option>
+                                                <option value="1">Đã xử lý</option>
+                                                <option value="0">Chưa xử lý</option>
+                                            </select>
+                                        </div>*@
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtTuNgay" class="col-lg-2 col-form-label">Từ ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.TuNgay, new { @class = "form-control keyenter", @id = "txtTuNgay" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label for="txtDenNgay" class="col-lg-2 col-form-label">Đến ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.DenNgay, new { @class = "form-control keyenter", @id = "txtDenNgay" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col text-center text-lg-right">
+                                        <button id="btnSearch" class="btn text-white f-bg1" type="button">Tổng hợp</button>
+                                    </div>
+                                    <!-- / Collapsible element -->
+                                </div>
+                            </div>
+                            <hr class="my-1 chartflag">
+                            <div class="row chartflag">
+                                <div class="col-md-12">
+                                    @*<a href="javascript://" onclick="saveChart();" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="In Browser" data-original-title="In Browser"><i class="fal fa-print"></i></a>*@
+                                    <a href="javascript://" onclick="exportWord();" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" data-original-title="Xuất Word" title="Xuất Word"><i class="fal fa-file-word"></i></a>
+                                    <a href="javascript://" onclick="exportPDF();" class="btn-floating btn-sm btn-warning mx-1" data-toggle="tooltip" title="Xuất PDF" data-original-title="Xuất PDF"><i class="fal fa-file-pdf"></i></a>
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3 chartflag" id="table-print">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <div class="card card-cascade narrower">
+                                            <!-- Card image -->
+                                            <div class="view view-cascade gradient-card-header f-bg1">
+                                                <h5 class="mb-0 text-uppercase"><i class="fal fa-chart-bar mr-3"></i>Tổng số lượng vấn đề theo nhóm</h5>
+                                            </div>
+                                            <!-- Card image -->
+                                            <!-- Card content -->
+                                            <div class="card-body card-body-cascade text-center">
+
+                                                <div id="chart"></div>
+                                                <button id="btnXoay" class="btn text-white default-color rounded-pill px-3 btn-sm my-0 waves-effect waves-light"><i class="fas fa-redo-alt"></i> Xoay</button>
+
+                                            </div>
+                                            <!-- Card content -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <h2 class="mb-4 font-weight-bold">Tổng số lượng vấn đề của nhóm thiết bị</h2>
+                                        <table id="dt-vblt-den" class="table table-hover table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                                            <thead class="indigo text-white lighten-1">
+                                                <tr>
+                                                    <th style="text-align:center; width: 50px">STT</th>
+                                                    <th class="pointer" data-colname="TenNhom" data-orderby="asc">Nhóm thiết bị@* <span><i class="fas fa-sort"></i></span>*@</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:350px">Số lượng vấn đề đã xử lý @*<span><i class="fas fa-sort"></i></span>*@</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:350px">Số lượng vấn đề chưa xử lý @*<span><i class="fas fa-sort"></i></span>*@</th>
+                                                    <th style="text-align:center">Tổng số lượng vấn đề</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("IndexDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Script {
+    <script>
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+
+        //Thêm event xử lý load ajax
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        //, SoKyHieu: $("#txtSoKyHieu").val(), LoaiVanBanID: $("#LoaiVanBanID").val(), TrichYeu: $("#txtTrichYeu").val()
+        function loadData(col, order, pnum, psize) {
+            $("#loading").show();
+            var params = getParams(col, order, pnum, psize);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "BaoCao")',
+                data: params,
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                    //alert($("#txtChuaXuLy").val());
+                    var lstGroup = $("#txtGroupName").val();
+                    $(".chartflag").show();
+                    if (lstGroup != undefined && lstGroup != "") {
+                        chart.updateSeries([
+                            { name: "Chưa xử lý", data: $("#txtChuaXuLy").val().split(',').map(Number) },
+                            { name: "Đã xử lý", data: $("#txtDaXuLy").val().split(',').map(Number) }]);
+                        chart.updateOptions({
+                            xaxis: {
+                                categories: $("#txtGroupName").val().split(',').map(String)
+                            }
+                        });
+                    }
+                    else {
+                        $(".chartflag").hide();
+                    }
+                    $("#loading").hide();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                    $("#loading").hide();
+                }
+            });
+        }
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        function getParams(col, order, pnum, psize) {
+            return { LstGroup: $("#ddlGroupName").val().toString(), TrangThai: $("#trangthai").val(), TuNgay: $("#txtTuNgay").val(), DenNgay: $("#txtDenNgay").val(), srTrangThai: $("#srTrangThai").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val(), HasChart: $("#chkBieuDo").is(":checked"), HasTableData: $("#chkChiTiet").is(":checked") };
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+
+        function exportWord() {
+            var params = getParams(null, null, 0, 0);
+            var dataURL = chart.dataURI().then((uri) => {
+                var checkBieuDo = $("#chkBieuDo").is(":checked");
+                if (checkBieuDo != undefined && checkBieuDo != null && checkBieuDo) {
+                    params["ChartImage"] = uri.imgURI;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/BaoCao/ExportWordTongVDNhom',
+                    data: params,
+                    success: function (response, status, xhr) {
+                        var dt = new Date();
+                        var a = document.createElement('a');
+                        a.href = response;
+                        a.download = 'TongVanDeNhom_' + dt.getFullYear() + "" + (dt.getMonth() + 1) + dt.getDate() + dt.getHours() + dt.getMinutes() + dt.getSeconds() +'.docx';
+                        document.body.append(a);
+                        a.click();
+                        a.remove();
+                    },
+                    error: function (response) {
+                        console.log('error - ' + response);
+                        //swal("Đã có lỗi xảy ra", { icon: "error", });
+                    }
+                });
+            });
+        }
+
+        function exportPDF() {
+            var params = getParams(null, null, 0, 0);
+            var dataURL = chart.dataURI().then((uri) => {
+                var checkBieuDo = $("#chkBieuDo").is(":checked");
+                if (checkBieuDo != undefined && checkBieuDo != null && checkBieuDo) {
+                    params["ChartImage"] = uri.imgURI;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/BaoCao/ExportPDFTongVDNhom',
+                    data: params,
+                    success: function (response, status, xhr) {
+                        var dt = new Date();
+                        var a = document.createElement('a');
+                        a.href = response;
+                        a.download = 'TongVanDeNhom_' + dt.getFullYear() + "" + (dt.getMonth() + 1) + dt.getDate() + dt.getHours() + dt.getMinutes() + dt.getSeconds() +'.pdf';
+                        document.body.append(a);
+                        a.click();
+                        a.remove();
+                    },
+                    error: function (response) {
+                        console.log('error - ' + response);
+                        //swal("Đã có lỗi xảy ra", { icon: "error", });
+                    }
+                });
+            });
+        }
+
+        let chart;
+        const button = document.getElementById("btnXoay");
+        var series = [
+          {
+              name: "Chưa xử lý",
+              //data: [23, 55, 5, 88, 6, 41, 37, 22, 43, 11]
+              data: $("#txtChuaXuLy").val().split(',').map(Number)
+          },
+          {
+              name: "Đã xử lý",
+              data: $("#txtDaXuLy").val().split(',').map(Number)
+          }
+        ];
+        //const categories = ['G-ADMIN', 'G-ADTN', 'G-AV_BKAV', 'G-BITRIX', 'G-CCHC', 'G-COMMVAULT', 'G-CONG', 'TN-NETWORK', 'TN-HYPERVISOR', 'TN-SERVER'];
+        var categories = $("#txtGroupName").val().split(',').map(String)
+        var options = {
+            series,
+                colors: ['#B22222', '#32CD32'],
+                chart: {
+                    type: "bar",
+                    height: 350,
+                    stacked: true,
+                    toolbar: {
+                        show: false
+                    },
+                    events: {
+                        mounted: (chartContext, config) => {
+                            //console.log("mounted", chartContext, config, config.globals.yRange);
+                            setTimeout(() => {
+                                addAnnotations(config);
+                            });
+                        },
+                        updated: (chartContext, config) => {
+                            setTimeout(() => {
+                                addAnnotations(config);
+                            });
+                        }
+                    }
+                },
+            dataLabels: {
+                enabled: true
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '30%',
+                    horizontal: false,
+                    dataLabels: {
+                        maxItems: 2
+                    }
+                }
+            },
+            xaxis: {
+                categories,
+                    axisTicks: {
+                    show: true
+                    },
+                axisBorder: {
+                    show: true
+                },
+                // floating: true,
+                labels: {
+                    // maxHeight: 0,
+                    hideOverlappingLabels: false,
+                }
+            },
+            yaxis: {
+                axisTicks: {
+                    show: true
+                },
+                axisBorder: {
+                    show: true
+                },
+                labels: {
+                    hideOverlappingLabels: true,
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            legend: {
+                position: "right",
+                horizontalAlign: "left"
+            },
+            grid: {
+                padding: {
+                    left: 13.5,
+                    right: 0
+                },
+                xaxis: {
+                    lines: {
+                        show: true
+                    }
+                },
+            }
+        };
+        var addAnnotations = (config) => {
+            const seriesTotals = config.globals.stackedSeriesTotals;
+            const isHorizontal = options.plotOptions.bar.horizontal;
+            chart.clearAnnotations();
+            var lstgroup = $("#txtGroupName").val().split(',').map(String);
+            try {
+                lstgroup.forEach((category, index) => {
+                    chart.addPointAnnotation(
+                      {
+                          y: isHorizontal
+                            ? calcHorizontalY(config, index)
+                            : seriesTotals[index],
+                          x: isHorizontal ? 0 : category,
+                          label: {
+                              text: `${seriesTotals[index]}`
+                          }
+                      },
+                      false
+                    );
+
+                    if (isHorizontal) {
+                        adjustPointAnnotationXCoord(config, index);
+                    }
+                });
+            } catch (error) {
+                console.log(`Add point annotation error: ${error.message}`);
+            }
+        };
+
+        var calcHorizontalY = (config, index) => {
+            const catLength = categories.length;
+            const yRange = config.globals.yRange[0];
+            const minY = config.globals.minY;
+            const halfBarHeight = yRange / catLength / 2;
+
+            return minY + halfBarHeight + 2 * halfBarHeight * (catLength - 1 - index);
+        };
+
+        var adjustPointAnnotationXCoord = (config, index) => {
+            const gridWidth = config.globals.gridWidth;
+            const seriesTotal = config.globals.stackedSeriesTotals[index];
+            const minY = config.globals.minY;
+            const yRange = config.globals.yRange[0];
+            const xOffset = (gridWidth * (seriesTotal + Math.abs(minY))) / yRange;
+            const circle = document.querySelector(
+              `.apexcharts-point-annotations circle:nth-of-type(${index + 1})`
+            );
+            const labelField = document.querySelector(
+              `.apexcharts-point-annotations rect:nth-of-type(${index + 1}`
+            );
+            const labelFieldXCoord = parseFloat(labelField.getAttribute("x"));
+            const text = document.querySelector(
+              `.apexcharts-point-annotations text:nth-of-type(${index + 1}`
+            );
+
+            labelField.setAttribute("x", labelFieldXCoord + xOffset);
+            text.setAttribute("x", xOffset);
+            console.log(labelFieldXCoord);
+            circle.setAttribute("cx", xOffset);
+        };
+
+        chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+        button.addEventListener("click", () => {
+            options.plotOptions.bar.horizontal = !options.plotOptions.bar.horizontal;
+
+            var lstGroup = $("#txtGroupName").val();
+            if (lstGroup != undefined && lstGroup != "") {
+                options.series = [
+                               { name: "Chưa xử lý", data: $("#txtChuaXuLy").val().split(',').map(Number) },
+                               { name: "Đã xử lý", data: $("#txtDaXuLy").val().split(',').map(Number) }];
+                options.xaxis.categories = $("#txtGroupName").val().split(',').map(String);
+            }
+            chart.destroy();
+            chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        });
+    </script>
+}

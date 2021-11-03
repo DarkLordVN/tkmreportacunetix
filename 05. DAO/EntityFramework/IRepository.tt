@@ -1,0 +1,664 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true"#>
+<#@ include file="EF.Utility.CS.ttinclude"#>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+
+<#@ output extension=".cs"#>
+<#
+
+// This needs to be set to the .edmx file that you want to process.
+string edmxFile = FindEDMXFileName(); // @"Model1.edmx";
+
+CodeGenerationTools code = new CodeGenerationTools(this);
+MetadataLoader loader = new MetadataLoader(this);
+MetadataTools ef = new MetadataTools(this);
+
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+namespace <#= code.VsNamespaceSuggestion() #>
+{ 
+	public interface IRepository<T> 
+    {
+		IUnitOfWork UnitOfWork { get; set; }
+		IQueryable<T> All();
+        IQueryable<T> All(string includes);
+		IQueryable<T> All(List<string> lstInclude);
+		IQueryable<T> Find(Func<T, bool> expression);
+		void Save();
+		//ToanLK - 2019
+		T Add(T entity);
+		void Delete(T entity);
+        void Update(T entity);
+        void Delete(Expression<Func<T, bool>> where);
+        IEnumerable<T> GetAll();
+		IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
+		T GetByFilter(Expression<Func<T, bool>> where);
+        T GetById(int Id);
+    }
+}<#
+
+
+EdmItemCollection ItemCollection = loader.CreateEdmItemCollection(edmxFile);
+EntityContainer container = ItemCollection.GetItems<EntityContainer>().FirstOrDefault();
+EntityFrameworkTemplateFileManager fileManager = EntityFrameworkTemplateFileManager.Create(this);
+
+foreach (EntityType entity in ItemCollection.GetItems<EntityType>().Where(e => !e.Name.Equals("NhomQuyenQuyen") && !e.Name.Equals("sysdiagram")).OrderBy(e => e.Name))
+{;
+    fileManager.StartNewFile(entity.Name + "Repository.Generated.cs"); #>using System;
+using System.Linq;
+using System.Collections.Generic; 
+using System.Data;
+using TKM.Utils;
+using System.Linq.Expressions;
+using System.Transactions;
+// This file is auto generated and will be overwritten as soon as the template is executed
+// Do not modify this file...
+	
+namespace <#= code.VsNamespaceSuggestion() #>
+{   
+	<#=Accessibility.ForType(entity)#> <#=code.SpaceAfter(code.AbstractOption(entity))#>partial class <#=code.Escape(entity)#>Repository
+	{
+		private IRepository<<#=code.Escape(entity)#>> _repository {get;set;}
+		public IRepository<<#=code.Escape(entity)#>> Repository
+		{
+			get { return _repository; }
+			set { _repository = value; }
+		}
+		
+		public <#=code.Escape(entity)#>Repository(IRepository<<#=code.Escape(entity)#>> repository, IUnitOfWork unitOfWork)
+    	{
+    		Repository = repository;
+			Repository.UnitOfWork = new EFUnitOfWork(); 
+    	}
+
+		public List<<#=code.Escape(entity)#>> GetList(Expression<Func<<#=code.Escape(entity)#>, bool>> where)
+        {
+            try
+            {
+                IEnumerable<<#=code.Escape(entity)#>> lResult;
+                if (where != null)
+                {
+                    lResult = Repository.GetMany(where);
+                }
+                else
+                {
+                    lResult = Repository.GetAll();
+                }
+                return lResult.ToList();
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return null;
+            }
+        }
+
+		public List<<#=code.Escape(entity)#>> GetList(Expression<Func<<#=code.Escape(entity)#>, bool>> where, int pageIndex, int pageSize, ref int totalItem, Func<<#=code.Escape(entity)#>, object> orderCol = null, bool isDecending = true)
+        {
+            try
+            {
+                IEnumerable<<#=code.Escape(entity)#>> lResult;
+                if (where != null)
+                {
+                    lResult = Repository.GetMany(where);
+                }
+                else
+                {
+                    lResult = Repository.GetAll();
+                }
+                if (orderCol != null)
+                {
+                    if (!isDecending) lResult = lResult.OrderBy(orderCol).AsEnumerable();
+                    else lResult = lResult.OrderByDescending(orderCol).AsEnumerable();
+                }
+                if (pageIndex > 0 && pageSize > 0)
+                {
+                    totalItem = lResult.Count();
+                    if (totalItem > ((pageIndex - 1) * pageSize))
+                        lResult = lResult.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                }
+                return lResult.ToList();
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return null;
+            }
+        }
+
+		public <#=code.Escape(entity)#> GetById(int id)
+        {
+            try
+            {
+                var obj = Repository.GetById(id);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return new <#=code.Escape(entity)#>();
+            }
+        }
+        public <#=code.Escape(entity)#> GetByFilter(Expression<Func<<#=code.Escape(entity)#>, bool>> where)
+        {
+            try
+            {
+                Repository.Save();
+                var obj = Repository.GetByFilter(where);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return new <#=code.Escape(entity)#>();
+            }
+        }
+		public bool CheckByFilter(Expression<Func<<#=code.Escape(entity)#>, bool>> where)
+        {
+            try
+            {
+                Repository.Save();
+                var obj = Repository.GetByFilter(where);
+				if(obj != null) return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return false;
+            }
+        }
+        public bool Add(<#=code.Escape(entity)#> entity)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                try
+                {
+                    Repository.Add(entity);
+                    Repository.Save();
+                    scope.Complete();
+                    scope.Dispose();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    OutputLog.WriteOutputLog(ex);
+                    return false;
+                }
+            }
+        }
+		
+		public bool Add(List<<#=code.Escape(entity)#>> lentity)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                try
+                {
+					if(lentity != null && lentity.Count() > 0) {
+						foreach(var entity in lentity) {
+							Repository.Add(entity);
+							Repository.UnitOfWork.Commit();
+						}
+					}
+                    scope.Complete();
+                    scope.Dispose();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    OutputLog.WriteOutputLog(ex);
+                    return false;
+                }
+            }
+        }
+
+        public bool Update(<#=code.Escape(entity)#> entity)
+        {
+            try
+            {
+                var objOld = GetById(entity.ID);
+                if (objOld.ID > 0)
+                {
+                    ObjectUtils.CopyObject(entity, ref objOld, true);
+                    Repository.Update(objOld);
+					Repository.UnitOfWork.Commit();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return false;
+            }
+        }
+
+		public bool Update(List<<#=code.Escape(entity)#>> lentity)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                try
+                {
+					if(lentity != null && lentity.Count() > 0) {
+						foreach(var entity in lentity) {
+							var objOld = GetById(entity.ID);
+							if (objOld.ID > 0)
+							{
+								ObjectUtils.CopyObject(entity, ref objOld, true);
+								Repository.Update(objOld);
+								Repository.UnitOfWork.Commit();
+							}
+						}
+					}
+                    scope.Complete();
+                    scope.Dispose();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    OutputLog.WriteOutputLog(ex);
+                    return false;
+                }
+            }
+        }
+
+        public bool Delete(int id)
+        {
+            try
+            {
+                var objOld = GetById(id);
+                Repository.Delete(objOld);
+				Repository.UnitOfWork.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return false;
+            }
+        }
+        public bool DeleteList(List<int> ListId)
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                try
+                {
+                    var objOld = Repository.GetMany(x => ListId.Contains(x.ID)).ToList();
+                    if (objOld != null && objOld.Count > 0)
+                    {
+                        foreach (var obj in objOld)
+                        {
+                            Repository.Delete(obj);
+                            Repository.UnitOfWork.Commit();
+                        }
+                    }
+                    scope.Complete();
+                    scope.Dispose();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    scope.Dispose();
+                    OutputLog.WriteOutputLog(ex);
+                    return false;
+                }
+            }
+        }
+	}
+}<#	
+	if(!DoesFileExist(entity.Name + "Repository.cs"))
+	{
+		fileManager.StartNewFile(entity.Name + "Repository.cs");
+		#>using System;
+using System.Linq;
+using System.Collections.Generic;
+namespace <#= code.VsNamespaceSuggestion() #>
+{   
+	<#=Accessibility.ForType(entity)#> <#=code.SpaceAfter(code.AbstractOption(entity))#>partial class <#=code.Escape(entity)#>Repository
+	{
+		// Add your own data access methods.
+		// This file should not get overridden
+	}
+}<#
+	}
+	else
+	{
+		fileManager.StartNewFile(entity.Name + "Repository.cs");
+		this.Write(OutputFile(entity.Name + "Repository.cs"));
+	}
+}
+
+fileManager.StartNewFile("IUnitOfWork.cs");
+#>using System.Data.Entity;
+
+namespace <#= code.VsNamespaceSuggestion() #>
+{
+	public interface IUnitOfWork
+	{
+		DbContext Context { get; set; }
+		void Save();
+		bool LazyLoadingEnabled { get; set; }
+		bool ProxyCreationEnabled { get; set; }
+		string ConnectionString { get; set; }
+		void Commit();
+	}
+}<# fileManager.StartNewFile("EFRepository.cs");
+#>using System;
+using System.Data.Entity;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.Entity.Infrastructure;
+using System.Linq.Expressions;
+
+namespace <#= code.VsNamespaceSuggestion() #>
+{
+	public class EFRepository<T> : IRepository<T> where T : class
+	{
+		public IUnitOfWork UnitOfWork { get; set; }
+		private IDbSet<T> _objectset;
+		private IDbSet<T> ObjectSet
+		{
+			get
+			{
+				if (_objectset == null)
+				{
+					_objectset = UnitOfWork.Context.Set<T>();
+				}
+				return _objectset;
+			}
+		}
+
+		public virtual IQueryable<T> All()
+		{
+			return ObjectSet.AsQueryable();
+		}
+
+		public virtual IQueryable<T> All(string includes)
+		{
+            DbQuery<T> Query = UnitOfWork.Context.Set<T>();
+			if (!string.IsNullOrEmpty(includes))
+            {
+                foreach (string includeProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    Query = Query.Include(includeProperty.Trim());
+                }
+            }
+            return Query;
+		}
+
+		public virtual IQueryable<T> All(List<string> lstInclude)
+		{
+            DbQuery<T> Query = UnitOfWork.Context.Set<T>();
+			foreach(string itemInclude in lstInclude)
+                Query = Query.Include(itemInclude.Trim());
+            return Query;
+		}
+
+		public IQueryable<T> Find(Func<T, bool> expression)
+		{
+			return ObjectSet.Where(expression).AsQueryable();
+		}
+
+		public T Add(T entity)
+		{
+			return ObjectSet.Add(entity);
+		}
+
+		public void Delete(T entity)
+		{
+			ObjectSet.Remove(entity);
+		}
+
+		public void Save()
+		{
+			UnitOfWork.Save();
+		}
+
+		//ToanLK - 2019 - Modified
+		public void Update(T entity)
+        {
+            DbQuery<T> Query = UnitOfWork.Context.Set<T>();
+            ObjectSet.Attach(entity);
+            UnitOfWork.Context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+        }
+
+		public void Delete(Expression<Func<T, bool>> where)
+        {
+            IEnumerable<T> objects = ObjectSet.Where<T>(where).AsEnumerable();
+			if(objects != null && objects.Count() > 0)
+			{
+				foreach (T obj in objects)
+					ObjectSet.Remove(obj);
+			}
+
+        }
+		
+		public virtual T GetByFilter(Expression<Func<T, bool>> where)
+        {
+            return ObjectSet.Where(where).FirstOrDefault();
+        }
+
+        public virtual IEnumerable<T> GetAll()
+        {
+            return ObjectSet.AsEnumerable();
+        }
+
+        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
+        {
+            return ObjectSet.Where(where);
+        }
+        public virtual T GetById(int id)
+        {
+            return ObjectSet.Find(id);
+        }
+	}
+}<#fileManager.StartNewFile("EFUnitOfWork.cs");
+#>
+using System;
+using System.Data.Entity;
+
+namespace <#= code.VsNamespaceSuggestion() #>
+{
+	public class EFUnitOfWork : IUnitOfWork
+	{
+		public DbContext Context { get; set; }
+
+		public EFUnitOfWork()
+		{
+			Context = new <#=code.Escape(container)#>();
+		}
+
+		public void Save()
+		{
+			Context.SaveChanges();
+		}
+		
+		public bool LazyLoadingEnabled
+		{
+			get { return Context.Configuration.LazyLoadingEnabled; }
+			set { Context.Configuration.LazyLoadingEnabled = value;}
+		}
+
+		public bool ProxyCreationEnabled
+		{
+			get { return Context.Configuration.ProxyCreationEnabled; }
+			set { Context.Configuration.ProxyCreationEnabled = value; }
+		}
+		
+		public string ConnectionString
+		{
+			get { return Context.Database.Connection.ConnectionString; }
+			set { Context.Database.Connection.ConnectionString = value; }
+		}
+
+		public void Commit()
+        {
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+            }
+
+        }
+		private bool _disposed;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Context.Dispose();
+                }
+            }
+            _disposed = true;
+
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+	}
+}<#	fileManager.Process();
+#>
+
+
+<#+
+
+bool DoesFileExist(string filename)
+{			
+	return File.Exists(Path.Combine(GetCurrentDirectory(),filename));	
+}
+
+string OutputFile(string filename)
+{
+	using(StreamReader sr = new StreamReader(Path.Combine(GetCurrentDirectory(),filename)))
+	{
+		string contents = sr.ReadToEnd();
+		return contents;
+	}
+}
+
+string GetCurrentDirectory()
+{
+	string executingDirectoryName = "";
+	string stackTraceFileName = new StackTrace(true).GetFrame(0).GetFileName();
+	if (String.IsNullOrEmpty(stackTraceFileName))
+	{
+		throw new ArgumentException("No value was specified for the 'directoryName' configuration parameter" +
+			", and we could not figure out the file name from the stack trace (most likely because of running " +
+			"the template with debug='False' specified in the <\u0023@ template \u0023> directive.");
+	}
+	else
+	{		
+		executingDirectoryName = Path.GetDirectoryName(stackTraceFileName);
+	}	
+	return executingDirectoryName;
+}
+
+string FindEDMXFileName()
+{
+	string edmxFile = "";
+				
+	string[] entityFrameworkFiles = Directory.GetFiles(GetCurrentDirectory(), "*.edmx");
+	if(entityFrameworkFiles.Length > 0)
+		edmxFile = entityFrameworkFiles[0];
+	
+	return edmxFile;
+}
+
+string strReplaceByEntityName(string Name)
+{
+	string strName = Name,entityNameReplace=Name;
+	string[] strNguyenAm = new string[5] {"u","e","o","a","i" };
+
+	bool flag = false;
+          
+    if (strName.Length > 1 && Name.Contains('_')==false)
+    {
+        strName = strName.Substring(strName.Length - 1, 1);
+
+        switch (strName.ToLower()) 
+        {
+            case "s" :      entityNameReplace=Name;
+                                break;
+            case "o": 
+					            for (int i = 0; i < strNguyenAm.Length; i++) 
+								{
+									if(strNguyenAm[i]==Name.Substring(Name.Length - 2, 1).ToLower())
+									{
+										flag=true;
+									}
+								}
+
+								if(flag)
+								{
+									entityNameReplace =Name +  "s"; 
+								}
+								else
+								{
+					                entityNameReplace =Name +  "es"; 
+								}
+                                break;
+			case "y": entityNameReplace =Name.Substring(0,Name.Length - 1) +  "ies";
+                                break;
+            default: entityNameReplace = Name +  "s";
+                                break;     
+        }
+    }
+
+	return entityNameReplace;
+}
+
+
+string WriteProperty(string sType)
+{
+	switch (sType.ToLower()) 
+    {
+		case "string": 
+		case "nullable<string>":
+			return "NVarChar";
+		case "system.datetime":
+		case "nullable<system.datetime>":
+			return "DateTime";
+		case "int": 
+		case "number": 
+		case "nullable<int>":
+			return "Int32";
+		case "bool":
+		case "nullable<bool>":
+			return "Boolean";
+		case "double":
+		case "decimal":
+		case "nullable<double>":
+		case "nullable<decimal>":
+			return "Double";
+		case "byte[]":
+		case "nullable<byte[]>":
+			return "Binary";
+		case "real[]":
+		case "nullable<real[]>":
+			return "Double";
+		case "single[]":
+		case "nullable<single[]>":
+			return "Double";
+		case "float[]":
+		case "nullable<float[]>":
+			return "Double";
+	}
+	return sType;
+}
+#>

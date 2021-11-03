@@ -1,0 +1,872 @@
+﻿@using TKM.Utils
+@model TKM.BLL.VanBanDuThaoDiViewModel
+@{
+    ViewBag.Title = "Chi tiết văn bản dự thảo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var typeUser = (string)ViewBag.typeUser;
+    var showYKien = (bool)ViewBag.showYKien;
+    var lstQuanHeLienKet = (Dictionary<int, string>)ViewBag.lstQuanHeLienKet;
+}
+
+@section Css{
+    <style>
+        table#table-detail td, table th {
+            font-size: 100% !important;
+        }
+
+        table#table-detail td {
+            text-align: left !important;
+        }
+
+        .titleInfo {
+            font-size: 17px;
+            padding-bottom: 3px;
+        }
+
+        .thr-line {
+            background-color: #808080;
+            width: 20%;
+            height: 3px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .table-infomation td:nth-child(2n+1) {
+            font-weight: bold !important;
+        }
+
+        .table-infomation td:nth-child(2n) {
+            width: 30% !important;
+        }
+
+        .table-infomation td:nth-child(3n) {
+            width: 20% !important;
+        }
+    </style>
+}
+<script src="~/Scripts/vgca/base64.js"></script>
+<script src="~/Scripts/vgca/vgcaplugin.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDuThaoDi">Danh sách văn bản dự thảo</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+        {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <h3 class="titleInfo fwb">Thông tin văn bản dự thảo đi</h3>
+                            <div class="thr-line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <table id="table-detail" class="table table-hover table-bordered table-infomation" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Loại văn bản</td>
+                                                <td>@Model.LoaiVanBan</td>
+                                                <td>Ngày đến </td>
+                                                <td>@ConvertDateTime.ConvertDateTimeToString(Model.NgayTao)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trích yếu nội dung</td>
+                                                <td colspan="3" style="max-width: 480px;">@Model.TrichYeu</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Người ký</td>
+                                                <td>@Model.NguoiKy</td>
+                                                <td>Đối tượng gửi văn bản đi</td>
+                                                <td>@Model.DoiTuongGuiVanBanDuThaoDi</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Chức vụ người ký</td>
+                                                <td>@Model.ChucVuNguoiKy</td>
+                                                <td>Độ khẩn</td>
+                                                <td>@Model.TenDoKhan</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nơi nhận</td>
+                                                <td><span style="white-space: pre-line">@Model.DonViNhan</span></td>
+                                                <td>Thời hạn giải quyết</td>
+                                                <td>@ConvertDateTime.ConvertDateTimeToString(Model.ThoiHanGiaiQuyet)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Người soạn thảo</td>
+                                                <td>@Model.NguoiTao</td>
+                                                <td>Đơn vị soạn thảo</td>
+                                                <td>@Model.TenDonViTao</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lĩnh vực</td>
+                                                <td>@Model.TenLinhVuc</td>
+                                                <td>Ngôn ngữ</td>
+                                                <td>
+                                                    @(TKM.Utils.CommonUtils.GetDescription((TKM.Utils.Enums.NgonNgu)Model.NgonNgu))
+                                                    @*@(Model.NgonNgu == (int)TKM.Utils.Enums.NgonNgu.TiengAnh ? TKM.Utils.Enums.NgonNgu.TiengAnh.GetDescription() : TKM.Utils.Enums.NgonNgu.TiengViet.GetDescription())*@
+                                                </td>
+                                                @*<td>@(Model.NgonNgu == )</td>*@
+                                            </tr>
+                                            <tr>
+                                                <td>Đơn vị hoặc người nhận bản lưu</td>
+                                                <td>@Model.TenDonViNhanBanLuu</td>
+                                                <td>Số trang</td>
+                                                <td>@Model.SoTrang.ToString("N0")</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ghi chú</td>
+                                                <td colspan="3" class="text-truncate" style="max-width: 240px;" title="@Model.GhiChu">@Model.GhiChu</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Số bản phát hành</td>
+                                                <td>@Model.SoBanPhatHanh.ToString("N0")</td>
+                                                <td>Trạng thái dự thảo</td>
+                                                <td>@Model.TrangThaiStr</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-2 fwb">
+                                    File văn bản
+                                </div>
+                                <div class="col-sm-10">
+                                    @*@{
+                                            var group_link = (string)TempData["group_link"];
+                                                                var group_name = (string)TempData["group_name"];
+                                                                var group_size = (string)TempData["group_size"];
+                                                                var group_replacename = (string)TempData["group_replacename"];
+                                                                var replaceName = group_replacename.Split('|');
+                                                                var name = group_name.Split('|');
+                                                            }
+                                        @if (!string.IsNullOrEmpty(group_link))
+                                        {
+                                            var arrLink = group_link.Split(',');
+                                            if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                                            {
+                                                for (int i = 0; i < arrLink.Length; i++)
+                                                {
+                                                    <a href="javascript://" data-link="@arrLink[i]" class="alert-link viewFile text-primary"><i class="fal fa-file-pdf mr-2" data-toggle="tooltip" title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i])? name[i] : "")" data-original-title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i])? name[i] : "")"></i>@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")</a>
+                                                    if (i != (arrLink.Length - 1))
+                                                    {
+                                                        @Html.Raw("</br>")
+                                                    }
+                                                }
+
+                                            }
+                                        }*@
+                                    @{
+                                        var group_link = (string)TempData["group_link"];
+                                        var group_name = (string)TempData["group_name"];
+                                        var group_size = (string)TempData["group_size"];
+                                        var group_replacename = (string)TempData["group_replacename"];
+                                    }
+                                    @if (!string.IsNullOrEmpty(group_link) && !string.IsNullOrEmpty(group_replacename) && !string.IsNullOrEmpty(group_name))
+                                    {
+                                        var replaceName = group_replacename.Split('|');
+                                        var name = group_name.Split('|');
+                                        var arrLink = group_link.Split(',');
+                                        if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                                        {
+                                            for (int i = 0; i < arrLink.Length; i++)
+                                            {
+                                                <a href="javascript://" data-link="@arrLink[i]" class="alert-link viewFile text-primary"><i class="fal fa-file-pdf mr-2" data-toggle="tooltip" title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i])? name[i] : "")" data-original-title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i])? name[i] : "")"></i>@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")</a>
+                                                if (i != (arrLink.Length - 1))
+                                                {
+                                                    @Html.Raw("</br>")
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-12 fwb">
+                                    Văn bản liên quan
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:180px">Số ký hiệu</th>
+                                                <th>Trích yếu</th>
+                                                <th style="width:85px">File</th>
+                                                <th style="width:200px">Quan hệ liên kết</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.LstVanBanLienQuan != null && Model.LstVanBanLienQuan.Count > 0)
+                                            {
+                                                foreach (var itemVBLQ in Model.LstVanBanLienQuan)
+                                                {
+                                                    <tr class="removed_@itemVBLQ.VanBanLienKetID">
+                                                        <input type="hidden" class="VanBanLienQuan" name="VanBanLienQuanID" value="@itemVBLQ.VanBanLienKetID" />
+                                                        <td align="center">
+                                                            @(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.SoKyHieu : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.SoKyHieu : "")
+                                                        </td>
+                                                        <td class="text-left">@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.TrichYeu : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.TrichYeu : "")</td>
+                                                        <td class="tac">
+                                                            @if (itemVBLQ.VanBanDen != null || itemVBLQ.VanBanDi != null)
+                                                            {
+                                                                <a href="@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.FileVanBan : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.FileVanBan : "javascript://")" target="_blank" class="h-tdu" style="color:#0b51c5;"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title=""></i></span></a>
+                                                            }
+                                                        </td>
+                                                        <td align="center">
+                                                            <select class="mdb-select mdb-select-cs-@itemVBLQ.VanBanLienKetID" id="LoaiLienKet" name="LoaiLienKet" searchable="Nhập từ khóa.." readonly disabled>
+                                                                <option value="0"> -- Chọn --</option>
+                                                                @if (lstQuanHeLienKet != null && lstQuanHeLienKet.Count > 0)
+                                                                {
+                                                                    foreach (var itemLK in lstQuanHeLienKet.Keys)
+                                                                    {
+                                                                        <option value="@itemLK" @(itemLK == itemVBLQ.LoaiLienKet ? "selected" : "" )>@lstQuanHeLienKet[itemLK]</option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                <tr><td colspan="10">Dữ liệu không tồn tại</td></tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            @if (Model.LstGopY != null && Model.LstGopY.Count > 0)
+                            {
+                                <div class="row form-group">
+                                    <div class="col-sm-12 fwb">
+                                        Ý kiến góp ý
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:180px">Người gửi</th>
+                                                    <th style="width:150px">Thời gian</th>
+                                                    @*<th style="width:200px">Đơn vị</th>*@
+                                                    <th style="width:180px">Người nhận</th>
+                                                    <th>Nội dung ý kiến</th>
+                                                    <th style="width:85px">File đính kèm</th>
+                                                    @if (Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.BanNhap || Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoGopY)
+                                                    {
+                                                        <th style="width:85px">Thao tác</th>}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.LstGopY != null && Model.LstGopY.Count > 0)
+                                                {
+                                                    foreach (var itemGopY in Model.LstGopY)
+                                                    {
+                                                        <tr>
+                                                            <td class="text-left">@itemGopY.HoVaTenNguoiTao</td>
+                                                            <td>@(itemGopY.NgayGopY.HasValue ? itemGopY.NgayGopY.Value.ToString("dd/MM/yyyy HH:mm") : "")</td>
+                                                            <td class="text-left">@itemGopY.HoVaTenNguoiGopY</td>
+                                                            <td class="text-left">@itemGopY.NoiDungYKien</td>
+                                                            <td>
+                                                                @if (!string.IsNullOrEmpty(itemGopY.FileDinhKem))
+                                                                {
+                                                                    <a href="@itemGopY.FileDinhKem" target="_blank" class="h-tdu" style="color:#0b51c5;"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File đính kèm"></i></span></a>
+                                                                }
+                                                            </td>
+                                                            @if (Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.BanNhap || Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoGopY)
+                                                            {
+                                                                <td>
+                                                                    @if (itemGopY.NguoiGopYID == SessionInfo.CurrentUser.ID)
+                                                                    {
+                                                                        <a class="h-tdu"><span><i class="fal fa-reply fs20" data-toggle="modal" data-nguoitaoid="@itemGopY.NguoiTaoID" data-target="#gopymodal" title="Phản hồi ý kiến" id="btngopy"></i></span></a>
+                                                                    }
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    <tr><td colspan="10">Dữ liệu không tồn tại</td></tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.LstQuaTrinh != null && Model.LstQuaTrinh.Count > 0)
+                            {
+                                <h3 class="titleInfo fwb">Ý kiến xử lý văn bản</h3>
+                                <div class="thr-line"></div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:180px">Người gửi</th>
+                                                    <th style="width:150px">Thời gian gửi</th>
+                                                    <th style="width:180px">Người nhận</th>
+                                                    <th>Nội dung ý kiến</th>
+                                                    <th style="width:120px">Trạng thái</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.LstQuaTrinh != null && Model.LstQuaTrinh.Count > 0)
+                                                {
+                                                    foreach (var itemQuaTrinh in Model.LstQuaTrinh)
+                                                    {
+                                                <tr>
+                                                    <td class="text-left">@itemQuaTrinh.HoVaTenNguoiGui</td>
+                                                    <td>@itemQuaTrinh.ThoiGianGui</td>
+                                                    <td class="text-left">@itemQuaTrinh.HoVaTenNguoiNhan</td>
+                                                    <td class="text-left">@itemQuaTrinh.NoiDungYKien</td>
+                                                    <td>@itemQuaTrinh.TrangThaiStr</td>
+                                                </tr>
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                <tr><td colspan="10">Dữ liệu không tồn tại</td></tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.LstVanBanDi != null && Model.LstVanBanDi.Count > 0)
+                            {
+                                <div class="accordion md-accordion" id="accordionExyk" role="tablist" aria-multiselectable="true">
+                                    <div role="tab" id="headingOne1yk">
+                                        <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                            <h3 class="titleInfo fwb mb-0">Danh sách văn bản đi <i class="fal fa-angle-down rotate-icon fr fs20"></i></h3>
+                                        </a>
+                                        <div class="thr-line"></div>
+                                    </div>
+                                    @*<h3 class="titleInfo fwb">Ý kiến trao đổi</h3>*@
+                                    <div class="collapse" id="collapseExample">
+                                        <div class="form-group row">
+                                            <div class="col-sm-12">
+                                                <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:180px">Số ký hiệu</th>
+                                                            <th style="width:180px">Trích yếu</th>
+                                                            <th style="width:150px">Đơn vị nhận</th>
+                                                            <th style="width:180px">Số đi</th>
+                                                            <th style="width:150px">Trạng thái</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.LstVanBanDi != null && Model.LstVanBanDi.Count > 0)
+                                                        {
+                                                            foreach (var itemVanBanDi in Model.LstVanBanDi)
+                                                            {
+                                                                <tr>
+                                                                    <td class="text-left">@itemVanBanDi.SoKyHieu</td>
+                                                                    <td class="text-left">@itemVanBanDi.TrichYeu</td>
+                                                                    <td class="text-left">@itemVanBanDi.DonViNhanStr</td>
+                                                                    <td>@itemVanBanDi.SoDi</td>
+
+                                                                    <td>@(itemVanBanDi.SoDi != null ? "Đã vào sổ":"Chưa vào sổ")</td>
+                                                                </tr>
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr><td colspan="10">Dữ liệu không tồn tại</td></tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="form-group row">
+                                <div class="col-sm-12 text-right">
+                                    @if (Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.BanNhap || Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoGopY || Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.LanhDaoCucTuChoiDuyet || Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.LanhDaoDonViTuChoiDuyet)
+                                    {
+                                        if (Model.NguoiTaoID == SessionInfo.CurrentUser.ID)
+                                        {
+                                            <a href="/VanBanDuThaoDi/Update/@Model.ID" id="capnhat" class="btn btn-primary">Cập nhật</a>
+                                            //if (Model.LstGopY == null || Model.LstGopY.Count == 0)
+                                            //{
+                                            <a href="/VanBanDuThaoDi/GuiYKien?vanbanid=@Model.ID" id="capnhat" class="btn btn-primary">Đưa ý kiến</a>
+                                            //}
+                                            <a href="/VanBanDuThaoDi/TrinhLanhDao?vanbanid=@Model.ID" id="capnhat" class="btn btn-primary">Trình duyệt</a>
+                                        }
+                                        @*if (Model.IsGopY && Model.NguoiTaoID != SessionInfo.CurrentUser.ID)
+                                            {
+                                                <a class="btn btn-primary" data-toggle="modal" data-target="#gopymodal">
+                                                    Đưa ý kiến
+                                                </a>
+                                            }*@
+                                    }
+
+                                    <a href="/VanBanDuThaoDi/QuaTrinhXuLy?vbid=@Model.ID" id="capnhat" class="btn btn-primary">Quá trình xử lý</a>
+                                    @if (Model.IsDuyet)
+                                    {
+
+                                        <a class="btn btn-primary" data-toggle="modal" data-target="#duyetmodal" data-id="@Model.QuaTrinhXuLyID" data-duthaoid="@Model.DuThaoId" data-duyet="1" id="btnduyetvakyso">
+                                            Duyệt và ký số
+                                        </a>
+                                        if (!SessionInfo.CurrentUser.IsCuc)
+                                        {
+                                            <a href="/VanBanDuThaoDi/TrinhLanhDao?vanbanid=@Model.ID" id="btnduyetvatrinh" class="btn btn-primary">Duyệt và trình lãnh đạo cục</a>
+                                            @*<button type="button" id="btnduyetvatrinh" data-vbid="@Model.ID" class="btn btn-primary">Duyệt và trình lãnh đạo cục</button>*@
+                                        }
+                                        <a class="btn btn-primary" data-toggle="modal" data-target="#tuchoimodal" data-id="@Model.QuaTrinhXuLyID" data-duthaoid="@Model.DuThaoId" data-duyet="0" id="btntuchoi">
+                                            Từ chối duyệt
+                                        </a>
+                                    }
+                                    @if (Model.NguoiTaoID == SessionInfo.CurrentUser.ID && (Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.DaDuyet || Model.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.DaKyDuyet))
+                                    {
+                                        <a class="btn btn-primary" data-toggle="modal" data-target="#phathanhdvmodal" data-duthaoid="@Model.DuThaoId" data-isdonvi="true" id="btnphathanhdv">
+                                            Chuyển đơn vị phát hành
+                                        </a>
+                                        <a class="btn btn-primary" data-toggle="modal" data-target="#phathanhmodal" data-duthaoid="@Model.DuThaoId" data-isdonvi="false" id="btnphathanh">
+                                            Chuyển cục phát hành
+                                        </a>
+                                    }
+                                    <a class="btn btn-primary" href="/VanBanDuThaoDi">Đóng</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="gopymodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Đưa ý kiến</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("DuaYKien", "VanBanDuThaoDi", FormMethod.Post, new { @id = "fFormGopY", enctype = "multipart/form-data" }))
+            {
+                @Html.Hidden("VanBanId", Model.ID)
+                @Html.Hidden("NguoiGopYID")
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="inputMaNV" class="col-sm-4 col-form-label">Nội dung góp ý</label>
+                        <div class="col-sm-8">
+                            <textarea type="text" class="form-control" id="txtNoiDung" name="NoiDungYKien" placeholder="Nhập nội dung góp ý (nếu có)"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputMaNV" class="col-sm-4 col-form-label">File đính kèm</label>
+                        <div class="col-sm-8">
+                            <input id="txtFile" name="File" type="file" />
+                            @*@Html.TextBoxFor(mo => m.Files, new { @id = "txtFile", @type = "file" })*@
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="duyetmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Duyệt dự thảo văn bản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("PheDuyet", "VanBanDuThaoDi", FormMethod.Post))
+            {
+                @Html.Hidden("QuaTrinhXuLyID")
+                @Html.Hidden("DuThaoId")
+                @Html.Hidden("IsPheDuyet")
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="inputMaNV" class="col-sm-4 col-form-label">Nội dung phê duyệt</label>
+                        <div class="col-sm-8">
+                            <textarea type="text" class="form-control" id="txtNoiDung" name="NoiDungYKien" placeholder="Nhập nội dung phê duyệt (nếu có)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="tuchoimodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Từ chối duyệt dự thảo văn bản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("PheDuyet", "VanBanDuThaoDi", FormMethod.Post))
+            {
+                @Html.Hidden("QuaTrinhXuLyID")
+                @Html.Hidden("DuThaoId")
+                @Html.Hidden("IsPheDuyet")
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="inputMaNV" class="col-sm-4 col-form-label">Lý do từ chối <span class="c-red-500">(*)</span></label>
+                        <div class="col-sm-8">
+                            <textarea type="text" class="form-control" id="txtNoiDung" name="NoiDungYKien" placeholder="Nhập lý do từ chối"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="phathanhmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chuyển phát hành</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("PhatHanh", "VanBanDuThaoDi", FormMethod.Post))
+            {
+                @Html.Hidden("DuThaoId")
+                @*<input id="PhatHanhDuThaoId" name="DuThaoId" hidden />*@
+                @Html.Hidden("IsDonVi", false)
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-center">
+                            @*<textarea type="text" class="form-control" id="txtNoiDung" name="NoiDungYKien" placeholder="Nhập nội dung góp ý (nếu có)"></textarea>*@
+                            <label class="col-form-label">Xác nhận chuyển phát hành cục?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="phathanhdvmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chuyển phát hành</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("PhatHanh", "VanBanDuThaoDi", FormMethod.Post))
+            {
+                @Html.Hidden("DuThaoId")
+                @*<input id="PhatHanhDuThaoId" name="DuThaoId" hidden />*@
+                @Html.Hidden("IsDonVi", true)
+                <div class="modal-body">
+                    <div class="form-group row">
+                        @*<label for="inputMaNV" class="col-sm-4 col-form-label">Đơn vị</label>*@
+                        <div class="col-sm-12">
+                            @*<label class="active" for="DonViChuyenPhatHanhID">Đơn vị chuyển phát hành</label>
+                                @Html.DropDownListFor(model => model.DonViID, new SelectList(Model.LstDonVi, "ID", "TenVaKyHieu"), "--- Chọn đơn vị ---", new { @class = "mdb-select", @id = "DonViChuyenPhatHanhID", @searchable = "Nhập từ khóa.." })*@
+                            <label class="col-form-label">Xác nhận chuyển phát hành đơn vị?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="kysomodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ký số dự thảo văn bản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="show_xemfilecks">
+
+            </div>
+            @*<div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+@section Script{
+    <script>
+        $('#quatrinhxuly').on('click', function (e) {
+            var vbid = e.target.dataset.vbid;
+            modal.Render('/VanBanDuThaoDi/QuaTrinhXuLyVanBan?vbid=' + vbid, 'Quá trình xử lý văn bản', 'modal-lg');
+        })
+        $('#trinhlanhdao').on('click', function (e) {
+            var vbid = e.target.dataset.vbid;
+            modal.Render('/VanBanDuThaoDi/TrinhLanhDao?vbid=' + vbid, 'Trình lãnh đạo', 'modal-lg');
+        });
+        function onTrinhLanhDaoSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Trình lãnh đạo thành công.');
+                modal.hide();
+                window.location.href = '/VanBanDuThaoDi';
+            } else {
+                toastr.error('Có lỗi khi trình lãnh đạo.');
+            }
+        }
+        $('#duaykienxuly').on('click', function (e) {
+            var vbid = e.target.dataset.vbid;
+            modal.Render('/VanBanDuThaoDi/DuaYKienXuLy?vbid=' + vbid, 'Đưa ý kiến xử lý', 'modal-lg');
+        })
+        function onDuaYKienXuLySuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Đưa ý kiến xử lý thành công.');
+                modal.hide();
+                window.location.href = '/VanBanDuThaoDi';
+            } else {
+                toastr.error('Có lỗi khi đưa ý kiến xử lý.');
+            }
+        }
+
+        $('#chuyenxuly').on('click', function (e) {
+            var vbid = e.target.dataset.vbid;
+            modal.Render('/VanBanDuThaoDi/ChuyenXuLy?vbid=' + vbid, 'Chuyển xử lý văn bản dự thảo đi', 'modal-lg');
+        });
+        function onChuyenXuLySuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Chuyển xử lý cho đơn vị thành công.');
+                modal.hide();
+                window.location.href = '/VanBanDuThaoDi';
+            } else {
+                if (res.message != '')
+                    toastr.error(res.message);
+                else
+                    toastr.error('Có lỗi khi chuyển xử lý cho đơn vị.');
+            }
+        }
+
+        $('#tralai').on('click', function (e) {
+            var vbid = e.target.dataset.vbid;
+            modal.Render('/VanBanDuThaoDi/TraLai?vbid=' + vbid, 'Trả lại văn bản', 'modal-lg');
+        })
+
+        function onTraLaiSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Trả lại văn bản thành công.');
+                modal.hide();
+                window.location.reload();
+            } else {
+                toastr.error('Có lỗi khi trả lại văn bản.');
+            }
+        }
+        $('#chidaonhiemvu').on('click', function (e) {
+            var vbid = e.target.dataset.vbid;
+            modal.Render('/VanBanDuThaoDi/ChiDaoNhiemVu?vbid=' + vbid, 'Nhập nội dung chỉ đạo/ nhiệm vụ được giao', 'modal-lg');
+        });
+        function onChiDaoNhiemVuSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Cập nhật nội dung chỉ đạo/ nhiệm vụ của lãnh đạo thành công.');
+                modal.hide();
+                window.location.reload();
+            } else {
+                toastr.error('Có lỗi khi nội dung chỉ đạo/ nhiệm vụ của lãnh đạo.');
+            }
+        }
+        function onUpdateStatusVB(id) {
+            modal.Render('/VanBanDuThaoDi/PopupUpdateStatusVB?id=' + id, 'Cập nhật trạng thái văn bản', 'modal-lg');
+        }
+        function onUpdateStatusVBSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Cập nhật trạng thái văn bản thành công.');
+                modal.hide();
+                window.location.reload();
+            } else {
+                toastr.error('Có lỗi khi cập nhạt trạng thái văn bản.');
+            }
+        }
+        function onUpdateStatusUser(id) {
+            modal.Render('/VanBanDuThaoDi/PopupUpdateStatusUser?id=' + id, 'Cập nhật trạng thái người dùng', 'modal-lg');
+        }
+        function onUpdateStatusUserSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Cập nhật trạng thái người dùng thành công.');
+                modal.hide();
+                window.location.reload();
+            } else {
+                toastr.error('Có lỗi khi cập nhạt trạng thái người dùng.');
+            }
+        }
+        function onAddSoVanBan() {
+            modal.Render('/VanBanDuThaoDi/PopupAddSoVanBan', 'Thêm mới sổ văn bản dự thảo đi', 'modal-lg');
+        }
+        function onAddSoVanBanSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Thêm mới sổ văn bản thành công.');
+                $.ajax({
+                    type: "GET",
+                    url: '/VanBanDuThaoDi/ReloadSoVanBanDuThaoDi',
+                    data: {},
+                    dataType: "html",
+                    success: function (res) {
+                        $('#reloadSoVanBanDuThaoDi').html(res);
+                    },
+                    error: function (response) {
+                        swal("Đã có lỗi xảy ra", { icon: "error", });
+                    }
+                });
+                modal.hide();
+            } else {
+                toastr.error('Có lỗi khi thêm mới sổ văn bản.');
+            }
+        }
+        function onAddCoQuanBanHanh() {
+            modal.Render('/VanBanDuThaoDi/PopupAddCoQuanBanHanh', 'Thêm mới cơ quan ban hành', 'modal-lg');
+        }
+        function onAddCoQuanBanHanhSuccess(res) {
+
+            if (res.isSuccess == true) {
+                toastr.success('Thêm mới cơ quan ban hành thành công.');
+                $.ajax({
+                    type: "GET",
+                    url: '/VanBanDuThaoDi/ReloadCoQuanBanHanh',
+                    data: {},
+                    dataType: "html",
+                    success: function (res) {
+
+                        $('#reloadCoQuanBanHanh').html(res);
+                    },
+                    error: function (response) {
+                        swal("Đã có lỗi xảy ra", { icon: "error", });
+                    }
+                });
+                modal.hide();
+            } else {
+                toastr.error('Có lỗi khi thêm mới sổ văn bản.');
+            }
+        }
+        function onPopupAddVanBanLienQuan() {
+            modal.Render('/VanBanDuThaoDi/PopupAddVanBanLienQuan', 'Chọn văn bản liên quan', 'modal-lg');
+        }
+        function onDelete(id) {
+            swal({
+                title: "Xóa?",
+                text: "Bạn có chắc chăn muốn xóa văn bản dự thảo đi này?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+              .then((willDelete) => {
+                  if (willDelete) {
+                      $.ajax({
+                          type: "POST",
+                          url: '/VanBanDuThaoDi/Delete',
+                          data: { id: id },
+                          dataType: "html",
+                          success: function (res) {
+                              res = JSON.parse(res);
+                              if (res.isSuccess == 1) {
+                                  swal("Xóa văn bản dự thảo đi thành công!", {
+                                      icon: "success",
+                                  });
+                                  window.location.href = '/VanBanDuThaoDi';
+                              }
+                              else
+                                  swal("Đã có lỗi xảy ra", { icon: "error", });
+                              loadData("", "");
+                          },
+                          error: function (response) {
+                              swal("Đã có lỗi xảy ra", { icon: "error", });
+                          }
+                      });
+
+                  }
+              });
+        }
+        $("#btngopy").click(function () {
+            $("#NguoiGopYID").val($(this).data("nguoitaoid"));
+        });
+        $("#btnduyetvakyso").click(function () {
+            $("#QuaTrinhID").val($(this).data("id"));
+            $("#DuThaoId").val($(this).data("duthaoid"));
+            $("#IsPheDuyet").val(true);
+        });
+        $("#btntuchoi").click(function () {
+            $("#QuaTrinhID").val($(this).data("id"));
+            $("#DuThaoId").val($(this).data("duthaoid"));
+            $("#IsPheDuyet").val(false);
+        });
+        $("#btnphathanh").click(function () {
+            $("#PhatHanhDuThaoId").val($(this).data("duthaoid"));
+            $("#IsDonVi").val($(this).data("isdonvi"));
+        });
+        $("#btnphathanhdv").click(function () {
+            $("#DuThaoId").val($(this).data("duthaoid"));
+            $("#IsDonVi").val($(this).data("isdonvi"));
+        });
+        $(".xemfilecks_dialog").click(function (e) {
+            $("#loading").show();
+            var id = e.target.dataset.id;
+            $.ajax({
+                type: "GET",
+                url: "/VanBanDuThaoDi/ViewFileKySo?id=" + id,
+                success: function (data) {
+                    if (data)
+                        $("#show_xemfilecks").html(data);
+                    $("#loading").hide();
+                }
+            });
+            $("#loading").hide();
+        });
+
+        //$('#btnduyetvatrinh').on('click', function (e) {
+        //    var vbid = e.target.dataset.vbid;
+        //    modal.Render('/VanBanDuThaoDi/TrinhLanhDao?vanbanid=' + vbid, 'Trình lãnh đạo', 'modal-lg');
+        //})
+    </script>
+}

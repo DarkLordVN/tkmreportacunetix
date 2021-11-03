@@ -1,0 +1,67 @@
+﻿@using TKM.BLL
+@{
+    ViewBag.Title = "Ký duyệt";
+    Layout = null;
+    var viewModel = (VanBanDiAttachViewModel)ViewBag.viewModel;    
+    var site = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Host + ":" + HttpContext.Current.Request.Url.Port;
+}
+@*viewModel.ChuKySo*@
+<input type="hidden" name="vbid" value="@viewModel.VanBanDiID" />
+@Html.Action("ViewFile", "Home", new { linkdown = ViewBag.filenameShow, cks = 1 })
+<script src="~/Scripts/vgca/base64.js"></script>
+<script src="~/Scripts/vgca/vgcaplugin.js"></script>
+    <div class="row" style="margin:auto;text-align:center;">
+        <div class="col-md-12">
+            <input type="hidden" id="file1" size="50" value="" />
+            <button class="btn btn-primary" onclick="exc_sign_file();" title="Ký duyệt" type="button"><i class="pr5 fas fa-pencil-alt"></i> Ký duyệt</button>
+            &nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button> 
+        </div>
+    </div>
+<script src="~/Scripts/jquery.fileDownload.js"></script>
+<script type="text/javascript">
+    function SignFileCallBack(rv) {
+        debugger;
+        var received_msg = JSON.parse(rv);
+        console.log(received_msg);
+        var status = 'error';
+        if (received_msg.Status == 0 ||received_msg.Status == 28) {
+            status = 'success';
+            received_msg.Message = 'Ký số thành công!';
+        }
+        if (status == 'success') {
+            toastr.success('Ký số thành công!');
+        }else {
+            toastr.error(received_msg.Message);
+        }
+        if (received_msg.Status != 0 && received_msg.Status != 28) {
+            return false;
+        }
+        $("#loading").hide();
+        window.location.reload();
+    }
+
+    function exc_sign_file() {
+        debugger;
+        //$("#loading").show();
+        var prms = {};
+        var scv = [{ "Key": "tvs", "Value": "cucdangkiem" }];
+        prms["FileUploadHandler"] = "@site" + "/VanBanDi/Signed?id=@ViewBag.id";
+        prms["SessionId"] = "";
+        prms["FileName"] = document.getElementById("file1").value;
+        prms["MetaData"] = scv;
+        var json_prms = JSON.stringify(prms);
+        console.log(json_prms);
+        vgca_sign_file(json_prms, SignFileCallBack);
+    }
+    $.fileDownload("@site" + "/VanBanDi/Download?id=" +@ViewBag.id, {
+        successCallback: function (url) {
+            console.log(url);
+        },
+        prepareCallback: function (url) {
+            console.log(url);
+        }
+    });
+</script>
+
+

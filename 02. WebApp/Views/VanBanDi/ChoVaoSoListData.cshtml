@@ -1,0 +1,103 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.VanBanDiListView
+    @{ 
+        var pagesize = Model.PageSize;
+        var totalPageNumber = Model.TotalItem / pagesize;
+        if (Model.TotalItem % pagesize != 0)
+        {
+            totalPageNumber = totalPageNumber + 1;
+        }
+    }
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.lstVanBanDi != null && Model.lstVanBanDi.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.lstVanBanDi)
+    {
+        index++;
+        <tr>
+           
+            @*<td align="center">@index</td>*@
+            <td class="tal">
+                <a href="/VanBanDi/Detail/@item.ID?q=chovaoso" class="f-hov1 h-tdu text-primary"><pre class="ffm-rob text-primary">@item.TrichYeu</pre></a>
+            </td>
+            <td align="center">
+                @*<a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.FileVanBan) ? item.FileVanBan : "")"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title=""></i></span></a>*@
+                @if (!String.IsNullOrEmpty(item.FileVanBan))
+                {
+                    var arrLink = item.FileVanBan.Split(new string[] { "[--]" }, StringSplitOptions.None);
+                    if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                    {
+                        for (int i = 0; i < arrLink.Length; i++)
+                        {
+                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@arrLink[i]"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title=""></i></span></a>
+                            if (i != (arrLink.Length - 1))
+                            {
+                                @Html.Raw("</br>")
+                            }
+                        }
+
+                    }
+                }
+            </td>
+            <td class="tal">@item.DonViSoanThao</td>
+            <td class="tal">@item.CanBoSoanThao</td>
+            <td class="tal"><pre class="ffm-rob">@Html.Raw(item.NoiNhan)</pre></td>
+
+            <td class="tal">@item.NguoiKy</td>
+            <td class="t_action">
+                <a href="javascript://" onclick="location.href='@Url.Action("VaoSo", "VanBanDi", new { id = item.ID })'" class="btn-floating btn-sm btn-warning mx-1" data-toggle="tooltip" title="Vào sổ" data-original-title="Vào sổ"><i class="fa fa-edit"></i></a>
+            </td>
+            @*<td>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                    <label class="form-check-label" for="chk'@item.ID'"></label>
+                </div>
+            </td>*@
+            
+        </tr>
+    }
+  
+}
+@if (Model != null && Model.lstVanBanDi == null || Model.lstVanBanDi.Count == 0)
+{
+    <tr>
+        <td colspan="12" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="12">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("ChoVaoSoListData", "VanBanDi", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TuKhoa = Model.TuKhoa,
+                   PhamViTimKiem = Model.PhamViTimKiem,
+                   DonViSoanThaoID = Model.DonViSoanThaoID,
+                   TuNgayNVB = Model.TuNgayNVB,
+                   CanBoSoanThaoID = Model.CanBoSoanThaoID,
+                   NguoiKyID = Model.NguoiKyID,
+                   DonViNhanNoiBoID = Model.DonViNhanNoiBoID,
+                   DonViNhanLT = Model.DonViNhanLT,
+                   tab = Model.tab,
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem văn bản
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+

@@ -1,0 +1,90 @@
+﻿@using TKM.BLL
+@model VanBanDenViewModel
+@{
+    Layout = null;
+    var act = (string)ViewBag.act;
+    var lstDonVi = (List<TKM.BLL.DmDonViViewModel>)ViewBag.lstDonVi;
+}
+@using (Ajax.BeginForm("ChuyenXuLy", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onChuyenXuLySuccess"
+}, new { @id = "fFormCXL" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+    <input type="hidden" id="act" name="act" value="@act" />
+    <div class="row">
+        <div class="col-sm-6 row">
+            <label for="ListDonViNhanID" class="col-sm-3 col-form-label">Đơn vị nhận <span class="c-red-500">(*)</span></label>
+            @Html.DropDownListFor(model => model.ListDonViNhanID, new SelectList(lstDonVi, "ID", "TenVaKyHieu"), "-- Chọn đơn vị --", new { @class = "mdb-select mdb-select-csa col-sm-9 md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ListDonViNhanID", @searchable = "Nhập từ khóa..", @multiple = "true" })
+        </div>
+        <div class="col-sm-6 row ml-1">
+            <div class="form-check form-check-inline">
+                <input type="checkbox" name="IsGuiSMS" class="form-check-input" id="GuiSms" value="true">
+                <label class="form-check-label" for="GuiSms">Gửi SMS</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="checkbox" name="IsGuiEmail" class="form-check-input" id="GuiEmail" value="true">
+                <label class="form-check-label" for="GuiEmail">Gửi Email</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary">Lưu và gửi</button>
+            @if (act.Equals("add"))
+            {
+                <button type="button" class="btn btn-light" onclick="DongForm();">Đóng</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+            }
+        </div>
+    </div>
+
+
+}
+@if (act == "add")
+{
+    <script>
+        function DongForm() {
+            window.location.href = '/VanBanDen';
+        }
+        $(document).ready(function () {
+            var thongbaoid = '@TempData["ThongBao"]';
+            if (thongbaoid != '') {
+                $('#lstidThongBao').val(thongbaoid);
+                $('.addNotificationRight').click();
+                $('.addNotification').click();
+            }
+            $('#close-redirect').addClass('closeredirect');
+            $('.closeredirect').on('click', function () {
+                window.location.href = '/VanBanDen';
+            })
+        });
+
+    </script>
+}
+<style>
+     .modal-lg, .modal-xl {
+        max-width: 1300px !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-csa').materialSelect();
+    })
+    $('#fFormCXL').on('submit', function () {
+        $("#loading").show();
+        var donvinhanid = $('#ListDonViNhanID').val().toString();
+        if (donvinhanid == '' || donvinhanid == ',') {
+            toastr.error('Bạn chưa chọn đơn vị nhận!');
+            $("#loading").hide();
+            return false;
+        }
+        //$('#btn-luu').attr("disabled", true);
+    })
+</script>

@@ -1,0 +1,61 @@
+﻿
+@model TKM.BLL.HomeViewModel
+@{
+    Layout = null;
+    var lstData = (List<string>)ViewBag.lstData;
+}
+<!-- Card image -->
+<div class="col-12">
+    <div class="form-group row">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header text-uppercase font-weight-bold">Các website có nguy cơ cao nhất</div>
+                <div class="card-body">
+                    @if (Model != null && Model.LsWebsite != null && Model.LsWebsite.Count() > 0)
+                    {
+                        foreach (var vmWebsite in Model.LsWebsite)
+                        {
+                            <div class="form-group row p-0 mt-0 mb-0">
+                                <div class="col-md-9">@vmWebsite.Host</div>
+                                <div class="col-md-3 p-0">
+                                    <a class="btn btn-danger m-1 btn-rounded text-right p-1 pr-3 pl-3 text-center" style="width: 55px;">@vmWebsite.TongNguyCoCao</a>
+                                    <a class="btn btn-warning m-1 btn-rounded text-right p-1 pr-3 pl-3 text-center" style="width: 55px;">@vmWebsite.TongNguyCoTrungBinh</a>
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                        }
+                    }
+                </div>
+                <div class="card-footer text-right">
+                    <a href="/NguoiDung" class="btn btn-info btn-rounded waves-effect waves-light pr-3 pl-3 pt-1 pb-1">Xem thêm <i class="fas fa-angle-double-down ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header text-uppercase font-weight-bold">Các nguy cơ mức cao thường gặp</div>
+                <div class="card-body">
+                    @if (Model != null && Model.LsAlertGroup != null && Model.LsAlertGroup.Count() > 0)
+                    {
+                        foreach (var vmNguyCo in Model.LsAlertGroup)
+                        {
+                            <div class="form-group row p-0 mt-0 mb-0">
+                                <div class="col-md-10">
+                                    @vmNguyCo.AlertName
+                                </div>
+                                <div class="col-md-2 p-0">
+                                    <a class="btn btn-outline-danger m-1 btn-rounded text-right p-1 pr-3 pl-3 text-center" style="width: 55px;">@vmNguyCo.TongWebsite</a>
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                        }
+                    }
+                </div>
+                <div class="card-footer text-right">
+                    <a href="/AlertGroup" class="btn btn-info btn-rounded waves-effect waves-light pr-3 pl-3 pt-1 pb-1">Xem thêm <i class="fas fa-angle-double-down ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Card -->

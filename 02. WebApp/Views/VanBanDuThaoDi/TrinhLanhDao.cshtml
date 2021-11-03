@@ -1,0 +1,184 @@
+﻿@model TKM.BLL.VanBanDuThaoDiQuaTrinhXuLyViewModel
+@{
+    ViewBag.Title = "Trình lãnh đạo";
+    var typeUser = (string)ViewBag.typeUser;
+    var noiDungYKien = (string)ViewBag.NoiDungYKien;
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDuThaoDi">Danh sách văn bản dự thảo</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+        {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @using (Html.BeginForm("TrinhLanhDao", "VanBanDuThaoDi", null, FormMethod.Post, new { @id = "fFormVanBan", enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @*@Html.HiddenFor(m => m.Files, new { @id = "ModelFileVanBan" })*@
+                                @Html.HiddenFor(m => m.DuThaoId)
+                                <input type="hidden" name="LoaiHinhVanBanChinh" value="duthao" />
+                                <input type="hidden" id="typeSubmit" name="typeSubmit" value="luu" />
+                                <input type="hidden" id="type" name="type" value="@typeUser" />
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            @Html.DropDownListFor(model => model.LanhDaoCucID, new SelectList(Model.LstLanhDao, "ID", "ChucVuVaTen"), "--- Chọn lãnh đạo trình ---", new { @class = "mdb-select", @id = "LanhDaoCucID", @searchable = "Nhập từ khóa.." })
+                                            @Html.ValidationMessageFor(model => model.LanhDaoCucID, "", new { @class = "alert-danger" })
+                                            <label class="active" for="NguoiKy">Kính trình <span class="c-red-500">(*)</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+
+                                            @Html.TextBoxFor(model => model.HoVaTen, new { @class = "form-control", @id = "HoVaTen", @disabled = "disabled", @readonly = "readonly" })
+                                            @Html.ValidationMessageFor(model => model.HoVaTen, "", new { @class = "alert-danger" })
+                                            <label for="NguoiGuiID" class="active">Cán bộ trình</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                if ((!SessionInfo.CurrentUser.IsCuc && SessionInfo.CurrentUser.IsLanhDao) || SessionInfo.CurrentUser.IsCuc)
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBoxFor(model => model.TenDonVi, new { @class = "form-control", @id = "TenVaKyHieu", @placeholder = "Đơn vị", @disabled = "disabled", @readonly = "readonly" })
+                                                <label for="NgayVanBanStr">Đơn vị soạn thảo</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.DropDownListFor(model => model.LanhDaoDonViID, new SelectList(Model.LstLanhDao.Where(x => x.DonViID == SessionInfo.CurrentUser.DonViID), "ID", "ChucVuVaTen"), new { @class = "mdb-select", @id = "LanhDaoDonViID", @searchable = "Nhập từ khóa..", @disabled = "disabled", @readonly = "readonly" })
+                                                @Html.ValidationMessageFor(model => model.LanhDaoDonViID, "", new { @class = "alert-danger" })
+                                                <label class="active" for="NguoiKy">Lãnh đạo đơn vị trình</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <label class="active" for="TrichYeu">
+                                            Nội dung trình <span class="c-red-500">(*)</span>
+                                        </label>
+                                        @Html.TextArea("NoiDungYKien", noiDungYKien, new { @class = "form-control rounded-0", @id = "NoiDungYKien", @placeholder = "Nội dung trình...", @rows = "3" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            <label class="active" for="NguoiKy">Độ khẩn</label>
+                                            @Html.DropDownListFor(model => model.DoKhanID, new SelectList(Model.LstDoKhan, "ID", "TenDoKhan"), "--- Chọn độ khẩn ---", new { @class = "mdb-select", @id = "DoKhanID", @searchable = "Nhập từ khóa.." })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            <label class="active" for="LstDonViNhanID">
+                                                Đơn vị phối hợp
+                                            </label>
+                                            @Html.DropDownListFor(model => model.LstDonViPhoiHopID, new SelectList(Model.LstDonVi, "ID", "TenVaKyHieu"), "--- Chọn đơn vị phối hợp ---", new { @class = "mdb-select", @id = "LstDonViPhoiHopID", @searchable = "Nhập từ khóa..", @multiple = "true" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2">
+                                        File đính kèm
+                                    </div>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(m => m.Files, new
+                                   {
+                                       @id = "txtFile",
+                                       @type = "file"@*, @multiple = "multiple"*@
+                                   })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2">
+                                        <div class="md-form mt-0">
+                                            <div class="form-check form-check-inline px-3 my-3">
+                                                <input type="checkbox" class="form-check-input" id="IsGuiSMS" name="IsGuiSMS" value="true">
+                                                <label class="form-check-label" for="IsGuiSMS">Gửi SMS</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 pl-0">
+                                        <div class="md-form mt-0">
+                                            <div class="form-check form-check-inline px-3 my-3">
+                                                <input type="checkbox" class="form-check-input" id="IsGuiEmail" name="IsGuiEmail" value="true">
+                                                <label class="form-check-label color-black" for="IsGuiEmail">Gửi Email</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right col-sm-12 mt-2">
+                                        <button type="submit" id="trinhduyet" class="btn btn-primary">Lưu và gửi</button>
+                                        <a class="btn btn-primary" href="/VanBanDuThaoDi">Đóng</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Script {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#addActive').addClass('active');
+        });
+        function setActive() {
+            $('#addActive').addClass('active');
+        }
+        setInterval(setActive, 1);
+
+        $("#fFormVanBan").validate({
+            rules: {
+                SoKyHieu: {
+                    required: true,
+                },
+                TrichYeu: {
+                    required: true,
+                }
+            },
+            messages: {
+                SoKyHieu: {
+                    required: "Vui lòng nhập số ký hiệu!",
+                },
+                TrichYeu: {
+                    required: "Vui lòng nhập trích yếu!",
+                }
+            }
+        });
+
+        $('#fFormVanBan').on('submit', function () {
+            $("#fFormVanBan").valid();
+            var lanhdaoid = $('#LanhDaoCucID').val();
+            if (lanhdaoid == '') {
+                toastr.error('Bạn chưa chọn lãnh đạo trình ký!');
+                return false;
+            }
+            $('#btn-luu').attr("disabled", true);
+        });
+
+    </script>
+}

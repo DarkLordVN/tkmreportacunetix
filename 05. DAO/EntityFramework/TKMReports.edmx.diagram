@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8a969475479343c39d44dafe43703dca" Name="Diagram1" ZoomLevel="90">
+        <EntityTypeShape EntityType="TKMReportsModel.AffectedItem" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.AlertGroup" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.HeThongThamSo" Width="1.5" PointX="5.75" PointY="4.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.NguoiDung" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.NhatKyHeThong" Width="1.5" PointX="7.75" PointY="7.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.NhomNguoiDung" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.NhomQuyen" Width="1.5" PointX="0.75" PointY="7.875" />
+        <EntityTypeShape EntityType="TKMReportsModel.NhomQuyenQuyen" Width="1.5" PointX="3" PointY="2.875" />
+        <EntityTypeShape EntityType="TKMReportsModel.Quyen" Width="1.5" PointX="0.75" PointY="1.125" />
+        <EntityTypeShape EntityType="TKMReportsModel.ScannedItem" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.ThongBao" Width="1.5" PointX="9.75" PointY="4.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.ThongBaoAttach" Width="1.5" PointX="9.75" PointY="9.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.TuDienVietHoa" Width="1.5" PointX="6.75" PointY="10.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.Website" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.WebsiteItem" Width="1.5" PointX="11.75" PointY="4.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.WebsiteScan" Width="1.5" PointX="11.75" PointY="8.75" />
+        <AssociationConnector Association="TKMReportsModel.FK_NhomQuyenQuyen_NhomQuyen" />
+        <AssociationConnector Association="TKMReportsModel.FK_NhomQuyenQuyen_Quyen" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

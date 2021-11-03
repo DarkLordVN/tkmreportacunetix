@@ -1,0 +1,165 @@
+﻿@using TKM.Utils
+@{
+    ViewBag.Title = "Sao lưu - Phục hồi dữ liệu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div id="mess"></div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="homeslider">
+                                <div class="col-xs-12 col-sm-12 paddingleft" style="padding-top:20px; padding-bottom:20px;">
+                                    <div class="doc_heading">
+                                        <h4><a href="#" title="Hướng dẫn">@ViewBag.Title</a> </h4>
+                                    </div>
+                                    <div class="guide_content">
+                                        Vui lòng xác nhận khi thực hiện việc sao lưu, phục hồi dữ liệu. Chú ý: <br />
+                                        <i><span class="c-red-500">(*)</span> Khi sao lưu dữ liệu sẽ ghi đè lên tập tin đã có!</i><br />
+                                        <i><span class="c-red-500">(*)</span> Khi phục hồi hệ thống sẽ thay thế dữ liệu hiện tại bằng dữ liệu đã phục hồi trước đó!</i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-1 col-form-label">Ngày</label>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="input-group date datepicker">
+                                            @Html.TextBox("LimitTime", null, new { @class = "form-control keyenter", @id = "LimitTime", @Value = ConvertDateTime.ConvertDateToString(DateTime.Now) })
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-clock"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-md-1 col-form-label">Giờ</label>
+                                <div class="col-md-3">
+                                    <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" searchable="Nhập từ khóa.." id="Gio" name="Gio">
+                                        @for (int i = 0; i < 24; i++)
+            {
+                                            <option @(DateTime.Now.Hour == i ? "selected" : "")>@i</option>
+                                        }
+                                    </select>
+                                </div>
+                                <label class="col-md-1 col-form-label">Phút</label>
+                                <div class="col-md-3">
+                                    <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" searchable="Nhập từ khóa.." id="Phut" name="Phut">
+                                        @for (int i = 0; i < 60; i++)
+            {
+                                            <option @(DateTime.Now.Minute == i ? "selected" : "")>@i</option>
+                                        }
+                                    </select>
+                                </div>
+                                
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-12 text-right">
+                                    <button type="button" onclick="backup()" class="btn btn-primary waves-effect waves-light m-0 mr-2">Sao lưu dữ liệu (Backup)</button>
+                                    <button type="button" onclick="restore()" class="btn btn-danger waves-effect waves-light m-0">Phục hồi dữ liệu (Restore)</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                   
+                    <script>
+                        var backup = function () {
+                            debugger;
+                            var ngay = $('#LimitTime').val();
+                            var gio = $('#Gio').val();
+                            var phut = $('#Phut').val();
+                            if (ngay == '') {
+                                swal("Bạn chưa chọn ngày", {
+                                    icon: "error",
+                                });
+                            } else {
+                                swal({
+                                    title: "Backup?",
+                                    text: "Bạn có chắc chắn muốn sao lưu dữ liệu?",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                })
+                                  .then((willDelete) => {
+                                      if (willDelete) {
+                                          $('#loading').show();
+                                          $.get("/BackupDatabase/Backup?Ngay=" + ngay + "&Gio=" + gio + "&Phut=" + phut, function (res) {
+                                              var htmlbackup;
+                                              if (res.IsSuccess == false) {
+                                                  htmlbackup = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">x</button><strong>' + res.Messenger + '</strong></div>';
+                                                  $("#mess").html(htmlbackup);
+                                              } else {
+                                                  htmlbackup = '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">x</button><strong>' + res.Messenger + '</strong></div>';
+                                                  $("#mess").html(htmlbackup);
+                                              }
+                                              $('#loading').hide();
+                                              setTimeout(function () {
+                                                  $("#mess").html('');
+                                              }, 5000);
+                                          });
+                                          $('#loading').hide();
+                                      }
+                                  });
+                            }
+
+                        };
+                        var restore = function () {
+                            var ngay = $('#LimitTime').val();
+                            var gio = $('#Gio').val();
+                            var phut = $('#Phut').val();
+                            if (ngay == '') {
+                                swal("Bạn chưa chọn ngày", {
+                                    icon: "error",
+                                });
+                            } else {
+                                swal({
+                                    title: "Khôi phục?",
+                                    text: "Bạn có muốn khôi phục dữ liệu không?",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                })
+                                      .then((willDelete) => {
+                                          if (willDelete) {
+                                              $('#loading').show();
+                                              $.get("/BackupDatabase/Restore?Ngay=" + ngay + "&Gio=" + gio + "&Phut=" + phut, function (res) {
+                                                  var htmlrestore;
+                                                  if (res.IsSuccess == false) {
+                                                      htmlrestore = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">x</button><strong>' + res.Messenger + '</strong></div>';
+                                                      $("#mess").html(htmlrestore);
+                                                  } else {
+                                                      htmlrestore = '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">x</button><strong>' + res.Messenger + '</strong></div>';
+                                                      $("#mess").html(htmlrestore);
+                                                  }
+                                                  $('#loading').hide();
+                                              });
+                                              setTimeout(function () {
+                                                  $("#mess").html('');
+                                              }, 5000);
+                                              $('#loading').hide();
+                                          }
+                                      });
+                            }
+                        };
+                    </script>

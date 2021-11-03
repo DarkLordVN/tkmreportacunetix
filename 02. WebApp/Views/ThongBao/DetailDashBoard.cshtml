@@ -1,0 +1,74 @@
+﻿@using TKM.BLL
+@model ThongBaoViewModel
+@{
+    Layout = null;
+}
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Tiêu đề: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model!=null ? Model.TieuDe : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Nội dung: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.NoiDung : "")
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">File đính kèm: </label>
+        </div>
+        <div class="col-md-9">
+           @if (!string.IsNullOrEmpty(Model.FileDinhKem))
+           {
+               var group_link = (string)TempData["group_link"];
+               var group_name = (string)TempData["group_name"];
+               var group_size = (string)TempData["group_size"];
+               string[] replaceName = null;
+               string[] name = null;
+               var group_replacename = (string)TempData["group_replacename"];
+               if (!string.IsNullOrEmpty(group_replacename))
+               {
+                   replaceName = group_replacename.Split('|');
+                   name = group_name.Split('|');
+               }
+               if (!String.IsNullOrEmpty(group_link))
+               {
+                   var arrLink = group_link.Split(',');
+                   if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                   {
+                       for (int i = 0; i < arrLink.Length; i++)
+                       {
+                        <a href="javascript://" data-link="@arrLink[i]" class="alert-link viewFile text-primary"><i class="fal fa-file-pdf mr-2" data-toggle="tooltip" title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")" data-original-title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")"></i>@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")</a>
+                           if (i != (arrLink.Length - 1))
+                           {
+                            @Html.Raw("</br>")
+                           }
+                       }
+
+                   }
+               }
+           }
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mic.gov.vn/TBT/QCVN_102_2016">
+  <edXML:edXMLEnvelope xmlns:edXML="http://www.mic.gov.vn/TBT/QCVN_102_2016">
+    <edXML:edXMLHeader>
+      <edXML:MessageHeader>
+        <edXML:From>
+          <edXML:OrganId>000.00.20.G04</edXML:OrganId>
+          <edXML:OrganizationInCharge>Cục Đăng kiểm Việt Nam</edXML:OrganizationInCharge>
+          <edXML:OrganName>Cục Đăng kiểm Việt Nam</edXML:OrganName>
+          <edXML:OrganAdd>18 Phạm Hùng, Từ Liêm, Hà Nội</edXML:OrganAdd>
+          <edXML:Email>vr-id@vr.org.vn</edXML:Email>
+          <edXML:Website>vr.org.vn</edXML:Website>
+        </edXML:From>
+        <edXML:ResponseFor>
+          <edXML:OrganId>000.00.00.G04</edXML:OrganId>
+          <edXML:Code>309/GM-BGTVT</edXML:Code>
+          <edXML:PromulgationDate>2020/04/10</edXML:PromulgationDate>
+          <edXML:DocumentId>000.00.00.G04,03/23/2020,309/GM-BGTVT</edXML:DocumentId>
+        </edXML:ResponseFor>
+        <edXML:StaffInfo>
+          <edXML:Department>Phòng Văn Thư - Lưu trữ</edXML:Department>
+          <edXML:Staff>Nguyễn Thị Tố Tâm</edXML:Staff>
+          <edXML:Mobile>(024).37684715</edXML:Mobile>
+        </edXML:StaffInfo>
+        <edXML:StatusCode>04</edXML:StatusCode>
+        <edXML:Description>Lãnh đạo: Phân công xử lý</edXML:Description>
+        <edXML:Timestamp>2020/04/10 23:42:14</edXML:Timestamp>
+      </edXML:MessageHeader>
+    </edXML:edXMLHeader>
+  </edXML:edXMLEnvelope>
+</edXML>

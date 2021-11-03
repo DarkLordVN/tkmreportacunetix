@@ -1,0 +1,254 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.NhatKyHeThongListView
+@{
+    ViewBag.Title = "Danh sách nhật ký hệ thống";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row lighten-4 border border-light border-top-0 border-right-0 border-left-0">
+                                <div class="col p-3">
+
+                                    <div class="d-none d-lg-inline-flex form-inline my-0 px-lg-3 border-right">
+                                        @Html.TextBoxFor(model => model.TuKhoa, new { @class = "form-control keyenterTuKhoa", @id = "txtTuKhoa", @placeholder = "Nhập từ khóa cần tìm ...", @style = "min-width: 31rem" })
+                                        <button id="btnSearchTuKhoa" class="btn text-white default-color rounded-pill px-3 btn-sm my-0 waves-effect waves-light" type="button">Tìm</button>
+                                    </div>
+
+                                    <button class="btn btn-sm btn-warning text-white ml-3 rounded-pill" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        Tìm kiếm nâng cao
+                                    </button>
+                                    <!-- Chức năng thêm và xóa -->
+                                    <div class="float-right">
+                                        @*<a href="/NhatKyHeThong/Add" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" title="Thêm mới" data-original-title="Thêm mới"><i class="fal fa-plus"></i></a>*@
+                                    </div>
+                                    <div style="clear:both;"></div>
+
+                                    <div class="collapse" id="collapseExample">
+                                        <div class="row bg-white mx-0 p-3">
+                                            <div class="col-12 col-lg-12 row">
+                                                <label for="NguoiDungID" class="col-lg-2 col-form-label">Người dùng</label>
+                                                <div class="col-lg-4">
+                                                    <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NguoiDungID" name="NguoiDungID" searchable="Nhập từ khóa..">
+                                                        <option value="0">-- Chọn --</option>
+                                                        @if (Model.lstNguoiDung != null && Model.lstNguoiDung.Count > 0)
+                                                        {
+                                                            foreach (var item in Model.lstNguoiDung)
+                                                            {
+                                                                <option value="@item.ID">@item.HoVaTen</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <label for="txtIpClient" class="col-lg-2 col-form-label">IP</label>
+                                                <div class="col-lg-4">
+                                                    @Html.TextBoxFor(model => model.IpClient, new { @class = "form-control keyenter", @id = "txtIpClient" })
+                                                </div>
+                                                <label for="txtMoTa" class="col-lg-2 col-form-label">Mô tả</label>
+                                                <div class="col-lg-4">
+                                                    @Html.TextBoxFor(model => model.MoTa, new { @class = "form-control keyenter", @id = "txtMoTa" })
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <p class="fwb mb-0 pl-3">Ngày tạo</p>
+                                            <div class="col-12 col-lg-12 row">
+                                                <label for="TuNgayNT" class="col-lg-2 col-form-label">Từ ngày</label>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <div class="input-group date datepicker">
+                                                            @Html.TextBoxFor(model => model.TuNgayNT, new { @class = "form-control keyenter", @id = "TuNgayNT" })
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-clock"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label for="DenNgayNT" class="col-lg-2 col-form-label">Đến ngày</label>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <div class="input-group date datepicker">
+                                                            @Html.TextBoxFor(model => model.DenNgayNT, new { @class = "form-control keyenter", @id = "DenNgayNT" })
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-clock"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col text-center text-lg-right">
+                                                <button id="btnSearch" class="btn text-white f-bg1" type="button">Tìm kiếm</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- / Collapsible element -->
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table id="dt-vblt-den" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead class="indigo text-white lighten-1">
+                                                <tr>
+
+                                                    <th class="t_action th-sm">STT</th>
+                                                    @* //Todo: Thêm colname + order by *@
+                                                    <th class="th-sm pointer">Tên người dùng </th>
+                                                    <th class="th-sm pointer" data-colname="IpClient" data-orderby="asc" style="min-width:200px">IP Client <span><i class="fas fa-sort"></i></span></th>
+                                                    <th class="th-sm" data-colname="MoTa" data-orderby="asc">Mô tả <span><i class="fas fa-sort"></i></span></th>
+                                                    <th class="th-sm">Ngày tạo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("IndexDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+        $(".keyenterTuKhoa").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearchTuKhoa").click();
+            }
+        });
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+        //Thêm event xử lý load ajax
+        $("#btnSearchTuKhoa").click(function () {
+            $("#loading").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "NhatKyHeThong")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), NguoiDungID: $("#NguoiDungID").val(), MoTa: $("#txtMoTa").val(), IpClient: $("#txtIpClient").val(), TuNgayNT: $("#TuNgayNT").val(), DenNgayNT: $("#DenNgayNT").val(), ColumnName: "", OrderBy: "", PageNumber: 1, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            $("#loading").hide();
+        });
+        function loadData(col, order, pnum, psize) {
+            $("#loading").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "NhatKyHeThong")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), NguoiDungID: $("#NguoiDungID").val(), MoTa: $("#txtMoTa").val(), IpClient: $("#txtIpClient"), TuNgayNT: $("#TuNgayNT").val(), DenNgayNT: $("#DenNgayNT").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            $("#loading").hide();
+        }
+        $("#btnSearch").click(function () {
+            $("#loading").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "NhatKyHeThong")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), NguoiDungID: $("#NguoiDungID").val(), MoTa: $("#txtMoTa").val(), IpClient: $("#txtIpClient").val(), TuNgayNT: $("#TuNgayNT").val(), DenNgayNT: $("#DenNgayNT").val(), ColumnName: "", OrderBy: "", PageNumber: 1, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            $("#loading").hide();
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+    </script>
+}

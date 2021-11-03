@@ -1,0 +1,72 @@
+--------- 01:18:31 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /Quyen/Index?check
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:18:31
+--------- 01:18:52 ---------
+Ref URL: http://localhost:3939/BaoCao/TongThietBiNhom
+Host: localhost:3939
+URL: /Quyen/Index?check
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:18:52
+--------- 01:18:57 ---------
+Ref URL: http://localhost:3939/Quyen/Index?check
+Host: localhost:3939
+URL: /Quyen/Add
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:18:57
+--------- 01:19:47 ---------
+Ref URL: http://localhost:3939/Quyen/Add
+Host: localhost:3939
+URL: /Quyen/Add
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:19:47
+--------- 01:19:47 ---------
+Ref URL: http://localhost:3939/Quyen/Add
+Host: localhost:3939
+URL: /Quyen
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:19:47
+--------- 01:19:54 ---------
+Ref URL: http://localhost:3939/Quyen
+Host: localhost:3939
+URL: /NhomQuyen/Index
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:19:54
+--------- 01:19:56 ---------
+Ref URL: http://localhost:3939/NhomQuyen/Index
+Host: localhost:3939
+URL: /NhomQuyen/Update/1
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:19:56
+--------- 01:20:09 ---------
+Ref URL: http://localhost:3939/NhomQuyen/Update/1
+Host: localhost:3939
+URL: /NhomQuyen/Update/1
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:20:09
+--------- 01:20:10 ---------
+Ref URL: http://localhost:3939/NhomQuyen/Update/1
+Host: localhost:3939
+URL: /NhomQuyen
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:20:10
+--------- 01:20:22 ---------
+Ref URL: http://localhost:3939/NhomQuyen
+Host: localhost:3939
+URL: /Quyen/Index?check
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:20:22
+--------- 01:20:36 ---------
+Ref URL: http://localhost:3939/Quyen/Index?check
+Host: localhost:3939
+URL: /Quyen/Delete
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:20:36
+--------- 01:20:40 ---------
+Ref URL: http://localhost:3939/Quyen/Index?check
+Host: localhost:3939
+URL: /Quyen/Delete
+IP: ::1
+Text: User: user2; Date: 08/05/2021 01:20:40

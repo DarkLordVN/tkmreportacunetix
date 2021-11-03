@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BBF1EC7F-90C8-43BD-B962-260CB514B509}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TKM.DAO</RootNamespace>
+    <AssemblyName>TKM.DAO</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\20. WIP\5. Program\BIN\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\0. DLL\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\0. DLL\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\0. DLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EntityFramework\AffectedItem.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AffectedItemRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AffectedItemRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AlertGroup.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AlertGroupRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\AlertGroupRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\CountHostsByGroup_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\CountProblemBySeverity_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\CountProblemByStatus_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\CustomModel\WebsiteScan.cs" />
+    <Compile Include="EntityFramework\CustomModel\NguoiDung.cs" />
+    <Compile Include="EntityFramework\CustomModel\ThongBao.cs" />
+    <Compile Include="EntityFramework\DeXuatNhomThietBi_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\EFRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\EFUnitOfWork.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\CustomModel\NhomDonVi.cs" />
+    <Compile Include="EntityFramework\CustomModel\NhomNguoiDung.cs" />
+    <Compile Include="EntityFramework\CustomModel\NhomQuyenQuyen.cs" />
+    <Compile Include="EntityFramework\CustomModel\Quyen.cs" />
+    <Compile Include="EntityFramework\GetFilterHieuNang_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\GetNhomThietBi_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\GetProblemDetail_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\HeThongThamSo.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\HeThongThamSoRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\HeThongThamSoRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\HieuNangNhomThietBi_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\HostsByGroup_Result.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\IRepository1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\IUnitOfWork.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NguoiDung.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NguoiDungRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NguoiDungRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhatKyHeThong.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhatKyHeThongRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhatKyHeThongRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhomNguoiDung.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhomNguoiDungRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhomNguoiDungRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhomQuyen.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhomQuyenQuyen.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhomQuyenRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\NhomQuyenRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Quyen.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\QuyenRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\QuyenRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ScannedItem.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ScannedItemRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ScannedItemRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ThongBao.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ThongBaoAttach.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ThongBaoAttachRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ThongBaoAttachRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ThongBaoRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\ThongBaoRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TKMReports.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TKMReports.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TKMReports.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TKMReports.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TKMReports.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TuDienVietHoa.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TuDienVietHoaRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TuDienVietHoaRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Website.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteItem.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteItemRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteItemRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteScan.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteScanRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\WebsiteScanRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="EntityFramework\TKMReports.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TKMReports.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="EntityFramework\TKMReports.edmx.diagram">
+      <DependentUpon>TKMReports.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EntityFramework\IRepository.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IRepository1.cs</LastGenOutput>
+    </Content>
+    <Content Include="EntityFramework\TKMReports.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TKMReports.edmx</DependentUpon>
+      <LastGenOutput>TKMReports.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EntityFramework\TKMReports.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TKMReports.edmx</DependentUpon>
+      <LastGenOutput>TKMReports.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\01. Common\TKM.Utils.csproj">
+      <Project>{8f3771f1-4d56-4699-bd09-f4941255aced}</Project>
+      <Name>TKM.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EntityFramework\CustomRepository\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

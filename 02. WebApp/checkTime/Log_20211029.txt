@@ -1,0 +1,12 @@
+--------- 20:51:34 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:17:02 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2

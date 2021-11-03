@@ -1,0 +1,98 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.LichLanhDaoListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.LstLichLanhDao != null && Model.LstLichLanhDao.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.LstLichLanhDao)
+    {
+        index++;
+        <tr>
+
+            <td align="center">@index</td>
+
+            <td class="tal">
+                <a href="javascript://" title="Xem chi tiết" onclick="loadfrmView(@item.ID)" class="h-tdu text-primary"><div class="ffm-rob text-primary dib">@item.HoVaTen</div></a>
+            </td>
+            <td align="center">@item.ThoiGianStr</td>
+            <td>
+                <a href="javascript://" title="Xem chi tiết" onclick="loadfrmView(@item.ID)" class="h-tdu text-primary"><div class="ffm-rob text-primary dib">@(item.ThoiGianBatDau != null ? item.ThoiGianBatDau.ToString("dd/MM/yyyy") : "--")</div></a>
+            </td>
+            @*<td>
+                <a href="javascript://" title="Xem chi tiết" onclick="loadfrmView(@item.ID)" class="h-tdu text-primary"><div class="ffm-rob text-primary dib">@(item.ThoiGianKetThuc != null ? item.ThoiGianKetThuc.ToString("dd/MM/yyyy") : "--")</div></a>
+            </td>*@
+            <td class="tal">
+                @Html.Raw(item.NoiDung)
+            </td>
+            <td class="tal">
+                @item.DiaDiem
+            </td>
+            @*<td class="tal">
+                @item.ChuanBi
+            </td>*@
+            <td class="tal">
+                @item.ThanhPhanThamGia
+            </td>
+            @*<td class="tal">
+                    <a href="/LichLanhDao/Detail/@item.ID" title="Xem chi tiết" class="h-tdu text-primary"><div class="ffm-rob text-primary dib whitespace-pre" >@item.TenNguoiUQ</div></a>
+                </td>
+                <td align="center">
+                    <a title="@(item.TrangThai == true?"Có sử dụng":"Không sử dụng")" onclick="onChangeStatus(@item.ID)">@Html.Raw(item.TrangThai == true ? "<span class='text-success'><i class='fa fa-check'></i></span>" : "<span class='text-danger'><i class='fa fa-times'></i></span>")</a>
+                </td>*@
+            <td class="t_action">
+                <a href="javascript://" onclick="location.href='@Url.Action("Update", "LichLanhDao", new { id = item.ID })'" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa"><i class="fal fa-edit"></i></a>
+                <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+            </td>
+            @*<td>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                    <label class="form-check-label" for="chk'@item.ID'"></label>
+                </div>
+            </td>*@
+        </tr>
+    }
+
+}
+@if (Model != null && Model.LstLichLanhDao == null || Model.LstLichLanhDao.Count == 0)
+{
+    <tr>
+        <td colspan="9" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="10">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "LichLanhDao", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   NguoiDungID = Model.NguoiDungID,
+                   ThoiGianBatDauStr = Model.ThoiGianBatDauStr,
+                   ThoiGianKetThucStr = Model.ThoiGianKetThucStr
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem bản ghi
+                </div>
+            </div>
+        </td>
+    </tr>
+}

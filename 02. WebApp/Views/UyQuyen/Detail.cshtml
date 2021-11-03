@@ -1,0 +1,56 @@
+﻿
+@using TKM.BLL
+@model UyQuyenViewModel
+@{
+    Layout = null;
+}
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Người ủy quyền: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.NguoiUyQuyen : "1")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Người được ủy quyền: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.NguoiDung : "")
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Từ ngày: </label>
+        </div>
+        <div class="col-md-9">
+            @Model.TuNgay.Value.ToString("dd/MM/yyyy")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Đến ngày: </label>
+        </div>
+        <div class="col-md-9">
+            @Model.DenNgay.Value.ToString("dd/MM/yyyy")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,7 @@
+--------- 00:09:32 ---------
+Ref URL: http://localhost:3939/Authentication/Login
+Host: localhost:3939
+URL: /Authentication/Login
+IP: ::1
+Text: System.NullReferenceException: Object reference not set to an instance of an object.
+   at TKM.DAO.EntityFramework.NguoiDungRepository.DoLogin(String username, String password, NguoiDung& acc, String& isLocked) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\NguoiDungRepository.cs:line 20

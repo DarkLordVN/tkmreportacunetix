@@ -1,0 +1,2 @@
+﻿/*@media print{@page {size: landscape}}*/
+@media print and (orientation:landscape) { @page {size: landscape}}

@@ -1,0 +1,139 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.HoSoCongViecListView
+    @{ 
+        var pagesize = Model.PageSize;
+        var totalPageNumber = Model.TotalItem / pagesize;
+        if (Model.TotalItem % pagesize != 0)
+        {
+            totalPageNumber = totalPageNumber + 1;
+        }
+        var isDonVi = (bool)ViewBag.isDonVi;
+        var typeUser = (string)ViewBag.typeUser;
+    }
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.lstHoSoCongViec != null && Model.lstHoSoCongViec.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.lstHoSoCongViec)
+    {
+        index++;
+        <tr>
+
+            <td align="center">@index</td>
+            <td class="tal">
+                <a href="/HoSoCongViec/Detail/@item.ID?tab=@Model.tab" class="f-hov1 h-tdu text-primary" data-toggle="tooltip" title="Xem chi tiết"><div class="ffm-rob text-primary">@item.TenCongViec</div></a>
+            </td>
+            <td class="tal">@Html.Raw(item.MoTaCongViec)</td>
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(item.NgayTaoForm)</td>
+            <td class="tal"><div class="ffm-rob">@(typeUser.Equals("ldc")? item.DonViXuLyChinh:item.CanBoXuLyChinh)</div></td>
+            
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(item.HanXuLy)</td>
+            <td class="tal">
+                @item.GhiChu
+            </td>
+            <td class="tal">
+                @Html.Raw(item.KetQuaXuLy)
+                @if (!String.IsNullOrEmpty(item.FileDinhKemTraLoi))
+                {
+                    @Html.Raw("</br>")
+                    <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@item.FileDinhKemTraLoi"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File đính kèm" data-original-title=""></i></span></a>
+                }
+        </td>
+            @{
+                string background = "";
+                string color = "#fff";
+                switch (item.TrangThaiCongViecID)
+                {
+                    case 0:
+                        //Chưa tiếp nhận
+                        background = "#e53935";
+                        break;
+                    case 1:
+                        //Đã tiếp nhận
+                        background = "#4285f4";
+                        break;
+                    case 2:
+                        //Phân công
+                        background = "#ff9100";
+                        break;
+                    case 3:
+                        //Đang xử lý
+                        background = "rgba(0,188,212,.7)";
+                        break;
+                    case 4:
+                        //Hoàn thành
+                        background = "#00c851";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            <td align="center" style='@string.Format("background-color:{0} !important;color:{1} !important",background,color)'>@item.TrangThaiCongViecStr</td>
+            @*<td class="t_action">
+                <a href="javascript://" onclick="onQuaTrinhXuLy(@item.ID,@item.RootID);" class="btn-floating btn-sm btn-default mx-1" data-toggle="tooltip" data-original-title="Quá trình xử lý" title="Quá trình xử lý"><i class="fas fa-project-diagram"></i></a>
+            </td>*@
+            <td class="t_action">
+                @*<a href="javascript://" onclick="location.href='@Url.Action("Add", "HoSoCongViec", new { pID = item.ID })'" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" title="Giao việc tiếp" data-original-title="Giao việc tiếp"><i class="fal fa-plus"></i></a>*@
+                @if (item.NguoiTaoID == SessionInfo.CurrentUser.ID)
+                {
+                    if (item.IsGiao == false)
+                    {
+                        <a href="javascript://" onclick="location.href='@Url.Action("Update", "HoSoCongViec", new { id = item.ID })'" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa"><i class="fal fa-edit"></i></a>
+                        <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                    }
+                }   
+            </td>
+            @*<td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                        <label class="form-check-label" for="chk'@item.ID'"></label>
+                    </div>
+                </td>*@
+
+        </tr>
+                    }
+
+                }
+@if (Model != null && Model.lstHoSoCongViec == null || Model.lstHoSoCongViec.Count == 0)
+{
+    <tr>
+        <td colspan="14" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="14">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "HoSoCongViec", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TuKhoa = Model.TuKhoa,
+                   PhamViTimKiem = Model.PhamViTimKiem,
+                   TrangThaiCongViecID = Model.TrangThaiCongViecID,
+                   DonViXuLyChinhID = Model.DonViXuLyChinhID,
+                   CanBoXuLyChinhID = Model.CanBoXuLyChinhID,
+                   TuNgayNT = Model.TuNgayNT,
+                   DenNgayNT = Model.DenNgayNT,
+                   TuNgayHXL = Model.TuNgayHXL,
+                   DenNgayHXL = Model.DenNgayHXL,
+                   tab = Model.tab,
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem công việc
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+

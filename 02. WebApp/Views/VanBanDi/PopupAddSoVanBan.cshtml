@@ -1,0 +1,214 @@
+﻿@using TKM.BLL
+@model TKM.BLL.SoVanBanDiViewModel
+@{
+    ViewBag.Title = "";
+    Layout = null;
+    //var lstDonVi = (List<DmCoQuanBanHanhViewModel>)ViewBag.lstDonVi;
+    var DonViID = (int)ViewBag.DonViID;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@*<link href="~/Assets/css/mdb.min.css" rel="stylesheet">*@
+@using (Ajax.BeginForm("PopupAddSoVanBan", "VanBanDi", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onAddSoVanBanSuccess"
+}, new { @id = "fForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="DonViID" value="@DonViID" />
+    <div class="form-group row">
+        <div class="col-sm-6 row">
+            <label for="Ten" class="col-sm-4 col-form-label pr-0">Tên sổ văn bản <span class="c-red-500">(*)</span></label>
+            <div class="col-sm-8">@Html.TextBoxFor(model => model.Ten, new { @class = "form-control", @id = "Ten" })</div>
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6 row">
+            <label for="SoBatDauTrongSo" class="col-sm-4 col-form-label pr-0">Số bắt đầu trong sổ <span class="c-red-500">(*)</span></label>
+            <div class="col-sm-8">@Html.TextBox("SoBatDauTrongSo", null, new { @class = "form-control keyenter", @id = "SoBatDauTrongSo", @Type = "number", @min = "0" })</div>
+        </div>
+        <div class="col-sm-6 row">
+            <label for="NamVaoSo" class="col-sm-4 col-form-label pr-0">Năm vào sổ <span class="c-red-500">(*)</span></label>
+            <div class="col-sm-8">
+                @Html.TextBox("NamVaoSo", null, new { @class = "form-control keyenter", @id = "NamVaoSo", @Type = "number" })
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-sm-6 row">
+            <label class="col-sm-4 col-form-label" for="NgayBatDauStr">
+                Ngày bắt đầu
+            </label>
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <div class="input-group date datepicker">
+                        @Html.TextBoxFor(model => model.NgayBatDauStr, new { @class = "form-control datepickerfix", @id = "NgayBatDauStr" })
+                        <span class="input-group-addon">
+                            <span class="fa fa-clock"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 row">
+            <label class="col-sm-4 col-form-label" for="NgayKetThucStr">
+                Ngày kết thúc
+            </label>
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <div class="input-group date datepicker">
+                        @Html.TextBoxFor(model => model.NgayKetThucStr, new { @class = "form-control datepickerfix", @id = "NgayKetThucStr" })
+                        <span class="input-group-addon">
+                            <span class="fa fa-clock"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary" id="btnluusvb">Lưu</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Hủy bỏ</button>
+        </div>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-cusdv').materialSelect();
+        $(".datepickerfix").kendoDatePicker({
+            //value: "",
+            dateInput: true,
+            format: "dd/MM/yyyy"
+        });
+        $(".datetimepicker").kendoDateTimePicker({
+            //value: new Date(),
+            dateInput: true,
+            format: "dd/MM/yyyy HH:mm"
+        });
+
+        $(".datepickerfix").each(function () {
+            if ($(this).val() == 'ngày / tháng / năm') {
+                $(this).val("");
+            }
+        });
+        $(".datepickerfix").focusout(function () {
+            if ($(this).val() == 'ngày / tháng / năm') {
+                $(this).val("");
+            }
+        });
+        $(".datetimepicker").each(function () {
+            if ($(this).val() == 'ngày / tháng / năm giờ:phút') {
+                $(this).val("");
+            }
+        });
+        $(".datetimepicker").focusout(function () {
+            if ($(this).val() == 'ngày / tháng / năm giờ:phút') {
+                $(this).val("");
+            }
+        });
+        //$.validator.addMethod('CheckTrungTenSoVanBan', function () {
+            
+        //    var name = $('#Ten').val();
+        //    var id = '0';
+        //    var isSuccess = true; // không trùng
+        //    $.ajax({
+        //        type: "GET",
+        //        url: '/VanBanDi/CheckTrungTenSoVanBan',
+        //        data: { id: id, name: name },
+        //        dataType: "html",
+        //        success: function (res) {
+        //            res = JSON.parse(res);
+        //            if (res.trungTen == true) {
+                        
+        //                isSuccess = false;
+        //                toastr.error('Tên sổ văn bản đã tồn tại!');
+        //                $('#btnluusvb').prop('disabled', true);
+        //            }
+        //            else
+        //                $('#btnluusvb').prop('disabled', false);
+        //        },
+        //        error: function (response) {
+        //            swal("Đã có lỗi xảy ra", { icon: "error", });
+        //        }
+        //    });
+        //    return isSuccess;
+        //}, "Tên sổ văn bản đã tồn tại!");
+    });
+    $("#fForm").validate({
+        rules: {
+
+            Ten: {
+                required: true,
+                maxlength: 250,
+            },
+            SoBatDauTrongSo: {
+                required: true,
+                min: 1,
+                digits:true,
+                maxlength:9,
+            },
+            NamVaoSo: {
+                required: true,
+                min: 1901,
+                maxlength:4
+            }
+        },
+        messages: {
+
+            Ten: {
+                required: "Vui lòng nhập tên sổ văn bản!",
+                maxlength: "Không nhập quá 250 ký tự",
+            },
+            SoBatDauTrongSo: {
+                required: "Sô bắt đầu trong sổ không để trống",
+                min: "Sô bắt đầu trong sổ phải lớn hơn 0",
+                digits: "Sai định dạng số! Vui lòng nhập lại.",
+                maxlength: "Không nhập quá 9 ký tự",
+            },
+            NamVaoSo: {
+                required: "Năm vào sổ trong sổ không để trống",
+                min: "Năm vào sổ trong sổ phải lớn hơn 1900",
+                maxlength :"Năm vào sổ chỉ nhập 4 ký tự!"
+            }
+        }
+    });
+
+    //$('#Ten').on('change', function () {
+        
+    //    var name = $('#Ten').val();
+    //    var id = '0';
+    //    var isSuccess = true; // không trùng
+    //    if (name.length <= 250) {
+    //        $.ajax({
+    //            type: "GET",
+    //            url: '/VanBanDi/CheckTrungTenSoVanBan',
+    //            data: { id: id, name: name },
+    //            dataType: "html",
+    //            success: function (res) {
+    //                res = JSON.parse(res);
+    //                if (res.trungTen == true) {
+    //                    toastr.error('Tên sổ văn bản đã tồn tại!');
+    //                    isSuccess = false;
+    //                } else
+    //                    $('#btnluusvb').prop('disabled', false);
+    //            },
+    //            error: function (response) {
+    //                toastr.error('Đã có lỗi xảy ra');
+    //            }
+    //        });
+    //        return isSuccess;
+    //    }
+    //});
+    $('#fForm').on('submit', function () {
+        if ($("#NgayBatDauStr").val() != "" && $("#NgayKetThucStr").val() != "") {
+            var checkDate = validateFromDate_ToDate($("#NgayBatDauStr").val(), $("#NgayKetThucStr").val());
+            if (!checkDate) {
+                toastr.error("Bạn cần chọn thời gian kết thúc lớn hơn thời gian bắt đầu");
+                return false;
+            }
+        }
+        $("#fForm").valid();
+    })
+</script>

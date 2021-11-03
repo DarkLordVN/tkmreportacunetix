@@ -1,0 +1,413 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.UyQuyenListView
+@{
+    ViewBag.Title = "Danh sách ủy quyền";
+    var lstUyQuyen = (List<TKM.BLL.UyQuyenViewModel>)ViewBag.lstUyQuyen;
+    var lstNguoiDung = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiDung;
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row lighten-4 border border-primary border-top-0 border-right-0 border-left-0">
+                                <div class="col p-3">
+                                    <div class="d-none d-lg-inline-flex form-inline my-0 px-lg-3 border-right">
+                                        @Html.TextBoxFor(model => model.TuKhoa, new { @class = "form-control keyenterTuKhoa", @id = "txtTuKhoa", @placeholder = "Nhập từ khóa cần tìm ...", @style = "min-width: 31rem" })
+                                        <button id="btnSearchTuKhoa" class="btn text-white default-color rounded-pill px-3 btn-sm my-0 waves-effect waves-light" type="button">Tìm</button>
+                                    </div>
+
+                                    <button class="btn btn-sm btn-warning text-white ml-3 rounded-pill" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        Tìm kiếm nâng cao
+                                    </button>
+                                    <!-- Chức năng thêm và xóa -->
+                                    <div class="float-right">
+                                        <a href="/UyQuyen/Add" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" title="Thêm mới" data-original-title="Thêm mới"><i class="fal fa-plus"></i></a>
+                                          @*<a href="javascript://" onclick="onDeleteMul();" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa nhiều" title="Xóa nhiều"><i class="fal fa-trash"></i></a>*@
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                    
+                                    <!-- Collapsible element -->
+                                    <div class="collapse" id="collapseExample">
+                                        <div class="row bg-white mx-0 p-3">
+                                            <div class="col-12 col-lg-12 row">
+                                                <label for="txtTuNgayStr" class="col-lg-2 col-form-label">Từ ngày</label>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <div class="input-group date datepicker">
+                                                            @Html.TextBoxFor(model => model.TuNgayStr, new { @class = "form-control ", @id = "txtTuNgayStr" })
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-clock"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label for="txtDenNgayStr" class="col-lg-2 col-form-label">Đến ngày</label>
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <div class="input-group date datepicker">
+                                                            @Html.TextBoxFor(model => model.DenNgayStr, new { @class = "form-control ", @id = "txtDenNgayStr" })
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-clock"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-12 col-lg-12 row mt-3">
+                                                <label for="NguoiUyQuyenID" class="col-lg-2 col-form-label">Người ủy quyền</label>
+                                                <div class="col-lg-4">
+                                                    <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NguoiUyQuyenID" name="NguoiUyQuyenID" searchable="Nhập từ khóa..">
+                                                        <option value="0">-- Chọn tên cán bộ --</option>
+                                                        @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                                                        {
+                                                            foreach (var item in lstNguoiDung)
+                                                            {
+                                                                <option value="@item.ID">@item.HoVaTen</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+
+                                            <div class="col text-center text-lg-right">
+                                                <button id="btnSearch" class="btn text-white f-bg1" type="button">Tìm kiếm</button>
+                                            </div>
+                                        </div>
+                                        <!-- / Collapsible element -->
+                                    </div>
+                                    <!-- / Collapsible element -->
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th class="pointer" data-colname="NguoiUyQuyen" data-orderby="asc">Nguời ủy quyền</th>
+                                                    <th class="pointer" data-colname="NguoiDuocUyQuyen" data-orderby="asc">Người được ủy quyền</th>
+                                                    <th class="pointer" data-colname="TuNgay" data-orderby="asc">Từ ngày</th>
+                                                    <th class="pointer" data-colname="DenNgay" data-orderby="asc">Đến ngày</th>
+                                                    <th class="pointer">Trạng thái</th>
+                                                    <th class="pointer">Ủy quyền</th>
+                                                    <th class="pointer">Chức năng</th>
+                                                    <th style="width:60px">
+                                                        <input type="hidden" id="hdfID" />
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="chkall" name="checkbox">
+                                                            <label class="form-check-label" for="chkall"></label>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">                                                
+                                                @{ Html.RenderAction("IndexDetail", Model); }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Script {
+    <script>
+        $(document).ready(function () {
+            InitClickCheckAllInTable("chkall", function (res) {
+                $("#hdfID").val(res);
+            });
+        });
+        function onDelete(id) {
+            swal({
+                title: "Xóa?",
+                text: "Bạn có chắc chắn muốn xóa không?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+              .then((willDelete) => {
+                  if (willDelete) {
+                      $.ajax({
+                          type: "POST",
+                          url: '/UyQuyen/Delete',
+                          data: { id: id },
+                          dataType: "html",
+                          success: function (res) {
+                              res = JSON.parse(res);
+                              if (res.isSuccess == 1)
+                                  swal("Xóa thành công!", {
+                                      icon: "success",
+                                  });
+                              else
+                                  swal("Đã có lỗi xảy ra", { icon: "error", });
+                              loadData("", "");
+                          },
+                          error: function (response) {
+                              swal("Đã có lỗi xảy ra", { icon: "error", });
+                          }
+                      });
+
+                  }
+              });
+        }
+        function onDeleteMul() {
+
+
+            if ($("table tbody").find("input[type=checkbox]:checked").length == 0) {
+                swal("Bạn cần chọn ít nhất 1 danh mục cần xóa", { icon: "error", });
+            } else {
+                swal({
+                    title: "Xóa?",
+                    text: "bạn có chắc chăn muốn xóa không? ",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+             .then((willDelete) => {
+                 if (willDelete) {
+                     $.ajax({
+                         type: "POST",
+                         url: '/UyQuyen/DeleteMul',
+                         data: { lstid: $("#hdfID").val() },
+                         dataType: "html",
+                         success: function (res) {
+                             res = JSON.parse(res);
+                             if (res.isSuccess)
+                                 swal("Xóa thành công!", {
+                                     icon: "success",
+                                 });
+                             else
+                                 swal("Có lỗi xảy ra", {
+                                     icon: "error",
+                                 });
+                             loadData("", "");
+                         },
+                         error: function (response) {
+                             swal("Đã có lỗi xảy ra", { icon: "error", });
+                         }
+                     });
+
+                 }
+             });
+            }
+        }
+
+        function loadfrmView(id) {
+            modal.Render("/UyQuyen/Detail/" + id, "Thông tin ủy quyền", "modal-lg");
+        }
+
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+        $(".keyenterTuKhoa").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearchTuKhoa").click();
+            }
+        });
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        $("#btnDel").on("click", function () {
+            $.ajax({
+                url: '/UyQuyen/DeleteUyQuyen',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: $("#delModalId").val() }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            $(window).scrollTop(0);
+        });
+
+        //Thêm event xử lý load ajax
+        $("#btnSearchTuKhoa").click(function () {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "UyQuyen")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), NguoiUyQuyenID: $("#NguoiUyQuyenID").val(), TuNgayStr: $("#txtTuNgayStr").val(), DenNgayStr: $("#txtDenNgayStr").val(), ColumnName: '', OrderBy: '', PageNumber: 1, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        });
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+        function loadData(col, order, pnum, psize) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "UyQuyen")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), NguoiUyQuyenID: $("#NguoiUyQuyenID").val(), TuNgayStr: $("#txtTuNgayStr").val(), DenNgayStr: $("#txtDenNgayStr").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+
+        function onChangeStatusSend(id) {
+            swal({
+                title: "Bạn có muốn gửi ủy quyền?",
+                text: "Ủy quyền sẽ được gửi, hãy nhấn OK!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/UyQuyen/onChangeStatusSend',
+                        data: { id: id },
+                        dataType: "html",
+                        success: function (res) {
+                            res = JSON.parse(res);
+                            if (res.isSuccess)
+                                swal("Gửi ủy quyền thành công!", {
+                                    icon: "success",
+                                });
+                            else
+                                swal("Có lỗi xảy ra", {
+                                    icon: "error",
+                                });
+                            loadData("", "");
+                        },
+                        error: function (response) {
+                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                        }
+                    });
+
+                }
+            });
+        }
+
+        function onChangeStatusStop(id) {
+            swal({
+                title: "Bạn có muốn dừng ủy quyền?",
+                text: "Ủy quyền sẽ dừng lại, hãy nhấn OK!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/UyQuyen/onChangeStatusStop',
+                        data: { id: id },
+                        dataType: "html",
+                        success: function (res) {
+                            res = JSON.parse(res);
+                            if (res.isSuccess)
+                                swal("Dừng ủy quyền thành công!", {
+                                    icon: "success",
+                                });
+                            else
+                                swal("Có lỗi xảy ra", {
+                                    icon: "error",
+                                });
+                            loadData("", "");
+                        },
+                        error: function (response) {
+                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                        }
+                    });
+
+                }
+            });
+        }
+    </script>
+}

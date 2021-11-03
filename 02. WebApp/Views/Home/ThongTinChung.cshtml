@@ -1,0 +1,169 @@
+﻿
+@model TKM.BLL.HomeViewModel
+@{
+    Layout = null;
+    var lstData = (List<string>)ViewBag.lstData;
+}
+<input type="hidden" id="txtTongLuotRaQuet" value="@Model.TongLuotRaQuet" />
+<input type="hidden" id="txtTongNguyCo" value="@Model.TongNguyCo" />
+<input type="hidden" id="txtTongSoWebsite" value="@Model.TongSoWebsite" />
+<!-- Card image -->
+<div class="col-12 pt-3">
+    <div class="form-group row mb-0">
+        <div class="col-md-4">
+            <!-- Card -->
+            <div class="card card-cascade narrower">
+                <!-- Card image -->
+                <div class="view view-cascade gradient-card-header bg-success pb-2 pt-2">
+                    <h5 class="mb-0 text-uppercase"><i class="fal fa-university mr-3"></i>Website</h5>
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body card-body-cascade">
+                    <div class="row">
+                        <div id="chartWebsite" class="w-100"></div>
+                    </div>
+                    <!-- Grid row -->
+                </div>
+
+            </div>
+        </div><div class="col-md-4">
+            <!-- Card -->
+            <div class="card card-cascade narrower">
+                <!-- Card image -->
+                <div class="view view-cascade gradient-card-header bg-info pb-2 pt-2">
+                    <h5 class="mb-0 text-uppercase"><i class="fal fa-binoculars mr-3"></i>Lượt rà quét</h5>
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body card-body-cascade">
+                    <div class="row">
+                        <div id="chartScan" class="w-100"></div>
+                    </div>
+                    <!-- Grid row -->
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Card -->
+            <div class="card card-cascade narrower">
+                <!-- Card image -->
+                <div class="view view-cascade gradient-card-header bg-danger pb-2 pt-2">
+                    <h5 class="mb-0 text-uppercase"><i class="fal fa-biohazard mr-3"></i>Nguy cơ</h5>
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body card-body-cascade">
+                    <div class="row">
+                        <div id="chartNguyCo" class="w-100"></div>
+                    </div>
+                    <!-- Grid row -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Card -->
+<script>
+
+    let optionsNguyCo = {
+        series: $("#txtTongNguyCo").val().split(',').map(Number),
+        labels: ['Cao', 'Trung bình', 'Thấp'],
+        colors: ['#FF4560', '#F9CE1D', '#81D4FA'],
+        chart: {
+            type: 'donut',
+        },
+        dataLabels: {
+            enabled: true,
+        },
+        legend: {
+            show: false,
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        value: {
+                            fontFamily: 'Roboto, Arial',
+                            fontWeight: 600,
+                        },
+                        total: {
+                            show: true,
+                            label: 'Tổng nguy cơ',
+                            color: '#dc3545',
+                            fontSize: '16px',
+                            fontWeight: 600
+                        }
+                    }
+                }
+            }
+        }
+    };
+    let optionsWebsite = {
+        series: [$("#txtTongSoWebsite").val()],
+        labels: ['Tổng website'],
+        colors: ['#4CAF50'],
+        chart: {
+            type: 'donut',
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false,
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        value: {
+                            fontFamily: 'Roboto, Arial',
+                            fontWeight: 600,
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    let optionsScan = {
+        series: [$("#txtTongLuotRaQuet").val()],
+        labels: ['Lượt quét'],
+        colors: ['#17A2B8'],
+        chart: {
+            type: 'donut',
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false,
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        value: {
+                            fontFamily: 'Roboto, Arial',
+                            fontWeight: 600,
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+
+    var chartWebsite = new ApexCharts(document.querySelector("#chartWebsite"), optionsWebsite);
+    chartWebsite.render();
+    var chartScan = new ApexCharts(document.querySelector("#chartScan"), optionsScan);
+    chartScan.render();
+    var chartNguyCo = new ApexCharts(document.querySelector("#chartNguyCo"), optionsNguyCo);
+    chartNguyCo.render();
+
+</script>

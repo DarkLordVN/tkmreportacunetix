@@ -1,0 +1,132 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.MucDoQuanTrongListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.LstMucDoQuanTrong != null && Model.LstMucDoQuanTrong.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.LstMucDoQuanTrong)
+    {
+        index++;
+        <tr>
+            <td class="tac">@index</td>
+            <td class="tal">
+                <a href="javascript://" title="Xem chi tiết" onclick="loadfrmView(@item.ID)" class="h-tdu text-primary whitespace-pre"><div class="ffm-rob text-primary dib">@item.Ten</div></a>
+        </td>
+            <td class="tac">@item.ThuTu</td>
+            <td class="tac">
+                <a title="@(item.TrangThai == true?"Có Sử dụng":"Không sử dụng")" onclick="onChangeStatus(@item.ID)">@Html.Raw(item.TrangThai == true ? "<span class='text-success'><i class='fa fa-check'></i></span>" : "<span class='text-danger'><i class='fa fa-times'></i></span>")</a>
+            </td>
+            <td style="width:130px">
+                <a href="javascript://" onclick="location.href='@Url.Action("Update", "MucDoQuanTrong", new { id = item.ID })'" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa"><i class="fal fa-edit"></i></a>
+                <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+            </td>
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                    <label class="form-check-label" for="chk'@item.ID'"></label>
+                </div>
+            </td>
+        </tr>
+    }
+   
+}
+@if (Model != null && Model.LstMucDoQuanTrong == null|| Model.LstMucDoQuanTrong.Count == 0)
+{
+    <tr>
+        <td colspan="9" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="10">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "MucDoQuanTrong", new
+           {
+               ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+               PageSize = Model.PageSize,
+               Ten = Model.Ten,
+               TrangThai = Model.TrangThai
+
+           }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem bản ghi
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+
+@*<tr class="bg-ec">
+    <td colspan="10">
+        <div class="bound fwb">
+            <div class="colLeft w40pt">
+                <div class="custompage">
+                    <div class="group">
+                        <div class="item">
+                            <a href="javascript://" onclick="GoToPage('first',@Model.PageNumber,@Model.PageSize,@totalPageNumber)" title="Trang đầu">
+                                <span>
+                                    <i class="fa fa-fast-backward"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="item">
+                            <a href="javascript://" onclick="GoToPage('prev',@Model.PageNumber,@Model.PageSize,@totalPageNumber)" title="Trang trước" class="plr8">
+                                <span>
+                                    <i class="fa fa-step-backward"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="item w24pt tac">
+                            <span class="dib"> Trang <input type="text" id="pageNumber" name="PageNunber" value="@Model.PageNumber" class="custext keyenter" min="0" onchange="onChangePageNunber($(this).val(), $('#changePageSize').val(),@totalPageNumber)" /> / @totalPageNumber</span>
+                        </div>
+                        <div class="item">
+                            <a href="javascript://" onclick="GoToPage('next',@Model.PageNumber,@Model.PageSize,@totalPageNumber)" title="Trang sau" class="plr8">
+                                <span>
+                                    <i class="fa fa-step-forward"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="item">
+                            <a href="javascript://" onclick="GoToPage('end',@Model.PageNumber,@Model.PageSize,@totalPageNumber)" title="Trang cuối">
+                                <span>
+                                    <i class="fa fa-fast-forward"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="cb"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="colRight w60pt tar">
+                Kết quả trên 1 trang:
+                <select id="changePageSize" name="PageSize" class="custext w8pt" onchange="ChangePageSize($(this).val())">
+                    <option value="10" @(Model.PageSize == 10 ? "selected" : "")>10</option>
+                    <option value="20" @(Model.PageSize == 20 ? "selected" : "")>20</option>
+                    <option value="50" @(Model.PageSize == 50 ? "selected" : "")>50</option>
+                    <option value="100" @(Model.PageSize == 100 ? "selected" : "")>100</option>
+                    <option value="200" @(Model.PageSize == 200 ? "selected" : "")>200</option>
+                </select>
+                /Tổng số @Model.TotalItem
+            </div>
+            <div class="cb"></div>
+        </div>
+
+    </td>
+</tr>*@

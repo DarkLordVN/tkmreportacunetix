@@ -1,0 +1,117 @@
+--------- 10:15:35 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:15:41 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:15:46 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:15:48 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:15:50 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:15:52 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:16:00 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:16:06 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:16:11 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:16:12 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 10:16:17 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 11:00:21 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212
+--------- 11:00:26 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /baocao
+IP: ::1
+Text: System.ArgumentException: Parameter is not valid.
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height, PixelFormat format)
+   at System.Drawing.Bitmap..ctor(Int32 width, Int32 height)
+   at TKM.WebApp.Controllers.JqueryUploadController.getImagesPath(Byte[] bytesimg, Int32 widthExpect) in D:\TKM_Sysman_Reports\02. WebApp\Controllers\JqueryUploadController.cs:line 212

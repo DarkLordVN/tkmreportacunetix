@@ -1,0 +1,85 @@
+﻿@using TKM.BLL
+@model LichLanhDaoViewModel
+@{
+    Layout = null;
+}
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Lãnh đạo: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.ChucVuVaTen : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Nội dung làm việc: </label>
+        </div>
+        <div class="col-md-9">
+            @Html.Raw(Model != null ? Model.NoiDung : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Địa điểm: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.DiaDiem : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Chuẩn bị: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.ChuanBi : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Thành phần tham gia: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.ThanhPhanThamGia : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Ngày: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.ThoiGianBatDau.ToString("dd/MM/yyyy") : "")
+        </div>
+        
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Thời gian: </label>
+        </div>
+        <div class="col-md-3">
+            @(Model != null ? Model.ThoiGianStr : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+</div>

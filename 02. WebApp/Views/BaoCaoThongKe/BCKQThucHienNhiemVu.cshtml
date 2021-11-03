@@ -1,0 +1,343 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.v_BCKQThucHienChiDaoListView
+@{
+    //ViewBag.Title = "Báo cáo kết quả thực hiện nhiệm vụ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Css {
+    <style>
+        .p-2{
+            padding-top:20px;
+        }
+    </style>
+}
+<div class="row">
+    <div class="col right-content">
+        
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @{Html.RenderAction("SelectLoaiBaoCao", "BaoCaoThongKe", new { LoaiBaoCao = 6 });}
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-9 fwb">
+                                    Tìm kiếm văn bản
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <button class="btn btn-sm btn-warning text-white ml-3 rounded-pill" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="collapse" id="collapseExample">
+                                <div class="row bg-white mx-0">
+                                    @*<input type="hidden" name="dvID" id="dvID" value="@Model.dvID" />*@
+                                    <div class="col-12 col-lg-12 row p-2">
+                                        <label for="txtTuNgay" class="col-lg-2 col-form-label">Từ ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.TuNgay, new { @class = "form-control keyenter", @id = "txtTuNgay" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label for="txtDenNgay" class="col-lg-2 col-form-label">Đến ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.DenNgay, new { @class = "form-control keyenter", @id = "txtDenNgay" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-100"></div>
+                                    <div class="col-12 col-lg-12">
+                                        <div class="col text-center text-lg-right">
+                                            <button id="btnSearch" class="btn text-white f-bg1" type="button">Tìm kiếm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="javascript://" onclick="_loadDataInBrowser()" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="In Browser" data-original-title="In Browser"><i class="fal fa-print"></i></a>
+                                    <a href="/BaoCaoThongKe/ExportWordBaoCaoKetQua" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" data-original-title="Xuất Word" title="Xuất Word"><i class="fal fa-file-word"></i></a>
+                                    <a href="/BaoCaoThongKe/ExportExcelBaoCaoKetQua" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Xuất Excel" data-original-title="Xuất Excel"><i class="fal fa-file-excel"></i></a>
+                                    <a href="javascript://" onclick="_loadData();" class="btn-floating btn-sm btn-warning mx-1" data-toggle="tooltip" data-original-title="Xuất PDF" title="Xuất PDF"><i class="fal fa-file-pdf"></i></a>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+
+                            <div class="row" id="">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-hover table-bordered table_pdf" cellspacing="0" width="100%">
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+                                                    <th class="th-sm" colspan="12" style="padding:10px 0">Báo cáo kết quả thực hiện nhiệm vụ</th>
+                                                </tr>
+                                            </thead>
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+                                                    <th style="width:5%" class="t_action th-sm">STT</th>
+                                                    <th style="width:15%" class="th-sm">Số TBKL</th>
+                                                    <th style="width:15%" class="th-sm">Trích yếu</th>
+                                                    <th style="width:25%" class="th-sm">Nội dung nhiệm vụ giao của Chính phủ</th>
+                                                    <th style="width:25%" class="th-sm">Kết quả thực hiện</th>
+                                                    <th style="width:15%" class="th-sm">Trạng thái thực hiện</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("BCKQThucHienNhiemVuData", "BaoCaoThongKe"); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: none" class="row" id="table-print">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-hover table-bordered table_pdf" cellspacing="0" width="100%">
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+                                                    <th class="th-sm" colspan="12" style="padding:10px 0">Báo cáo kết quả thực hiện nhiệm vụ</th>
+                                                </tr>
+                                            </thead>
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+                                                    <th style="width:5%" class="t_action th-sm">STT</th>
+                                                    <th style="width:15%" class="th-sm">Số TBKL</th>
+                                                    <th style="width:15%" class="th-sm">Trích yếu</th>
+                                                    <th style="width:25%" class="th-sm">Nội dung nhiệm vụ giao của Chính phủ</th>
+                                                    <th style="width:25%" class="th-sm">Kết quả thực hiện</th>
+                                                    <th style="width:15%" class="th-sm">Trạng thái thực hiện</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="printf">
+                                                @if (Model != null && Model.lstNoPaging != null && Model.lstNoPaging.Count() > 0)
+                                                {
+                                                    var index = 0;
+                                                    foreach (var item in Model.lstNoPaging)
+                                                    {
+                                                        index++;
+                                                        <tr>
+                                                            <td align="center">@index</td>
+                                                            <td class="tal">
+                                                                @Html.Raw("Số: " + @item.SoKyHieu + "</br>" + "Ngày: " + @item.NgayVanBan.Value.ToString("dd/MM/yyyy") + "</br>" + "Lãnh đạo: " + @item.NguoiKy)
+                                                            </td>
+                                                            <td class="tal" style="width:250px">@item.TrichYeu</td>
+                                                            <td class="tal">@item.NoiDungChiDao</td>
+                                                            <td class="tal">@item.KetQuaXuLy</td>
+                                                            @{
+                                                                string TrangThaiVanBanStr = "";
+                                                                string background = "";
+                                                                string color = "#fff";
+                                                                switch (item.TrangThaiVanBan)
+                                                                {
+                                                                    case 0:
+                                                                        //Chưa tiếp nhận
+                                                                        background = "#e53935";
+                                                                        TrangThaiVanBanStr = "Chưa tiếp nhận";
+                                                                        break;
+                                                                    case 1:
+                                                                        //Đã tiếp nhận
+                                                                        background = "#4285f4";
+                                                                        TrangThaiVanBanStr = "Đã tiếp nhận";
+                                                                        break;
+                                                                    case 2:
+                                                                        //Phân công
+                                                                        background = "#ff9100";
+                                                                        TrangThaiVanBanStr = "Phân công";
+                                                                        break;
+                                                                    case 3:
+                                                                        //Đang xử lý
+                                                                        background = "rgba(0,188,212,.7)";
+                                                                        TrangThaiVanBanStr = "Đang xử lý";
+                                                                        break;
+                                                                    case 4:
+                                                                        //Hoàn thành
+                                                                        background = "#00c851";
+                                                                        TrangThaiVanBanStr = "Hoàn thành";
+                                                                        break;
+                                                                    default:
+                                                                        break;
+                                                                }
+                                                            }
+                                                            <td align="center" style='@string.Format("background-color:{0} !important;color:{1} !important",background,color)'>@TrangThaiVanBanStr</td>
+                                                        </tr>
+                                                                    }
+
+                                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form action="/BaoCaoThongKe/ExportPDFBaoCaoKetQua" method="post" id="ExportPDF" style="display: none">
+    <input type="hidden" name="tenFilePDF" id="tenFilePDF" value="ExportPDFBaoCaoKetQua" />
+    <input type="hidden" name="widthTable" id="widthTable" value="" />
+    <textarea name="GridHtml" id="GridHtml"></textarea>
+    <input type="submit" />
+</form>
+<style>
+    .select2 {
+        padding-top: 5px !important;
+    }
+</style>
+
+<link href="~/Assets/css/print.css" rel="stylesheet" />
+@section Script {
+    <script src="~/Assets/js/print.js"></script>
+    <script>
+        setInterval(function () { $(".pagination-ys").show(); }, 1000);
+        $(document).ready(function () {
+            InitClickCheckAllInTable("chkall", function (res) {
+                $("#hdfID").val(res);
+            });
+            $('.select2').select2();
+            //loadPaging();
+        });
+        function XuatPDF() {
+            var widthtable = 1024;
+            if (widthtable < 800) widthtable = 1024;
+            $('#widthTable').val(parseInt(widthtable));
+            $('#tenFilePDF').val("Bao_Cao_Ket_Qua_Thuc_Hien_Nhiem_Vu");
+            $(".pagination-ys").hide();
+            var style = '<style>.table_pdf th,.table_pdf td { border: none !important;border-left: 1px solid #000 !important;border-top: 1px solid #000 !important;padding: 5px;}.table_pdf tr:nth-child(2) th {font-weight: normal;}.table_pdf {border-bottom: 1px solid #000;border-right: 1px solid #000;border-spacing: 0;}            table th,table td{ vertical-align: middle; }table thead tr{ background: #f1f1f1 !important; }.table_pdf>tbody>tr>td, .table_pdf>tbody>tr>th, .table_pdf>tfoot>tr>td, .table_pdf>tfoot>tr>th, .table_pdf>thead>tr>td, .table_pdf>thead>tr>th {border: 1px solid #ddd;}.text-center,.tac{text-align:center !important}</style>';
+            var GridHtml = $("#table-print").html() + style;
+            $("#GridHtml").val(GridHtml);
+            $("#ExportPDF").submit();
+            return false;
+        }
+
+        function loadfrmView(id) {
+            modal.Render("/BaoCaoThongKe/Detail/" + id, "Thông tin văn bản đến", "modal-lg");
+        }
+
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        //Thêm event xử lý load ajax
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        function loadData(col, order, pnum, psize) {
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("BCKQThucHienNhiemVuData", "BaoCaoThongKe")',
+                data: { TuNgay: $("#txtTuNgay").val(), DenNgay: $("#txtDenNgay").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+
+        function _loadData() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("BCKQThucHienNhiemVuData", "BaoCaoThongKe")',
+                data: { TuNgay: $("#txtTuNgay").val(), DenNgay: $("#txtDenNgay").val(), dvID: $("#dvID").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#printf").html(response);
+                    loadPaging();
+                    XuatPDF();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+
+        function _loadDataInBrowser() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("BCKQThucHienNhiemVuData", "BaoCaoThongKe")',
+                data: { TuNgay: $("#txtTuNgay").val(), DenNgay: $("#txtDenNgay").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#printf").html(response);
+                    loadPaging();
+                    InBrowserVanBanDen();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+    </script>
+}
+
+

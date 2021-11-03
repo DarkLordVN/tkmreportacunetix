@@ -1,0 +1,41 @@
+﻿@using TKM.Utils.Enums
+@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstVanBanLienQuan = (List<VanBanDenViewModel>)ViewBag.lstVanBanLienQuan;
+}
+@if (lstVanBanLienQuan != null && lstVanBanLienQuan.Count > 0)
+{
+    foreach (var item in lstVanBanLienQuan)
+    {
+        <tr class="removed_@item.ID">
+            <td class="tal">
+                <input type="hidden" class="VanBanLienQuan" name="VanBanLienQuanID" value="@item.ID" />
+                @item.SoKyHieu
+            </td>
+            <td class="tal">@item.TrichYeu</td>
+            <td align="center">
+                @if (!String.IsNullOrEmpty(item.FileVanBan))
+                {
+                    var arrLink = item.FileVanBan.Split(new string[] { "[--]" }, StringSplitOptions.None);
+                    if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                    {
+                        for (int i = 0; i < arrLink.Length; i++)
+                        {
+                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@arrLink[i]"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title=""></i></span></a>
+                            if (i != (arrLink.Length - 1))
+                            {
+                                @Html.Raw("</br>")
+                            }
+                        }
+
+                    }
+                }
+            </td>
+                    <td>
+                        <a href="javascript://" title="Xóa" onclick="RemoveItem(@item.ID)" class="btn btn-sm btn-danger br-50pt"><span><i class="fal fa-times"></i></span></a>
+                    </td>
+                  
+                </tr>
+    }
+}

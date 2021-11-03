@@ -1,0 +1,1115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TKMReportsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AffectedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WebsiteID" Type="int" Nullable="false" />
+          <Property Name="WebiteScanID" Type="int" Nullable="false" />
+          <Property Name="AlertGroupID" Type="int" Nullable="false" />
+          <Property Name="ScanPath" Type="nvarchar" MaxLength="2000" />
+          <Property Name="Detail" Type="nvarchar(max)" />
+          <Property Name="SourceCode" Type="nvarchar(max)" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="AlertGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlertName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="AlertNameTrans" Type="nvarchar" MaxLength="250" />
+          <Property Name="Severity" Type="nvarchar" MaxLength="50" />
+          <Property Name="AlertDescription" Type="nvarchar(max)" />
+          <Property Name="AlertDescriptionTrans" Type="nvarchar(max)" />
+          <Property Name="Recommendations" Type="nvarchar" MaxLength="2000" />
+          <Property Name="RecommendationsTrans" Type="nvarchar" MaxLength="2000" />
+          <Property Name="AlertVariants" Type="nvarchar" MaxLength="250" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="HeThongThamSo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaThamSo" Type="varchar" MaxLength="50" />
+          <Property Name="TenThamSo" Type="nvarchar" MaxLength="250" />
+          <Property Name="MoTa" Type="nvarchar" MaxLength="500" />
+          <Property Name="NguoiCapNhatID" Type="int" />
+          <Property Name="NgayCapNhat" Type="datetime" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NguoiDung">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HoVaTen" Type="nvarchar" MaxLength="250" />
+          <Property Name="NgaySinh" Type="datetime" />
+          <Property Name="GioiTinh" Type="bit" />
+          <Property Name="NhomQuyenID" Type="int" />
+          <Property Name="NhomQuyenList" Type="nvarchar" MaxLength="500" />
+          <Property Name="ChucVuID" Type="int" />
+          <Property Name="DonViID" Type="int" />
+          <Property Name="TenDangNhap" Type="varchar" MaxLength="100" />
+          <Property Name="MatKhau" Type="varchar" MaxLength="500" />
+          <Property Name="AnhDaiDien" Type="varchar" MaxLength="500" />
+          <Property Name="Email" Type="varchar" MaxLength="250" />
+          <Property Name="SoDienThoai" Type="varchar" MaxLength="250" />
+          <Property Name="DiaChi" Type="nvarchar" MaxLength="500" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="100" />
+          <Property Name="NguoiTao" Type="varchar" MaxLength="50" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="NguoiTaoID" Type="int" />
+          <Property Name="NguoiCapNhatID" Type="int" />
+          <Property Name="NguoiCapNhat" Type="varchar" MaxLength="50" />
+          <Property Name="NgayCapNhat" Type="datetime" />
+          <Property Name="ThuTu" Type="int" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NhatKyHeThong">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NguoiDungId" Type="int" />
+          <Property Name="MoTa" Type="nvarchar" MaxLength="2000" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="IpClient" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="NhomNguoiDung">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenNhom" Type="nvarchar" MaxLength="250" />
+          <Property Name="ListNguoiDungThuocNhomID" Type="varchar(max)" />
+          <Property Name="PhamViSuDung" Type="bit" Nullable="false" />
+          <Property Name="NguoiTao" Type="varchar" MaxLength="50" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="NguoiTaoID" Type="int" />
+          <Property Name="NguoiCapNhatID" Type="int" />
+          <Property Name="NguoiCapNhat" Type="varchar" MaxLength="50" />
+          <Property Name="NgayCapNhat" Type="datetime" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NhomQuyen">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KyHieu" Type="nvarchar" MaxLength="50" />
+          <Property Name="MaNhom" Type="varchar" MaxLength="50" />
+          <Property Name="TenNhom" Type="nvarchar" MaxLength="250" />
+          <Property Name="GhiChu" Type="nvarchar" MaxLength="500" />
+          <Property Name="NguoiTao" Type="varchar" MaxLength="50" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="NguoiTaoID" Type="int" />
+          <Property Name="NguoiCapNhatID" Type="int" />
+          <Property Name="NguoiCapNhat" Type="varchar" MaxLength="50" />
+          <Property Name="NgayCapNhat" Type="datetime" />
+          <Property Name="ThuTu" Type="int" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NhomQuyenQuyen">
+          <Key>
+            <PropertyRef Name="QuyenID" />
+            <PropertyRef Name="NhomQuyenID" />
+          </Key>
+          <Property Name="QuyenID" Type="int" Nullable="false" />
+          <Property Name="NhomQuyenID" Type="int" Nullable="false" />
+          <Property Name="QuyenChiTiet" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Quyen">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KhoaChaID" Type="int" />
+          <Property Name="MaQuyen" Type="nvarchar" MaxLength="50" />
+          <Property Name="TenQuyen" Type="nvarchar" MaxLength="250" />
+          <Property Name="NhanQuyen" Type="bit" Nullable="false" />
+          <Property Name="TenHienThi" Type="nvarchar" MaxLength="250" />
+          <Property Name="Controller" Type="nvarchar" MaxLength="50" />
+          <Property Name="IconPath" Type="nvarchar" MaxLength="255" />
+          <Property Name="GhiChu" Type="nvarchar" MaxLength="250" />
+          <Property Name="Action" Type="nvarchar" MaxLength="50" />
+          <Property Name="FontAwesome" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsMenu" Type="bit" Nullable="false" />
+          <Property Name="PhanHe" Type="tinyint" />
+          <Property Name="NguoiTao" Type="varchar" MaxLength="50" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="NguoiTaoID" Type="int" />
+          <Property Name="NguoiCapNhatID" Type="int" />
+          <Property Name="NguoiCapNhat" Type="varchar" MaxLength="50" />
+          <Property Name="NgayCapNhat" Type="datetime" />
+          <Property Name="ThuTu" Type="int" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ScannedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WebsiteID" Type="int" Nullable="false" />
+          <Property Name="WebiteScanID" Type="int" Nullable="false" />
+          <Property Name="WebsiteItemID" Type="int" Nullable="false" />
+          <Property Name="FullPath" Type="nvarchar" MaxLength="2000" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="ThongBao">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TieuDe" Type="nvarchar" MaxLength="500" />
+          <Property Name="NoiDung" Type="nvarchar(max)" />
+          <Property Name="LstNguoiNhanID" Type="varchar(max)" />
+          <Property Name="LstNhomNguoiNhanID" Type="varchar(max)" />
+          <Property Name="FileDinhKem" Type="varchar(max)" />
+          <Property Name="NguoiTaoID" Type="int" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="ChucNangID" Type="int" />
+          <Property Name="Link" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDaGui" Type="bit" Nullable="false" />
+          <Property Name="LstNguoiNhanDaXemID" Type="varchar(max)" />
+          <Property Name="LstNguoiNhanDaNhanMoiNhatID" Type="varchar(max)" />
+          <Property Name="isXoaTam" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThongBaoAttach">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ThongBaoID" Type="int" />
+          <Property Name="LinkFile" Type="varchar(max)" />
+          <Property Name="NameFile" Type="nvarchar(max)" />
+          <Property Name="ReplaceName" Type="nvarchar(max)" />
+          <Property Name="Size" Type="varchar" MaxLength="500" />
+          <Property Name="Code" Type="varchar" MaxLength="500" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TuDienVietHoa">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NgonNgu" Type="nvarchar" MaxLength="50" />
+          <Property Name="CumTuKhoa" Type="nvarchar(max)" />
+          <Property Name="CumTuThayDoi" Type="nvarchar(max)" />
+          <Property Name="NguoiTaoID" Type="int" />
+          <Property Name="NguoiCapNhatID" Type="int" />
+          <Property Name="NgayTao" Type="datetime" />
+          <Property Name="TrangThai" Type="bit" />
+        </EntityType>
+        <EntityType Name="Website">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartURL" Type="nvarchar" MaxLength="250" />
+          <Property Name="Host" Type="nvarchar" MaxLength="250" />
+          <Property Name="Responsive" Type="nvarchar" MaxLength="250" />
+          <Property Name="ServerOS" Type="nvarchar" MaxLength="250" />
+          <Property Name="ServerInformation" Type="nvarchar" MaxLength="250" />
+          <Property Name="ServerTechnologies" Type="nvarchar" MaxLength="250" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="WebsiteItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WebsiteID" Type="int" Nullable="false" />
+          <Property Name="LastScanID" Type="int" Nullable="false" />
+          <Property Name="FullPath" Type="nvarchar" MaxLength="2000" />
+          <Property Name="ErrorCount" Type="int" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="WebsiteScan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WebsiteID" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="ScanTime" Type="nvarchar" MaxLength="250" />
+          <Property Name="ThreatLevel" Type="nvarchar" MaxLength="250" />
+          <Property Name="TotalSecond" Type="int" />
+          <Property Name="TotalItemScan" Type="int" />
+          <Property Name="TotalAlertFound" Type="int" />
+          <Property Name="HighAlert" Type="int" />
+          <Property Name="MediumAlert" Type="int" />
+          <Property Name="LowAlert" Type="int" />
+          <Property Name="InforAlert" Type="int" />
+          <Property Name="ScanProfile" Type="nvarchar" MaxLength="250" />
+          <Property Name="RootReportUrl" Type="nvarchar" MaxLength="255" />
+          <Property Name="NewReportUrl" Type="nvarchar" MaxLength="255" />
+          <Property Name="ReportHTML" Type="text" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <Association Name="FK_NhomQuyenQuyen_NhomQuyen">
+          <End Role="NhomQuyen" Type="Self.NhomQuyen" Multiplicity="1" />
+          <End Role="NhomQuyenQuyen" Type="Self.NhomQuyenQuyen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhomQuyen">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NhomQuyenQuyen">
+              <PropertyRef Name="NhomQuyenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NhomQuyenQuyen_Quyen">
+          <End Role="Quyen" Type="Self.Quyen" Multiplicity="1" />
+          <End Role="NhomQuyenQuyen" Type="Self.NhomQuyenQuyen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Quyen">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NhomQuyenQuyen">
+              <PropertyRef Name="QuyenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TKMReportsModelStoreContainer">
+          <EntitySet Name="AffectedItem" EntityType="Self.AffectedItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlertGroup" EntityType="Self.AlertGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HeThongThamSo" EntityType="Self.HeThongThamSo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NguoiDung" EntityType="Self.NguoiDung" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NhatKyHeThong" EntityType="Self.NhatKyHeThong" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NhomNguoiDung" EntityType="Self.NhomNguoiDung" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NhomQuyen" EntityType="Self.NhomQuyen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NhomQuyenQuyen" EntityType="Self.NhomQuyenQuyen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Quyen" EntityType="Self.Quyen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScannedItem" EntityType="Self.ScannedItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThongBao" EntityType="Self.ThongBao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThongBaoAttach" EntityType="Self.ThongBaoAttach" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TuDienVietHoa" EntityType="Self.TuDienVietHoa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Website" EntityType="Self.Website" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WebsiteItem" EntityType="Self.WebsiteItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WebsiteScan" EntityType="Self.WebsiteScan" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_NhomQuyenQuyen_NhomQuyen" Association="Self.FK_NhomQuyenQuyen_NhomQuyen">
+            <End Role="NhomQuyen" EntitySet="NhomQuyen" />
+            <End Role="NhomQuyenQuyen" EntitySet="NhomQuyenQuyen" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NhomQuyenQuyen_Quyen" Association="Self.FK_NhomQuyenQuyen_Quyen">
+            <End Role="Quyen" EntitySet="Quyen" />
+            <End Role="NhomQuyenQuyen" EntitySet="NhomQuyenQuyen" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TKMReportsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TKMReportsEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="CountHostsByGroup" ReturnType="Collection(TKMReportsModel.CountHostsByGroup_Result)">
+            <Parameter Name="p_listGroup" Mode="In" Type="String" />
+            <Parameter Name="p_trangThai" Mode="In" Type="String" />
+            <Parameter Name="p_tuNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_denNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="p_pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="p_columnName" Mode="In" Type="String" />
+            <Parameter Name="p_orderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CountProblemBySeverity" ReturnType="Collection(TKMReportsModel.CountProblemBySeverity_Result)">
+            <Parameter Name="p_listGroup" Mode="In" Type="String" />
+            <Parameter Name="p_trangThai" Mode="In" Type="String" />
+            <Parameter Name="p_groupBy" Mode="In" Type="String" />
+            <Parameter Name="p_tuNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_denNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="p_pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="p_columnName" Mode="In" Type="String" />
+            <Parameter Name="p_orderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CountProblemByStatus" ReturnType="Collection(TKMReportsModel.CountProblemByStatus_Result)">
+            <Parameter Name="p_listGroup" Mode="In" Type="String" />
+            <Parameter Name="p_trangThai" Mode="In" Type="String" />
+            <Parameter Name="p_groupBy" Mode="In" Type="String" />
+            <Parameter Name="p_tuNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_denNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="p_pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="p_columnName" Mode="In" Type="String" />
+            <Parameter Name="p_orderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetFilterHieuNang" ReturnType="Collection(TKMReportsModel.GetFilterHieuNang_Result)">
+          <Parameter Name="p_groupTime" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetNhomThietBi" ReturnType="Collection(TKMReportsModel.GetNhomThietBi_Result)" />
+          <FunctionImport Name="GetProblemDetail" ReturnType="Collection(TKMReportsModel.GetProblemDetail_Result)">
+            <Parameter Name="p_listGroup" Mode="In" Type="String" />
+            <Parameter Name="p_trangThai" Mode="In" Type="String" />
+            <Parameter Name="p_groupBy" Mode="In" Type="String" />
+            <Parameter Name="p_capDo" Mode="In" Type="Int32" />
+            <Parameter Name="p_tuNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_denNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="p_pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="p_columnName" Mode="In" Type="String" />
+            <Parameter Name="p_orderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HieuNangNhomThietBi" ReturnType="Collection(TKMReportsModel.HieuNangNhomThietBi_Result)">
+            <Parameter Name="p_listGroup" Mode="In" Type="String" />
+            <Parameter Name="p_listHost" Mode="In" Type="String" />
+            <Parameter Name="p_groupBy" Mode="In" Type="String" />
+            <Parameter Name="p_groupTime" Mode="In" Type="String" />
+            <Parameter Name="p_keyType" Mode="In" Type="String" />
+            <Parameter Name="p_getDetail" Mode="In" Type="Int32" />
+            <Parameter Name="p_tuNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_denNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="p_pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="p_columnName" Mode="In" Type="String" />
+            <Parameter Name="p_orderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HostsByGroup" ReturnType="Collection(TKMReportsModel.HostsByGroup_Result)">
+            <Parameter Name="p_listGroup" Mode="In" Type="String" />
+            <Parameter Name="p_hostname" Mode="In" Type="String" />
+            <Parameter Name="p_pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="p_pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="p_columnName" Mode="In" Type="String" />
+            <Parameter Name="p_orderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeXuatNhomThietBi" ReturnType="Collection(TKMReportsModel.DeXuatNhomThietBi_Result)">
+            <Parameter Name="p_listGroup" Mode="In" Type="String" />
+            <Parameter Name="p_listHost" Mode="In" Type="String" />
+            <Parameter Name="p_groupBy" Mode="In" Type="String" />
+            <Parameter Name="p_groupTime" Mode="In" Type="String" />
+            <Parameter Name="p_keyType" Mode="In" Type="String" />
+            <Parameter Name="p_getDetail" Mode="In" Type="Int32" />
+            <Parameter Name="p_tuNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_denNgay" Mode="In" Type="DateTime" />
+            <Parameter Name="p_pageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="p_pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="p_columnName" Mode="In" Type="String" />
+            <Parameter Name="p_orderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="AffectedItems" EntityType="TKMReportsModel.AffectedItem" />
+          <EntitySet Name="AlertGroups" EntityType="TKMReportsModel.AlertGroup" />
+          <EntitySet Name="HeThongThamSoes" EntityType="TKMReportsModel.HeThongThamSo" />
+          <EntitySet Name="NguoiDungs" EntityType="TKMReportsModel.NguoiDung" />
+          <EntitySet Name="NhatKyHeThongs" EntityType="TKMReportsModel.NhatKyHeThong" />
+          <EntitySet Name="NhomNguoiDungs" EntityType="TKMReportsModel.NhomNguoiDung" />
+          <EntitySet Name="NhomQuyens" EntityType="TKMReportsModel.NhomQuyen" />
+          <EntitySet Name="NhomQuyenQuyens" EntityType="TKMReportsModel.NhomQuyenQuyen" />
+          <EntitySet Name="Quyens" EntityType="TKMReportsModel.Quyen" />
+          <EntitySet Name="ScannedItems" EntityType="TKMReportsModel.ScannedItem" />
+          <EntitySet Name="ThongBaos" EntityType="TKMReportsModel.ThongBao" />
+          <EntitySet Name="ThongBaoAttaches" EntityType="TKMReportsModel.ThongBaoAttach" />
+          <EntitySet Name="TuDienVietHoas" EntityType="TKMReportsModel.TuDienVietHoa" />
+          <EntitySet Name="Websites" EntityType="TKMReportsModel.Website" />
+          <EntitySet Name="WebsiteItems" EntityType="TKMReportsModel.WebsiteItem" />
+          <EntitySet Name="WebsiteScans" EntityType="TKMReportsModel.WebsiteScan" />
+          <AssociationSet Name="FK_NhomQuyenQuyen_NhomQuyen" Association="TKMReportsModel.FK_NhomQuyenQuyen_NhomQuyen">
+            <End Role="NhomQuyen" EntitySet="NhomQuyens" />
+            <End Role="NhomQuyenQuyen" EntitySet="NhomQuyenQuyens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NhomQuyenQuyen_Quyen" Association="TKMReportsModel.FK_NhomQuyenQuyen_Quyen">
+            <End Role="Quyen" EntitySet="Quyens" />
+            <End Role="NhomQuyenQuyen" EntitySet="NhomQuyenQuyens" />
+          </AssociationSet>
+          </EntityContainer>
+        <ComplexType Name="CountHostsByGroup_Result">
+          <Property Type="String" Name="name" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="totalThietBiKhongLoi" Nullable="true" />
+          <Property Type="Int32" Name="totalLoi" Nullable="true" />
+          <Property Type="Int32" Name="totalThietBi" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CountProblemBySeverity_Result">
+          <Property Type="Int64" Name="rnum" Nullable="true" />
+          <Property Type="Int32" Name="totalItem" Nullable="true" />
+          <Property Type="String" Name="groupname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="ip" Nullable="true" MaxLength="64" />
+          <Property Type="Int32" Name="tongvande" Nullable="true" />
+          <Property Type="Int32" Name="chuabiet" Nullable="true" />
+          <Property Type="Int32" Name="thongtin" Nullable="true" />
+          <Property Type="Int32" Name="canhbao" Nullable="true" />
+          <Property Type="Int32" Name="trungbinh" Nullable="true" />
+          <Property Type="Int32" Name="cao" Nullable="true" />
+          <Property Type="Int32" Name="nghiemtrong" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="CountProblemByStatus_Result">
+          <Property Type="Int64" Name="rnum" Nullable="true" />
+          <Property Type="Int32" Name="totalItem" Nullable="true" />
+          <Property Type="String" Name="groupname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="ip" Nullable="true" MaxLength="64" />
+          <Property Type="Int32" Name="tongvande" Nullable="true" />
+          <Property Type="Int32" Name="chuaxuly" Nullable="true" />
+          <Property Type="Int32" Name="daxuly" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetFilterHieuNang_Result">
+          <Property Type="Int32" Name="timeval" Nullable="true" />
+          <Property Type="String" Name="timelabel" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="yearval" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetNhomThietBi_Result">
+          <Property Type="Int64" Name="groupid" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="255" />
+          <Property Type="Int32" Name="internal" Nullable="false" />
+          <Property Type="Int32" Name="flags" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetProblemDetail_Result">
+          <Property Type="Int64" Name="rnum" Nullable="true" />
+          <Property Type="Int32" Name="totalItem" Nullable="true" />
+          <Property Type="Int32" Name="trangThai" Nullable="false" />
+          <Property Type="Int32" Name="severity" Nullable="false" />
+          <Property Type="String" Name="groupname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="128" />
+          <Property Type="String" Name="ip" Nullable="false" MaxLength="64" />
+          <Property Type="String" Name="problemname" Nullable="false" MaxLength="2048" />
+          <Property Type="String" Name="thoigiantao" Nullable="true" MaxLength="61" />
+          <Property Type="String" Name="thoigiantontai" Nullable="true" MaxLength="31" />
+          <Property Type="String" Name="capDo" Nullable="true" MaxLength="12" />
+          <Property Type="String" Name="trangThaiStr" Nullable="false" MaxLength="13" />
+        </ComplexType>
+        <ComplexType Name="HieuNangNhomThietBi_Result">
+          <Property Type="Int64" Name="rnum" Nullable="true" />
+          <Property Type="Decimal" Name="value" Nullable="true" Precision="38" Scale="6" />
+          <Property Type="Int32" Name="stt" Nullable="true" />
+          <Property Type="Int32" Name="yearval" Nullable="true" />
+          <Property Type="String" Name="groupname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="ip" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="itemname" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="timelabel" Nullable="true" MaxLength="67" />
+          <Property Type="String" Name="minval" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="avgval" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="maxval" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <ComplexType Name="HostsByGroup_Result">
+          <Property Type="String" Name="groupname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="hostname" Nullable="false" MaxLength="128" />
+          <Property Type="String" Name="ip" Nullable="true" MaxLength="64" />
+          <Property Type="Int32" Name="happlications" Nullable="true" />
+          <Property Type="Int32" Name="hitems" Nullable="true" />
+          <Property Type="Int32" Name="htriggers" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="DeXuatNhomThietBi_Result">
+          <Property Type="Int64" Name="rnum" Nullable="true" />
+          <Property Type="Decimal" Name="value" Nullable="true" Precision="38" Scale="15" />
+          <Property Type="Int32" Name="stt" Nullable="true" />
+          <Property Type="Int32" Name="yearval" Nullable="true" />
+          <Property Type="String" Name="groupname" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="ip" Nullable="true" MaxLength="64" />
+          <Property Type="String" Name="itemname" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="timelabel" Nullable="true" MaxLength="67" />
+          <Property Type="String" Name="minval" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="avgval" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="maxval" Nullable="true" MaxLength="4000" />
+        </ComplexType>
+        <EntityType Name="AffectedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WebsiteID" Type="Int32" Nullable="false" />
+          <Property Name="WebiteScanID" Type="Int32" Nullable="false" />
+          <Property Name="AlertGroupID" Type="Int32" Nullable="false" />
+          <Property Name="ScanPath" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SourceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="AlertGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlertName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AlertNameTrans" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Severity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AlertDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlertDescriptionTrans" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Recommendations" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="RecommendationsTrans" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="AlertVariants" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="HeThongThamSo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaThamSo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TenThamSo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="MoTa" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NguoiCapNhatID" Type="Int32" />
+          <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NguoiDung">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HoVaTen" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NgaySinh" Type="DateTime" Precision="3" />
+          <Property Name="GioiTinh" Type="Boolean" />
+          <Property Name="NhomQuyenID" Type="Int32" />
+          <Property Name="NhomQuyenList" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ChucVuID" Type="Int32" />
+          <Property Name="DonViID" Type="Int32" />
+          <Property Name="TenDangNhap" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MatKhau" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AnhDaiDien" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SoDienThoai" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="DiaChi" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NguoiTao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="NguoiTaoID" Type="Int32" />
+          <Property Name="NguoiCapNhatID" Type="Int32" />
+          <Property Name="NguoiCapNhat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+          <Property Name="ThuTu" Type="Int32" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NhatKyHeThong">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NguoiDungId" Type="Int32" />
+          <Property Name="MoTa" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="IpClient" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="NhomNguoiDung">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenNhom" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ListNguoiDungThuocNhomID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PhamViSuDung" Type="Boolean" Nullable="false" />
+          <Property Name="NguoiTao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="NguoiTaoID" Type="Int32" />
+          <Property Name="NguoiCapNhatID" Type="Int32" />
+          <Property Name="NguoiCapNhat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NhomQuyen">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KyHieu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaNhom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TenNhom" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="GhiChu" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NguoiTao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="NguoiTaoID" Type="Int32" />
+          <Property Name="NguoiCapNhatID" Type="Int32" />
+          <Property Name="NguoiCapNhat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+          <Property Name="ThuTu" Type="Int32" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="NhomQuyenQuyens" Relationship="TKMReportsModel.FK_NhomQuyenQuyen_NhomQuyen" FromRole="NhomQuyen" ToRole="NhomQuyenQuyen" />
+        </EntityType>
+        <EntityType Name="NhomQuyenQuyen">
+          <Key>
+            <PropertyRef Name="QuyenID" />
+            <PropertyRef Name="NhomQuyenID" />
+          </Key>
+          <Property Name="QuyenID" Type="Int32" Nullable="false" />
+          <Property Name="NhomQuyenID" Type="Int32" Nullable="false" />
+          <Property Name="QuyenChiTiet" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="NhomQuyen" Relationship="TKMReportsModel.FK_NhomQuyenQuyen_NhomQuyen" FromRole="NhomQuyenQuyen" ToRole="NhomQuyen" />
+          <NavigationProperty Name="Quyen" Relationship="TKMReportsModel.FK_NhomQuyenQuyen_Quyen" FromRole="NhomQuyenQuyen" ToRole="Quyen" />
+        </EntityType>
+        <EntityType Name="Quyen">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KhoaChaID" Type="Int32" />
+          <Property Name="MaQuyen" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TenQuyen" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NhanQuyen" Type="Boolean" Nullable="false" />
+          <Property Name="TenHienThi" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Controller" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IconPath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="GhiChu" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FontAwesome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsMenu" Type="Boolean" Nullable="false" />
+          <Property Name="PhanHe" Type="Byte" />
+          <Property Name="NguoiTao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="NguoiTaoID" Type="Int32" />
+          <Property Name="NguoiCapNhatID" Type="Int32" />
+          <Property Name="NguoiCapNhat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+          <Property Name="ThuTu" Type="Int32" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="NhomQuyenQuyens" Relationship="TKMReportsModel.FK_NhomQuyenQuyen_Quyen" FromRole="Quyen" ToRole="NhomQuyenQuyen" />
+        </EntityType>
+        <EntityType Name="ScannedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WebsiteID" Type="Int32" Nullable="false" />
+          <Property Name="WebiteScanID" Type="Int32" Nullable="false" />
+          <Property Name="WebsiteItemID" Type="Int32" Nullable="false" />
+          <Property Name="FullPath" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ThongBao">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TieuDe" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LstNguoiNhanID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LstNhomNguoiNhanID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FileDinhKem" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NguoiTaoID" Type="Int32" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="ChucNangID" Type="Int32" />
+          <Property Name="Link" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDaGui" Type="Boolean" Nullable="false" />
+          <Property Name="LstNguoiNhanDaXemID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LstNguoiNhanDaNhanMoiNhatID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="isXoaTam" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThongBaoAttach">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ThongBaoID" Type="Int32" />
+          <Property Name="LinkFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NameFile" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReplaceName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Size" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Code" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TuDienVietHoa">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NgonNgu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CumTuKhoa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CumTuThayDoi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NguoiTaoID" Type="Int32" />
+          <Property Name="NguoiCapNhatID" Type="Int32" />
+          <Property Name="NgayTao" Type="DateTime" Precision="3" />
+          <Property Name="TrangThai" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Website">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartURL" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Host" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Responsive" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ServerOS" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ServerInformation" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ServerTechnologies" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="WebsiteItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WebsiteID" Type="Int32" Nullable="false" />
+          <Property Name="LastScanID" Type="Int32" Nullable="false" />
+          <Property Name="FullPath" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ErrorCount" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="WebsiteScan">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WebsiteID" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ScanTime" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ThreatLevel" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="TotalSecond" Type="Int32" />
+          <Property Name="TotalItemScan" Type="Int32" />
+          <Property Name="TotalAlertFound" Type="Int32" />
+          <Property Name="HighAlert" Type="Int32" />
+          <Property Name="MediumAlert" Type="Int32" />
+          <Property Name="LowAlert" Type="Int32" />
+          <Property Name="InforAlert" Type="Int32" />
+          <Property Name="ScanProfile" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="RootReportUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="NewReportUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ReportHTML" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_NhomQuyenQuyen_NhomQuyen">
+          <End Type="TKMReportsModel.NhomQuyen" Role="NhomQuyen" Multiplicity="1" />
+          <End Type="TKMReportsModel.NhomQuyenQuyen" Role="NhomQuyenQuyen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NhomQuyen">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NhomQuyenQuyen">
+              <PropertyRef Name="NhomQuyenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NhomQuyenQuyen_Quyen">
+          <End Type="TKMReportsModel.Quyen" Role="Quyen" Multiplicity="1" />
+          <End Type="TKMReportsModel.NhomQuyenQuyen" Role="NhomQuyenQuyen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Quyen">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="NhomQuyenQuyen">
+              <PropertyRef Name="QuyenID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TKMReportsModelStoreContainer" CdmEntityContainer="TKMReportsEntities">
+          <EntitySetMapping Name="AffectedItems">
+            <EntityTypeMapping TypeName="TKMReportsModel.AffectedItem">
+              <MappingFragment StoreEntitySet="AffectedItem">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="SourceCode" ColumnName="SourceCode" />
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="ScanPath" ColumnName="ScanPath" />
+                <ScalarProperty Name="AlertGroupID" ColumnName="AlertGroupID" />
+                <ScalarProperty Name="WebiteScanID" ColumnName="WebiteScanID" />
+                <ScalarProperty Name="WebsiteID" ColumnName="WebsiteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlertGroups">
+            <EntityTypeMapping TypeName="TKMReportsModel.AlertGroup">
+              <MappingFragment StoreEntitySet="AlertGroup">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="AlertVariants" ColumnName="AlertVariants" />
+                <ScalarProperty Name="RecommendationsTrans" ColumnName="RecommendationsTrans" />
+                <ScalarProperty Name="Recommendations" ColumnName="Recommendations" />
+                <ScalarProperty Name="AlertDescriptionTrans" ColumnName="AlertDescriptionTrans" />
+                <ScalarProperty Name="AlertDescription" ColumnName="AlertDescription" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="AlertNameTrans" ColumnName="AlertNameTrans" />
+                <ScalarProperty Name="AlertName" ColumnName="AlertName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HeThongThamSoes">
+            <EntityTypeMapping TypeName="TKMReportsModel.HeThongThamSo">
+              <MappingFragment StoreEntitySet="HeThongThamSo">
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+                <ScalarProperty Name="NguoiCapNhatID" ColumnName="NguoiCapNhatID" />
+                <ScalarProperty Name="MoTa" ColumnName="MoTa" />
+                <ScalarProperty Name="TenThamSo" ColumnName="TenThamSo" />
+                <ScalarProperty Name="MaThamSo" ColumnName="MaThamSo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NguoiDungs">
+            <EntityTypeMapping TypeName="TKMReportsModel.NguoiDung">
+              <MappingFragment StoreEntitySet="NguoiDung">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="ThuTu" ColumnName="ThuTu" />
+                <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+                <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+                <ScalarProperty Name="NguoiCapNhatID" ColumnName="NguoiCapNhatID" />
+                <ScalarProperty Name="NguoiTaoID" ColumnName="NguoiTaoID" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+                <ScalarProperty Name="SoDienThoai" ColumnName="SoDienThoai" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AnhDaiDien" ColumnName="AnhDaiDien" />
+                <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
+                <ScalarProperty Name="DonViID" ColumnName="DonViID" />
+                <ScalarProperty Name="ChucVuID" ColumnName="ChucVuID" />
+                <ScalarProperty Name="NhomQuyenList" ColumnName="NhomQuyenList" />
+                <ScalarProperty Name="NhomQuyenID" ColumnName="NhomQuyenID" />
+                <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+                <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
+                <ScalarProperty Name="HoVaTen" ColumnName="HoVaTen" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NhatKyHeThongs">
+            <EntityTypeMapping TypeName="TKMReportsModel.NhatKyHeThong">
+              <MappingFragment StoreEntitySet="NhatKyHeThong">
+                <ScalarProperty Name="IpClient" ColumnName="IpClient" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="MoTa" ColumnName="MoTa" />
+                <ScalarProperty Name="NguoiDungId" ColumnName="NguoiDungId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NhomNguoiDungs">
+            <EntityTypeMapping TypeName="TKMReportsModel.NhomNguoiDung">
+              <MappingFragment StoreEntitySet="NhomNguoiDung">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+                <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+                <ScalarProperty Name="NguoiCapNhatID" ColumnName="NguoiCapNhatID" />
+                <ScalarProperty Name="NguoiTaoID" ColumnName="NguoiTaoID" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+                <ScalarProperty Name="PhamViSuDung" ColumnName="PhamViSuDung" />
+                <ScalarProperty Name="ListNguoiDungThuocNhomID" ColumnName="ListNguoiDungThuocNhomID" />
+                <ScalarProperty Name="TenNhom" ColumnName="TenNhom" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NhomQuyens">
+            <EntityTypeMapping TypeName="TKMReportsModel.NhomQuyen">
+              <MappingFragment StoreEntitySet="NhomQuyen">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="ThuTu" ColumnName="ThuTu" />
+                <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+                <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+                <ScalarProperty Name="NguoiCapNhatID" ColumnName="NguoiCapNhatID" />
+                <ScalarProperty Name="NguoiTaoID" ColumnName="NguoiTaoID" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="TenNhom" ColumnName="TenNhom" />
+                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+                <ScalarProperty Name="KyHieu" ColumnName="KyHieu" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NhomQuyenQuyens">
+            <EntityTypeMapping TypeName="TKMReportsModel.NhomQuyenQuyen">
+              <MappingFragment StoreEntitySet="NhomQuyenQuyen">
+                <ScalarProperty Name="QuyenChiTiet" ColumnName="QuyenChiTiet" />
+                <ScalarProperty Name="NhomQuyenID" ColumnName="NhomQuyenID" />
+                <ScalarProperty Name="QuyenID" ColumnName="QuyenID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Quyens">
+            <EntityTypeMapping TypeName="TKMReportsModel.Quyen">
+              <MappingFragment StoreEntitySet="Quyen">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="ThuTu" ColumnName="ThuTu" />
+                <ScalarProperty Name="NgayCapNhat" ColumnName="NgayCapNhat" />
+                <ScalarProperty Name="NguoiCapNhat" ColumnName="NguoiCapNhat" />
+                <ScalarProperty Name="NguoiCapNhatID" ColumnName="NguoiCapNhatID" />
+                <ScalarProperty Name="NguoiTaoID" ColumnName="NguoiTaoID" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="NguoiTao" ColumnName="NguoiTao" />
+                <ScalarProperty Name="PhanHe" ColumnName="PhanHe" />
+                <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+                <ScalarProperty Name="FontAwesome" ColumnName="FontAwesome" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="IconPath" ColumnName="IconPath" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="TenHienThi" ColumnName="TenHienThi" />
+                <ScalarProperty Name="NhanQuyen" ColumnName="NhanQuyen" />
+                <ScalarProperty Name="TenQuyen" ColumnName="TenQuyen" />
+                <ScalarProperty Name="MaQuyen" ColumnName="MaQuyen" />
+                <ScalarProperty Name="KhoaChaID" ColumnName="KhoaChaID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScannedItems">
+            <EntityTypeMapping TypeName="TKMReportsModel.ScannedItem">
+              <MappingFragment StoreEntitySet="ScannedItem">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="FullPath" ColumnName="FullPath" />
+                <ScalarProperty Name="WebsiteItemID" ColumnName="WebsiteItemID" />
+                <ScalarProperty Name="WebiteScanID" ColumnName="WebiteScanID" />
+                <ScalarProperty Name="WebsiteID" ColumnName="WebsiteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThongBaos">
+            <EntityTypeMapping TypeName="TKMReportsModel.ThongBao">
+              <MappingFragment StoreEntitySet="ThongBao">
+                <ScalarProperty Name="isXoaTam" ColumnName="isXoaTam" />
+                <ScalarProperty Name="LstNguoiNhanDaNhanMoiNhatID" ColumnName="LstNguoiNhanDaNhanMoiNhatID" />
+                <ScalarProperty Name="LstNguoiNhanDaXemID" ColumnName="LstNguoiNhanDaXemID" />
+                <ScalarProperty Name="IsDaGui" ColumnName="IsDaGui" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="ChucNangID" ColumnName="ChucNangID" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="NguoiTaoID" ColumnName="NguoiTaoID" />
+                <ScalarProperty Name="FileDinhKem" ColumnName="FileDinhKem" />
+                <ScalarProperty Name="LstNhomNguoiNhanID" ColumnName="LstNhomNguoiNhanID" />
+                <ScalarProperty Name="LstNguoiNhanID" ColumnName="LstNguoiNhanID" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="TieuDe" ColumnName="TieuDe" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThongBaoAttaches">
+            <EntityTypeMapping TypeName="TKMReportsModel.ThongBaoAttach">
+              <MappingFragment StoreEntitySet="ThongBaoAttach">
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="ReplaceName" ColumnName="ReplaceName" />
+                <ScalarProperty Name="NameFile" ColumnName="NameFile" />
+                <ScalarProperty Name="LinkFile" ColumnName="LinkFile" />
+                <ScalarProperty Name="ThongBaoID" ColumnName="ThongBaoID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TuDienVietHoas">
+            <EntityTypeMapping TypeName="TKMReportsModel.TuDienVietHoa">
+              <MappingFragment StoreEntitySet="TuDienVietHoa">
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="NguoiCapNhatID" ColumnName="NguoiCapNhatID" />
+                <ScalarProperty Name="NguoiTaoID" ColumnName="NguoiTaoID" />
+                <ScalarProperty Name="CumTuThayDoi" ColumnName="CumTuThayDoi" />
+                <ScalarProperty Name="CumTuKhoa" ColumnName="CumTuKhoa" />
+                <ScalarProperty Name="NgonNgu" ColumnName="NgonNgu" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Websites">
+            <EntityTypeMapping TypeName="TKMReportsModel.Website">
+              <MappingFragment StoreEntitySet="Website">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ServerTechnologies" ColumnName="ServerTechnologies" />
+                <ScalarProperty Name="ServerInformation" ColumnName="ServerInformation" />
+                <ScalarProperty Name="ServerOS" ColumnName="ServerOS" />
+                <ScalarProperty Name="Responsive" ColumnName="Responsive" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="StartURL" ColumnName="StartURL" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WebsiteItems">
+            <EntityTypeMapping TypeName="TKMReportsModel.WebsiteItem">
+              <MappingFragment StoreEntitySet="WebsiteItem">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ErrorCount" ColumnName="ErrorCount" />
+                <ScalarProperty Name="FullPath" ColumnName="FullPath" />
+                <ScalarProperty Name="LastScanID" ColumnName="LastScanID" />
+                <ScalarProperty Name="WebsiteID" ColumnName="WebsiteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WebsiteScans">
+            <EntityTypeMapping TypeName="TKMReportsModel.WebsiteScan">
+              <MappingFragment StoreEntitySet="WebsiteScan">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ReportHTML" ColumnName="ReportHTML" />
+                <ScalarProperty Name="NewReportUrl" ColumnName="NewReportUrl" />
+                <ScalarProperty Name="RootReportUrl" ColumnName="RootReportUrl" />
+                <ScalarProperty Name="ScanProfile" ColumnName="ScanProfile" />
+                <ScalarProperty Name="InforAlert" ColumnName="InforAlert" />
+                <ScalarProperty Name="LowAlert" ColumnName="LowAlert" />
+                <ScalarProperty Name="MediumAlert" ColumnName="MediumAlert" />
+                <ScalarProperty Name="HighAlert" ColumnName="HighAlert" />
+                <ScalarProperty Name="TotalAlertFound" ColumnName="TotalAlertFound" />
+                <ScalarProperty Name="TotalItemScan" ColumnName="TotalItemScan" />
+                <ScalarProperty Name="TotalSecond" ColumnName="TotalSecond" />
+                <ScalarProperty Name="ThreatLevel" ColumnName="ThreatLevel" />
+                <ScalarProperty Name="ScanTime" ColumnName="ScanTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="WebsiteID" ColumnName="WebsiteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

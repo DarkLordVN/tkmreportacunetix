@@ -1,0 +1,105 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.v_BCKQThucHienChiDaoListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+    
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.lstBCKQThucHienChiDao != null && Model.lstBCKQThucHienChiDao.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.lstBCKQThucHienChiDao)
+    {
+        index++;
+        <tr>
+            <td align="center">@index</td>
+            <td class="tal">
+                @Html.Raw("Số: " + item.SoKyHieu + "</br>" + "Ngày: " + (item.NgayVanBan != null? item.NgayVanBan.Value.ToString("dd/MM/yyyy") : "") + "</br>" + "Lãnh đạo: " + item.NguoiKy)
+            </td>
+            <td class="tal" style="width:250px">@item.TrichYeu</td>
+            <td class="tal">@item.NoiDungChiDao</td>
+            <td class="tal">@item.KetQuaXuLy</td>
+            @{
+                string TrangThaiVanBanStr = "";
+                string background = "";
+                string color = "#fff";
+                switch (item.TrangThaiVanBan)
+                {
+                    case 0:
+                        //Chưa tiếp nhận
+                        background = "#e53935";
+                        TrangThaiVanBanStr = "Chưa tiếp nhận";
+                        break;
+                    case 1:
+                        //Đã tiếp nhận
+                        background = "#4285f4";
+                        TrangThaiVanBanStr = "Đã tiếp nhận";
+                        break;
+                    case 2:
+                        //Phân công
+                        background = "#ff9100";
+                        TrangThaiVanBanStr = "Phân công";
+                        break;
+                    case 3:
+                        //Đang xử lý
+                        background = "rgba(0,188,212,.7)";
+                        TrangThaiVanBanStr = "Đang xử lý";
+                        break;
+                    case 4:
+                        //Hoàn thành
+                        background = "#00c851";
+                        TrangThaiVanBanStr = "Hoàn thành";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            <td align="center" style='@string.Format("background-color:{0} !important;color:{1} !important",background,color)'>@TrangThaiVanBanStr</td>
+        </tr>
+                    }
+
+                }
+@if (Model != null && Model.lstBCKQThucHienChiDao == null || Model.lstBCKQThucHienChiDao.Count == 0)
+{
+    <tr>
+        <td colspan="12" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="12">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("BCKQThucHienNhiemVuData", "BaoCaoThongKe", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TuNgayNVB = Model.TuNgay,
+                   DenNgayNVB = Model.DenNgay,
+                   //dvID = Model.dvID,
+
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem văn bản
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+
+
+

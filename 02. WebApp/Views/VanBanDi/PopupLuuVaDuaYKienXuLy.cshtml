@@ -1,0 +1,182 @@
+﻿@using TKM.BLL
+@model VanBanDenViewModel
+@{
+    Layout = null;
+    var type = (string)ViewBag.type;
+}
+@using (Ajax.BeginForm("PopupLuuVaTrinhLanhDao", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onLuuVaTrinhLanhDaoSuccess"
+}, new { @id = "fForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="type" id="type" value="@type" />
+    <div class="form-group row">
+            <div class="col-sm-12">
+                <div class="form-check form-check-inline" style="margin-right:100px">
+                    <input type="radio" class="form-check-input" id="vbcanxuly" name="typevb">
+                    <label class="form-check-label" for="vbcanxuly">Văn bản cần xử lý</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="vbnhandebiet" name="typevb">
+                    <label class="form-check-label" for="vbnhandebiet">Văn bản nhận để biết</label>
+                </div>
+            </div>
+        </div>
+<div id="loadForm">
+
+</div>
+
+
+     <div class="form-group row">
+        <div class="col-sm-6">
+            <div class="md-form">
+                <label class="active" for="KinhTrinhID">
+                    Kính trình <span class="c-red-500">(*)</span>
+                </label>
+                <select class="mdb-select mdb-select-csa" id="KinhTrinhID" searchable="Nhập từ khóa..">
+                    <option value="">-- Chọn cán bộ --</option>
+                    <option value="1">Cục trưởng Trần Kỳ Hình</option>
+                    <option value="2">Cục trưởng Trần A</option>
+                    <option value="3">Cục trưởng Trần B</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="md-form">
+                <div class="md-form">
+                    <label class="active" for="CanBoTrinhID">
+                        Cán bộ trình <span class="c-red-500">(*)</span>
+                    </label>
+                    <select class="mdb-select mdb-select-csb" id="CanBoTrinhID" searchable="Nhập từ khóa..">
+                        <option value="">-- Chọn cán bộ --</option>
+                        <option value="1">Văn thư cục Trần Kỳ Hình</option>
+                        <option value="2">Văn thư cục Trần A</option>
+                        <option value="3">Văn thư cục Trần B</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    if (type == "vtcuc")
+    {
+
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <div class="md-form">
+                    <label class="active" for="DonViTrinhID">
+                        Đơn vị trình
+                    </label>
+                    <select class="mdb-select mdb-select-csc" id="DonViTrinhID" searchable="Nhập từ khóa..">
+                        <option value="">-- Chọn cán bộ --</option>
+                        <option value="1">Cục trưởng Trần Kỳ Hình</option>
+                        <option value="2">Cục trưởng Trần A</option>
+                        <option value="3">Cục trưởng Trần B</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="md-form">
+                    <div class="md-form">
+                        <label class="active" for="LanhDaoDonViTrinhID">
+                            Lãnh đạo dơn vị trình <span class="c-red-500">(*)</span>
+                        </label>
+                        <select class="mdb-select mdb-select-csd" id="LanhDaoDonViTrinhID" searchable="Nhập từ khóa..">
+                            <option value="">-- Chọn cán bộ --</option>
+                            <option value="1">Văn thư cục Trần Kỳ Hình</option>
+                            <option value="2">Văn thư cục Trần A</option>
+                            <option value="3">Văn thư cục Trần B</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <div class="md-form">
+                <label class="active" for="DoKhanID">
+                    Độ khẩn
+                </label>
+                <select class="mdb-select mdb-select-cse" id="DoKhanID" searchable="Nhập từ khóa..">
+                    <option value="">-- Chọn độ khẩn --</option>
+                    <option value="1">Cao</option>
+                    <option value="2">Trung bình</option>
+                    <option value="3">Thấp</option>
+                </select>
+            </div>
+        </div>
+        @if (type == "vtcuc")
+        {
+            <div class="col-sm-6">
+                <div class="md-form">
+                    <label class="active" for="DonViPhoiHopID">
+                        Đơn vị phối hợp
+                    </label>
+                    <select class="mdb-select mdb-select-csf" id="DonViPhoiHopID" searchable="Nhập từ khóa..">
+                        <option value="">-- Chọn đơn vị phối hợp --</option>
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                    </select>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">Nội dung trình <span class="c-red-500">(*)</span></div>
+        <div class="col-sm-10">
+            @Html.TextArea("NoiDungTrinh", null, new { @class = "form-control rounded-0", @id = "NoiDungTrinh", @placeholder = "Xin bút phê xừ lý văn bản (*)", @rows = "3" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            File đính kèm
+        </div>
+        <div class="col-sm-10">
+            @Html.TextBoxFor(m => m.Files, new { @id = "txtFile", @type = "file", @multiple = "multiple", @accept = "image/*", @onclick = "IsSubmit();" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="form-check form-check-inline px-3 my-3">
+            <input type="checkbox" class="form-check-input" id="materialInline1">
+            <label class="form-check-label" for="materialInline1">Gửi SMS</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" class="form-check-input" id="materialInline2">
+            <label class="form-check-label" for="materialInline2">Gửi Email</label>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="text-center col-sm-12">
+            <button type="button" class="btn btn-primary">Lưu và gửi</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+
+}
+<script>
+    $('input[type=radio]').on('change', function (e) {
+        var getElementID = e.target.id;
+        var type = $('#type').val();
+        if (getElementID == 'vbcanxuly') {
+            //Văn bản cần xử lý
+            if (type == 'vtcuc') {
+                alert(' vbcanxuly  cuc');
+            } else {
+                alert(' vbcanxuly donvi');
+            }
+        } else {
+            //văn bản nhận để biết
+            alert('vb nhan de biet');
+        }
+    });
+    $(document).ready(function () {
+        $('.mdb-select-csa,.mdb-select-csb,.mdb-select-csc,.mdb-select-csd,.mdb-select-cse,.mdb-select-csf').materialSelect();
+    })
+</script>

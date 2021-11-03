@@ -1,0 +1,96 @@
+﻿@using TKM.BLL
+@model DmDonViViewModel
+@{
+    Layout = null;
+    var tenDonViTruocThuoc = (string)ViewBag.tenDonViTrucThuoc;
+}
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Đơn vị cha: </label>
+        </div>
+        <div class="col-md-9">
+            @tenDonViTruocThuoc
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Tên đơn vị: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model!=null ? Model.TenDonVi:"")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Mã định danh đơn vị: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.MaDinhDanh : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Ký hiệu: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.KyHieu : "")
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Cán bộ xử lý văn bản đến: </label>
+        </div>
+        <div class="col-md-9">
+            @Html.Raw(Model.ListCanBoXuLyVanBanDen)
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Cán bộ xử lý hồ sơ công việc: </label>
+        </div>
+        <div class="col-md-9">
+            @Html.Raw(Model.ListCanBoXuLyHoSoCongViec)
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Đơn vị trực thuộc: </label>
+        </div>
+        <div class="col-md-9">
+            @Html.Raw(Model != null && Model.IsDonVi == true ? "<span class='fa fa-check text-success'></span>" : "<span class='fa fa-times text-danger'></span>")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Trạng thái: </label>
+        </div>
+        <div class="col-md-9">
+            @Html.Raw(Model != null && Model.TrangThai == true ? "<span class='badge badge-success'>Có Sử dụng</span>" : "<span class='badge badge-danger'>Không sử dụng</span>")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+</div>

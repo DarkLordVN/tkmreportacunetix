@@ -1,0 +1,168 @@
+﻿@using TKM.BLL;
+@{ 
+    Layout = null;
+    var Nam = (int)ViewBag.Nam;
+    var lstDoiTuongGuiVBDi = (List<DoiTuongGuiVanBanDiViewModel>)ViewBag.lstDoiTuongGuiVBDi;
+    var countDTGVBDi = (int)ViewBag.countDTGVBDi + 1;
+    var dicDoiTuongGuiVBDi = (Dictionary<string, List<int>>)ViewBag.dicDoiTuongGuiVBDi;
+
+    var lstDoiTuongGuiVBDen = (List<DoiTuongGuiVanBanDenViewModel>)ViewBag.lstDoiTuongGuiVBDen;
+    var countDTGVBDen = (int)ViewBag.countDTGVBDen + 1;
+    var dicDoiTuongGuiVBDen = (Dictionary<string, List<int>>)ViewBag.dicDoiTuongGuiVBDen;
+
+    var lstLoaiVBDen = (List<DmLoaiVanBanViewModel>)ViewBag.lstLoaiVBDen;
+    var countLoaiVBDen = (int)ViewBag.countLoaiVBDen + 1;
+    var dicLoaiVBDen = (Dictionary<string, List<int>>)ViewBag.dicLoaiVBDen;
+    var dicTong = (Dictionary<string, List<int>>)ViewBag.dicTong;
+}
+<thead class="bg-primary text-white lighten-3">
+    <tr>
+        <th class="th-sm" colspan="19" style="padding:10px 0">THỐNG KÊ VĂN BẢN ĐẾN/ĐI NĂM @Nam</th>
+    </tr>
+    <tr>
+        <th class="th-sm">Văn bản</th>
+        <th class="th-sm" style="width:100px">Phân loại văn bản</th>
+        <th class="th-sm">T1</th>
+        <th class="th-sm">T2</th>
+        <th class="th-sm">T3</th>
+        <th class="th-sm">T4</th>
+        <th class="th-sm">T5</th>
+        <th class="th-sm">T6</th>
+        <th class="th-sm">T7</th>
+        <th class="th-sm">T8</th>
+        <th class="th-sm">T9</th>
+        <th class="th-sm">T10</th>
+        <th class="th-sm">T11</th>
+        <th class="th-sm">T12</th>
+        <th class="th-sm">Q1</th>
+        <th class="th-sm">Q2</th>
+        <th class="th-sm">Q3</th>
+        <th class="th-sm">Q4</th>
+        <th class="th-sm">TC</th>
+    </tr>
+</thead>
+<tbody>
+    @if (lstDoiTuongGuiVBDi != null && lstDoiTuongGuiVBDi.Count > 0)
+    {
+        for (int i = 0; i < lstDoiTuongGuiVBDi.Count; i++)
+        {
+            <tr>
+                @if (i == 0)
+                {
+                    <td style="font-weight: bold" rowspan="@countDTGVBDi">Văn bản đi</td>
+                }
+                <td style="text-align: left">@lstDoiTuongGuiVBDi[i].TenDoiTuong</td>
+
+                @{
+                    var lstMonth = new List<int>();
+                    lstMonth = dicDoiTuongGuiVBDi["itemDTGuiVBDi_" + i];
+                }
+                @foreach (var item in lstMonth)
+                {
+                    <td>@item</td>
+                }
+                <td></td>
+            </tr>
+                    }
+                    <tr>
+                        <td style="color: red; font-weight: bold; text-align: left">Tổng cộng</td>
+                        @{
+                            var lstTongDoiTuongGuiVBDi = new List<int>();
+                            lstTongDoiTuongGuiVBDi = dicTong["TongDoiTuongGuiVBDi"];
+                            int tcDoiTuongGuiVBDi = 0;
+                            for (int i = 0; i < 12; i++)
+                            {
+                                tcDoiTuongGuiVBDi += lstTongDoiTuongGuiVBDi[i];
+                            }
+                        }
+                        @foreach (var item in lstTongDoiTuongGuiVBDi)
+                        {
+                            <td style="color: red; font-weight:bold">@item</td>
+                        }
+                        <td style="color: red; font-weight:bold">@tcDoiTuongGuiVBDi</td>
+                    </tr>
+                            }
+
+    @if (lstDoiTuongGuiVBDen != null && lstDoiTuongGuiVBDen.Count > 0)
+    {
+        for (int i = 0; i < lstDoiTuongGuiVBDen.Count; i++)
+        {
+            <tr>
+                @if (i == 0)
+                {
+                    <td style="font-weight: bold" rowspan="@countDTGVBDen">Văn bản đến</td>
+                }
+                <td style="text-align: left">@lstDoiTuongGuiVBDen[i].TenDoiTuong</td>
+
+                @{
+                    var lstMonth = new List<int>();
+                    lstMonth = dicDoiTuongGuiVBDen["itemDTGuiVBDen_" + i];
+                }
+                @foreach (var item in lstMonth)
+                {
+                    <td>@item</td>
+                }
+                <td></td>
+            </tr>
+                    }
+                    <tr>
+                        <td style="color: red; font-weight: bold; text-align: left">Tổng cộng</td>
+                        @{
+                            var lstTongDoiTuongGuiVBDen = new List<int>();
+                            lstTongDoiTuongGuiVBDen = dicTong["TongDoiTuongGuiVBDen"];
+                            int tcDoiTuongGuiVBDen = 0;
+                            for (int i = 0; i < 12; i++)
+                            {
+                                tcDoiTuongGuiVBDen += lstTongDoiTuongGuiVBDen[i];
+                            }
+                        }
+                        @foreach (var item in lstTongDoiTuongGuiVBDen)
+                        {
+                            <td style="color: red; font-weight:bold">@item</td>
+                        }
+                        <td style="color: red; font-weight:bold">@tcDoiTuongGuiVBDen</td>
+                    </tr>
+                            }
+
+    @if (lstLoaiVBDen != null && lstLoaiVBDen.Count > 0)
+    {
+        for (int i = 0; i < lstLoaiVBDen.Count; i++)
+        {
+            <tr>
+                @if (i == 0)
+                {
+                    <td style="font-weight: bold" rowspan="@countLoaiVBDen">Văn bản đến</td>
+                }
+                <td style="text-align: left">@lstLoaiVBDen[i].TenLoaiVanBan</td>
+
+                @{
+                    var lstMonth = new List<int>();
+                    lstMonth = dicLoaiVBDen["itemLoaiVBDen_" + i];
+                }
+                @foreach (var item in lstMonth)
+                {
+                    <td>@item</td>
+                }
+                <td></td>
+            </tr>
+                    }
+                    <tr>
+                        <td style="color: red; font-weight: bold; text-align: left">Tổng cộng</td>
+                        @{
+                            var lstTongLoaiVBDen = new List<int>();
+                            lstTongLoaiVBDen = dicTong["LoaiVBDen"];
+                            int tcLoaiVBDen = 0;
+                            for (int i = 0; i < 12; i++)
+                            {
+                                tcLoaiVBDen += lstTongLoaiVBDen[i];
+                            }
+                        }
+                        @foreach (var item in lstTongLoaiVBDen)
+                        {
+                            <td style="color: red; font-weight:bold">@item</td>
+                        }
+                        <td style="color: red; font-weight:bold">@tcLoaiVBDen</td>
+                    </tr>
+                            }
+</tbody>
+

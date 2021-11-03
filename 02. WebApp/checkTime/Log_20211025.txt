@@ -1,0 +1,30 @@
+--------- 23:32:03 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:36:15 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:49:21 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:54:24 ---------
+Ref URL: http://localhost:3939/NhomQuyen/Index
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:54:27 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2

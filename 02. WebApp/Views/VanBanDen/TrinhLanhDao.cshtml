@@ -1,0 +1,219 @@
+﻿@using TKM.BLL
+
+@model VanBanDenViewModel
+@{
+    Layout = null;
+    var typeUser = (string)ViewBag.typeUser;
+    var lstKinhTrinh = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstKinhTrinh;
+    var act = (string)ViewBag.act;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@using (Ajax.BeginForm("TrinhLanhDao", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onTrinhLanhDaoSuccess"
+}, new { @id = "fFormTLD", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(model => model.FileVanBan, new { @id = "ModelFileVanBan" })
+    <input type="hidden" id="act" name="act" value="@act" />
+    @*<div class="form-group row">
+            <div class="col-sm-12">
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="trinhduyet" name="typetrinh">
+                    <label class="form-check-label" for="trinhduyet">Trình duyệt</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="trinhxinykien" name="typetrinh">
+                    <label class="form-check-label" for="trinhxinykien">Trình xin ý kiến</label>
+                </div>
+            </div>
+        </div>*@
+    <div class="form-group row">
+        <label for="NguoiNhanID" class="col-sm-2 col-form-label">Kính trình <span class="c-red-500">(*)</span></label>
+        <div class="col-sm-4">
+           @{
+               var objFirstKT = new TKM.BLL.NguoiDungViewModel();
+               if (lstKinhTrinh != null && lstKinhTrinh.Count() > 0)
+               {
+
+                   objFirstKT = lstKinhTrinh.FirstOrDefault();
+               }
+        }
+        @if (lstKinhTrinh != null && lstKinhTrinh.Count() > 0)
+                {
+            @Html.DropDownList("NguoiNhanID", new SelectList(lstKinhTrinh, "ID", "ChucVuVaTen", objFirstKT.ID), new { @class = "mdb-select col-sm-9 md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "NguoiNhanID", @searchable = "Nhập từ khóa.." })
+        }
+        else
+        {
+            @Html.DropDownList("NguoiNhanID", new SelectList(lstKinhTrinh, "ID", "ChucVuVaTen"), "-- Chọn lãnh đạo --", new { @class = "mdb-select col-sm-9 md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "NguoiNhanID", @searchable = "Nhập từ khóa.." })
+        }
+        </div>
+        <label for="NguoiXuLyID" class="col-sm-2 col-form-label">Cán bộ trình <span class="c-red-500">(*)</span></label>
+        <div class="col-sm-4">
+            @Html.DropDownList("NguoiXuLyID", new SelectList(Model.lstNguoiDung.Where(g => g.ID == SessionInfo.CurrentUser.ID), "ID", "ChucVuVaTen"), new { @class = "mdb-select col-sm-9 md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "NguoiXuLyID", @searchable = "Nhập từ khóa..", @disabled = "true" })
+        </div>
+    </div>
+
+
+               if (typeUser.Equals("vtc"))
+               {
+                <div class="form-group row">
+                    <label for="DonViXuLyID" class="col-sm-2 col-form-label">Đơn vị trình</label>
+                    <div class="col-sm-4">
+                        @Html.DropDownList("DonViXuLyID", new SelectList(Model.lstCoQuanBanHanh.Where(g => g.ID == SessionInfo.CurrentUser.DonViID), "ID", "TenVaKyHieu"), new { @class = "mdb-select col-sm-9 md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "DonViXuLyID", @searchable = "Nhập từ khóa..", @disabled = "true" })
+                    </div>
+                    <label for="LanhDaoDonViTrinhID" class="col-sm-2 col-form-label">Lãnh đạo đơn vị trình</label>
+                    <div class="col-sm-4">
+                        @{
+                            var lstLanhDaoDonViTrinh = Model.lstNguoiDung.Where(g =>g.TrangThai && g.IsLanhDao == true && g.DonViID == SessionInfo.CurrentUser.DonViID).ToList();
+                            var objFirstLD = new NguoiDungViewModel();
+                            if (lstLanhDaoDonViTrinh != null && lstLanhDaoDonViTrinh.Count() > 0)
+                            {
+                                objFirstLD = lstLanhDaoDonViTrinh.FirstOrDefault();
+                            }
+                        }
+                        @if (lstLanhDaoDonViTrinh != null && lstLanhDaoDonViTrinh.Count() > 0)
+                        {
+                            @Html.DropDownList("LanhDaoDonViTrinhID", new SelectList(lstLanhDaoDonViTrinh, "ID", "ChucVuVaTen", objFirstLD.ID), new { @class = "mdb-select col-sm-9 md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "LanhDaoDonViTrinhID", @searchable = "Nhập từ khóa.." })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("LanhDaoDonViTrinhID", new SelectList(lstLanhDaoDonViTrinh, "ID", "ChucVuVaTen"), "-- Chọn lãnh đạo --", new { @class = "mdb-select col-sm-9 md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "LanhDaoDonViTrinhID", @searchable = "Nhập từ khóa.." })
+                        }
+                    </div>
+                </div>
+                        
+                                            }
+                                            @*<div class="form-group row">
+                                                <div class="col-sm-6">
+                                                    <div class="md-form">
+                                                        <label class="active" for="DoKhanID">
+                                                            Độ khẩn
+                                                        </label>
+                                                        @Html.DropDownList("DoKhanID", new SelectList(Model.lstDoKhan, "ID", "TenDoKhan"), new { @class = "mdb-select md-form", @id = "DoKhanID", @searchable = "Nhập từ khóa.." })
+                                                    </div>
+                                                </div>
+                                                @if (typeUser.Equals("vtc"))
+                                                {
+                                                    <div class="col-sm-6">
+                                                        <div class="md-form">
+                                                            <label class="active" for="ListDonViPhoiHopID">
+                                                                Đơn vị phối hợp
+                                                            </label>
+                                                            @Html.DropDownListFor(model => model.ListDonViPhoiHopID, new SelectList(Model.lstCoQuanBanHanh.Where(g => g.ID != SessionInfo.CurrentUser.DonViID), "ID", "TenVaKyHieu"), new { @class = "select2", @id = "ListDonViPhoiHopID", @multiple = "true" })
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                                                        </div>*@
+                                    <div class="row">
+                                        <label for="NoiDungYKien" class="col-sm-2 col-form-label">Nội dung trình <span class="c-red-500">(*)</span></label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control rounded-0" name="NoiDungYKien" id="NoiDungYKien" rows="3">Xin ý kiến bút phê xử lý văn bản</textarea>
+                                        </div>
+                                    </div>
+                                           
+                                            @*<div class="row">
+                                                    <div class="col-sm-2">
+                                                        File đính kèm
+                                                    </div>
+                                                    <div class="col-sm-10">
+                                                        @Html.TextBoxFor(m => m.Files, new { @id = "txtFile", @type = "file", @multiple = "multiple", @onclick = "IsSubmit();" })
+                                                    </div>
+                                                </div>*@
+                                            <div class="row">
+                                                <div class="form-check form-check-inline px-3 my-3">
+                                                    <input type="checkbox" name="IsGuiSMS" class="form-check-input" id="GuiSms" value="true">
+                                                    <label class="form-check-label" for="GuiSms">Gửi SMS</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input type="checkbox" name="IsGuiEmail" class="form-check-input" id="GuiEmail" value="true">
+                                                    <label class="form-check-label" for="GuiEmail">Gửi Email</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="text-right col-sm-12">
+                                                    <button type="submit" class="btn btn-primary" id="btn-luu">Lưu và gửi</button>
+                                                    @if (act.Equals("add"))
+                                                    {
+                                                        <button type="button" class="btn btn-light" onclick="DongForm();">Đóng</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+                                                    }
+                                                </div>
+                                            </div>
+
+
+                                            }
+<style>
+    span.select2 {
+        padding-top: 1px;
+    }
+
+    .modal-lg, .modal-xl {
+        max-width: 1300px !important;
+    }
+</style>
+@if (act == "add")
+{
+    <script>
+        function DongForm() {
+            window.location.href = '/VanBanDen';
+        }
+        $(document).ready(function () {
+            var thongbaoid = '@TempData["ThongBao"]';
+            if (thongbaoid != '') {
+                $('#lstidThongBao').val(thongbaoid);
+                $('.addNotificationRight').click();
+                $('.addNotification').click();
+            }
+            $('#close-redirect').addClass('closeredirect');
+            $('.closeredirect').on('click', function () {
+                window.location.href = '/VanBanDen';
+            })
+        });
+
+    </script>
+}
+<script>
+
+    $(document).ready(function () {
+        $('.select2').select2();
+        $('.mdb-select,.mdb-select-csa,.mdb-select-csb,.mdb-select-csc,.mdb-select-csd,.mdb-select-cse,.mdb-select-csf').materialSelect();
+
+    });
+    $("#fFormTLD").validate({
+        rules: {
+            NoiDungYKien: {
+                required: true,
+            }
+        },
+        messages: {
+            NoiDungYKien: {
+                required: "Vui lòng nhập nội dung trình!",
+            }
+        }
+    });
+    $('#fFormTLD').on('submit', function () {
+        $("#loading").show();
+        $("#fFormTLD").valid();
+        
+        var nguoinhanid = $('#NguoiNhanID').val();
+        if (nguoinhanid == '') {
+            toastr.error('Bạn chưa chọn cán bộ cần kính trình!');
+            $("#loading").hide();
+            return false;
+        }
+        @*var lanhdaodonvitrinhid = $('#@(typeUser.Equals("vtc")?"LanhDaoDonViTrinhID":"")').val();
+        if (lanhdaodonvitrinhid == '') {
+            toastr.error('Bạn chưa chọn lãnh đạo đơn vị trình!');
+            return false;
+        }*@
+        //$('#btn-luu').attr("disabled", true);
+    })
+</script>

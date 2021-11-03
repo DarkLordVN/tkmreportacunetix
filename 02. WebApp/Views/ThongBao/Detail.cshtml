@@ -1,0 +1,176 @@
+﻿@model TKM.BLL.ThongBaoViewModel
+@{
+    ViewBag.Title = "Chi tiết thông báo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/ThongBao">Danh sách thông báo</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <input id="ID" type="hidden" value="@Model.ID" />
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="thong-bao" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <h3 class="titleInfo fwb">Chi tiết thông báo</h3>
+                            <div class="thr-line"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <table class="table table-hover table-bordered table-infomation" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Tiêu đề</td>
+                                                <td colspan="3">@Model.TieuDe</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nội dung</td>
+                                                <td colspan="3">@Model.NoiDung</td>
+                                            </tr>
+                                            <tr>
+                                                <td>File đính kèm </td>
+                                                <td colspan="3">
+                                                    @if (!string.IsNullOrEmpty(Model.FileDinhKem))
+                                                    {
+                                                        var group_link = (string)TempData["group_link"];
+                                                        var group_name = (string)TempData["group_name"];
+                                                        var group_size = (string)TempData["group_size"];
+                                                        string[] replaceName = null;
+                                                        string[] name = null;
+                                                        var group_replacename = (string)TempData["group_replacename"];
+                                                        if (!string.IsNullOrEmpty(group_replacename))
+                                                        {
+                                                            replaceName = group_replacename.Split('|');
+                                                            name = group_name.Split('|');
+                                                        }
+                                                            if (!String.IsNullOrEmpty(group_link))
+                                                            {
+                                                                var arrLink = group_link.Split(',');
+                                                                if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                                                                {
+                                                                    for (int i = 0; i < arrLink.Length; i++)
+                                                                    {
+                                                                        <a href="javascript://" data-link="@arrLink[i]" class="alert-link viewFile text-primary"><i class="fal fa-file-pdf mr-2" data-toggle="tooltip" title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")" data-original-title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")"></i>@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")</a>
+                                                                        if (i != (arrLink.Length - 1))
+                                                                        {
+                                                                            @Html.Raw("</br>")
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+                                                            }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Người nhận</td>
+                                                <td>
+                                                    <p class="mb-1">
+                                                        <i title="Đã gửi" class="far fa-check-circle text-warning"></i> Đã gửi
+                                                        <i title="Đã nhận" class="fas fa-check-circle text-primary ml-2"></i> Đã nhận
+                                                        <i title="Đã xem" class="far fa-check-double text-success ml-2"></i> Đã xem
+                                                    </p>
+                                                    <div class="more">
+                                                        @Html.Raw(Model.LstNguoiNhan)
+                                                    </div>
+                                                </td>
+                                                <td>Nhóm người nhận</td>
+                                                <td>@Html.Raw(Model.LstNhomNguoiNhan)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="text-right col-sm-12">
+                                    @if (Model.NguoiTaoID.Value == SessionInfo.CurrentUser.ID && Model.IsDaGui == false)
+                                    {
+                                        <button type="button" onclick="onDelete();" class="btn btn-primary">Xóa</button>
+                                    }
+                                    <a class="btn btn-primary" href="/ThongBao">Đóng</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+   table td{text-align:left !important;}
+   .titleInfo{font-size:17px;padding-bottom:3px}
+   .thr-line{background-color:#808080;width:20%;height:3px;display:block;margin-bottom:15px}
+   .table-infomation td:nth-child(2n+1){font-weight:bold !important;}
+   .table-infomation td:nth-child(2n){width:30% !important}
+   .table-infomation td:nth-child(3n){width:20% !important}
+</style>
+
+<script>
+    $(document).ready(function () {
+        $(".more").css("overflow", "hidden");
+        $('.more').readmore({
+            speed: 300,
+            collapsedHeight: 170,
+            moreLink: '<a href="#" class="text-primary">Xem thêm...</a>',
+            lessLink: '<a href="#" class="text-primary">Thu gọn...</a>',
+            heightMargin: 16
+        });
+    })
+    function onDelete() {
+        var value = $('#ID').val();
+        swal({
+            title: "Xóa?",
+            text: "Bạn có chắc chăn muốn xóa thông báo này?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+          .then((willDelete) => {
+              if (willDelete) {
+                  $.ajax({
+                      type: "POST",
+                      url: '/ThongBao/Delete',
+                      data: { id: value },
+                      dataType: "html",
+                      success: function (res) {
+                          res = JSON.parse(res);
+                          if (res.isSuccess == 1) {
+                              swal("Xóa thông báo thành công!", {
+                                  icon: "success",
+                              });
+                              setTimeout(function () {
+                                  window.location.href = '/ThongBao';
+                              }, 2000);
+                          }
+                          else {
+                              swal("Đã có lỗi xảy ra", { icon: "error", });
+                          }
+                      },
+                      error: function (response) {
+                          swal("Đã có lỗi xảy ra", { icon: "error", });
+                      }
+                  });
+              }
+          });
+    }
+</script>

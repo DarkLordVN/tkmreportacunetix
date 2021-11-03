@@ -1,0 +1,234 @@
+﻿@using PagedList.Mvc;
+@using TKM.DAO.EntityFramework
+
+@model TKM.BLL.AlertGroupListView
+@{
+    ViewBag.Title = "Danh sách nhóm nguy cơ";
+    //var lstChucVu = (List<TKM.BLL.DmChucVuViewModel>)ViewBag.lstChucVu;
+}
+@section Css {
+    <style></style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/AlertGroup/Index">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row lighten-4 border border-light border-top-0 border-right-0 border-left-0">
+                                <div class="col p-3">
+                                    <div class="d-none d-lg-inline-flex form-inline my-0 px-lg-3 border-right">
+                                        @Html.TextBoxFor(model => model.TuKhoa, new { @class = "form-control keyenterTuKhoa", @id = "txtTuKhoa", @placeholder = "Nhập từ khóa cần tìm ...", @style = "min-width: 31rem" })
+                                        <button id="btnSearchTuKhoa" class="btn text-white default-color rounded-pill px-3 btn-sm my-0 waves-effect waves-light" type="button">Tìm</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- table -->
+                            @*<div class="row">
+                                <div class="col-md-12">
+                                    <a href="javascript://" onclick="InBrowserAlertGroup()" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="In Browser" data-original-title="In Browser"><i class="fal fa-print"></i></a>
+                                    <a href="/AlertGroup/ExportWord" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" data-original-title="Xuất Word" title="Xuất Word"><i class="fal fa-file-word"></i></a>
+                                    <a href="/AlertGroup/ExportExcel" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Xuất Excel" data-original-title="Xuất Excel"><i class="fal fa-file-excel"></i></a>
+                                  </div>
+                            </div>*@
+                            <div class="row mt-3" id="table-print">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table id="dt-vblt-den" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead class="indigo text-white lighten-1">
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th class="pointer">Mức độ</th>
+                                                    <th class="pointer">Tên nhóm nguy cơ</th>
+                                                    <th class="pointer">Nhóm biến thể</th>
+                                                    <th class="pointer">Mô tả</th>
+                                                    <th class="pointer">Việt hóa mô tả</th>
+                                                    <th class="th-sm t_action dn-browser" style="width:180px">Chức năng</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("IndexDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+
+@section Script {
+<script src="~/Assets/js/print.js"></script>
+    <script>
+        $(document).ready(function () {
+            InitClickCheckAllInTable("chkall", function (res) {
+                $("#hdfID").val(res);
+            });
+        });
+        
+        function onChangeStatus(id) {
+            swal({
+                title: "Thay đổi trạng thái?",
+                text: "Trạng thái sẽ được thay đổi, hãy nhấn OK!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/AlertGroup/onChangeStatus',
+                        data: { id: id },
+                        dataType: "html",
+                        success: function (res) {
+                            res = JSON.parse(res);
+                            if (res.isSuccess)
+                                swal("Thay đổi trạng thái thành công!", {
+                                    icon: "success",
+                                });
+                            else
+                                swal("Có lỗi xảy ra", { icon: "error", });
+                            loadData("", "");
+                        },
+                        error: function (response) {
+                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                        }
+                    });
+
+                }
+            });
+        }
+        function loadfrmView(id) {
+            modal.Render("/AlertGroup/Detail/" + id, "Thông tin nhóm nguy cơ", "modal-lg");
+        }
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+        $(".keyenterTuKhoa").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearchTuKhoa").click();
+            }
+        });
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        $("#btnDel").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: '/AlertGroup/DeleteAlertGroup',
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: $("#delModalId").val() }),
+                cache: false,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('Không thành công!');
+                }
+            });
+            $(window).scrollTop(0);
+        });
+        //Thêm event xử lý load ajax
+        $("#btnSearchTuKhoa").click(function () {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "AlertGroup")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), ColumnName: '', OrderBy: '', PageNumber: 1, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        });
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        function loadData(col, order, pnum, psize) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "AlertGroup")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", {icon: "error",});
+                }
+            });
+        }
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+            
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+    </script>
+}

@@ -1,0 +1,48 @@
+﻿@model List<TKM.BLL.VanBanDenQuaTrinhXuLyViewModel>
+@{ 
+    Layout = null;
+}
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="tac">
+                <p class="mt-0 mb-0 tac"><a href="javascript://" title="@item.NguoiGui (@item.ChucVuNguoiGui)"><i class="fal fa-user-tag mr-1"></i> @item.NguoiGui @(!string.IsNullOrEmpty(item.ChucVuNguoiGui) ? "("+ item.ChucVuNguoiGui+")" : "")</a></p>
+                @*<small class="font-italic text-truncate d-block w-100 tac"></small>*@
+            </td>
+            <td class="tac">@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayTao)</td>
+            <td class="tac">
+                <p class="mt-0 mb-0 tac"><a href="javascript://" title="@item.NguoiNhan (@item.ChucVuNguoiNhan)"><i class="fal fa-user-tag mr-1"></i> @item.NguoiNhan @(!string.IsNullOrEmpty(item.ChucVuNguoiNhan) ? "(" + item.ChucVuNguoiNhan + ")" : "")</a></p>
+                @*<small class="font-italic text-truncate d-block w-100 tac" title="@item.ChucVuNguoiNhan"><i class="fal fa-user-tag mr-1"></i></small>*@
+            </td>
+            <td class="tac" title="@Html.Raw(item.DonViNhan)">@Html.Raw(item.DonViNhan)</td>
+            <td class="tac">@item.NoiDungYKien</td>
+            <td class="tac">
+                @if (!string.IsNullOrEmpty(item.FileDinhKem))
+                {
+                    if (item.FileDinhKem.Contains("[--]"))
+                    {
+                        var arrFile = item.FileDinhKem.Split(new string[] { "[--]" }, StringSplitOptions.None);
+                        foreach (var itemFile in arrFile)
+                        {
+                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(itemFile) ? itemFile : "")"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title="File đính kèm"></i></span></a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.FileDinhKem) ? item.FileDinhKem : "")"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File đính kèm" data-original-title="File đính kèm"></i></span></a>
+                    }
+
+                }
+
+            </td>
+        </tr>
+
+    }
+
+}
+<style>
+    #t-quatrinh table td, table th{font-size:100% !important}
+    .small, small{font-size:100% !important}
+</style>

@@ -1,0 +1,83 @@
+﻿@model List<TKM.BLL.VanBanDenQuaTrinhXuLyViewModel>
+@{ 
+    Layout = null;
+    var view = (string)ViewBag.view;
+    var strTrangThaiGuiNhan = "";
+    var classText = "";
+    var colorText = "";
+}
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        if (view == "detail")
+        {
+            <tr>
+                <td class="tac">
+                    <p class="mt-0 mb-0 tac"><a href="javascript://" title="@item.NguoiGui">@item.NguoiGui</a></p>
+                    <small class="font-italic text-truncate d-block w-100 tac"><i class="fal fa-user-tag mr-1"></i>@item.ChucVuNguoiGui</small>
+                </td>
+                <td class="tac">@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayTao)</td>
+                <td class="tac">
+                    <p class="mt-0 mb-0 tac"><a href="javascript://" title="@Html.Raw(item.NguoiNhan)">@Html.Raw(item.NguoiNhan)</a></p>
+                    <small class="font-italic text-truncate d-block w-100 tac" title="@item.ChucVuNguoiNhan"><i class="fal fa-user-tag mr-1"></i>@item.ChucVuNguoiNhan</small>
+                </td>
+                <td class="tac" title="@Html.Raw(item.DonViNhan)">@Html.Raw(item.DonViNhan)</td>
+                <td class="tac">@item.NoiDungYKien</td>
+                <td class="tac">
+                    @if (!string.IsNullOrEmpty(item.FileDinhKem))
+                    {
+                        <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.FileDinhKem) ? item.FileDinhKem : "")"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title="File văn bản"></i></span></a>
+                    }
+                   
+                </td>
+            </tr>
+        }
+        else
+        {
+            switch (item.TrangThai)
+            {
+                case 1:
+                    strTrangThaiGuiNhan = "Đã gửi";
+                    colorText = "text-primary";
+                    break;
+                case 2:
+                    strTrangThaiGuiNhan = "Đã nhận";
+                    colorText = "text-success";
+                    break;
+                case 3:
+                    strTrangThaiGuiNhan = "Trả lại";
+                    colorText = "text-danger";
+                    break;
+                default:
+                    strTrangThaiGuiNhan = "";
+                    classText = "";
+                    break;
+            }
+            <tr class='@(item.IsDungLai ?"bg-warning":"")'>
+                <td>
+                    <p class="mt-0 mb-0 tac"><a href="javascript://" title="@item.NguoiGui (@item.ChucVuNguoiGui)"><i class="fal fa-user-tag mr-1"></i> @item.NguoiGui @(!string.IsNullOrEmpty(item.ChucVuNguoiGui) ? "(" + item.ChucVuNguoiGui + ")" : "")</a></p>
+                    @*<small class="font-italic text-truncate d-block w-100 tac"></small>*@
+                </td>
+                <td class="tac" title="@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayTao)">@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayTao)</td>
+                <td>
+                    <p class="mt-0 mb-0 tac"><a href="javascript://" title="@item.NguoiNhan (@item.ChucVuNguoiNhan)"><i class="fal fa-user-tag mr-1"></i> @item.NguoiNhan @(!string.IsNullOrEmpty(item.ChucVuNguoiNhan) ? "(" + item.ChucVuNguoiNhan + ")" : "")</a></p>
+                    @*<small class="font-italic text-truncate d-block w-100 tac" title="@item.ChucVuNguoiNhan"><i class="fal fa-user-tag mr-1"></i></small>*@
+                </td>
+                <td class="tac" title="@Html.Raw(item.DonViNhan)">@Html.Raw(item.DonViNhan)</td>
+                <td class="tac" title="@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayNhan)">@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayNhan)</td>
+                <td class="tac">
+    <span class="@colorText" title="@strTrangThaiGuiNhan">@strTrangThaiGuiNhan</span>
+    
+            @Html.Raw(item.NgayTraLai != null? "</br>" + TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayTao):"")
+            </td>
+            </tr>
+        }
+        
+                    }
+
+                }
+<style>
+    #t-quatrinh table td, table th{font-size:100% !important}
+    .small, small{font-size:100% !important}
+</style>

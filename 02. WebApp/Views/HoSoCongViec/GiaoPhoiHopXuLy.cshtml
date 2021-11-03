@@ -1,0 +1,83 @@
+﻿@using TKM.BLL
+@model HoSoCongViecViewModel
+@{
+    Layout = null;
+    //var lstTrangThaiVanBan = (Dictionary<int, string>)ViewBag.lstTrangThaiVanBan;
+    var typeUser = (string)ViewBag.typeUser;
+    var strDaGiao = (string)ViewBag.strDaGiao;
+    var lstDonViPhoiHop = (List<DmDonViViewModel>)ViewBag.lstDonViPhoiHop;
+    var lstCanBoPhoiHop = (List<NguoiDungViewModel>)ViewBag.lstCanBoPhoiHop;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@using (Ajax.BeginForm("GiaoPhoiHopXuLy", "HoSoCongViec", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onGiaoPhoiHopXuLySuccess"
+}, new { @id = "fForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ID" value="@Model.ID" />
+        <div class="form-group row">
+            <label for="DaGiao" class="col-sm-3 col-form-label pr-0 fwb">@(typeUser.Equals("ldc") ? "Đơn vị" : "Cán bộ") đã phối hợp:</label>
+            <div class="col-sm-9">
+                @Html.Raw(strDaGiao)
+            </div>
+
+        </div>
+        <div class="row">
+            <label for="PhoiHopXuLy" class="col-sm-3 col-form-label fwb" style="padding:0 0 0 15px">@(typeUser.Equals("ldc") ? "Đơn vị" : "Cán bộ") phối hợp xử lý <span class="c-red-500">(*)</span></label>
+            <div class="col-sm-9">
+                <select class="mdb-select mdb-select-csa md-form md-outline colorful-select dropdown-primary m-0 p-0" id="PhoiHopXuLy" name="PhoiHopXuLy" searchable="Nhập từ khóa.." multiple>
+                    <option value="">-- Chọn --</option>
+                    @if (typeUser.Equals("ldc"))
+                {
+                    if (lstDonViPhoiHop != null && lstDonViPhoiHop.Count > 0)
+                    {
+                        foreach (var item in lstDonViPhoiHop)
+                        {
+                                <option value="@item.ID" @(!string.IsNullOrEmpty(Model.ListDonViPhoiHopID) && Model.ListDonViPhoiHopID.Contains("," + item.ID + ",") ? "disabled" : "")>@item.TenDonVi</option>
+                            }
+                        }
+                    }
+                    @if (typeUser.Equals("lddv"))
+                {
+                    if (lstCanBoPhoiHop != null && lstCanBoPhoiHop.Count > 0)
+                    {
+                        foreach (var item in lstCanBoPhoiHop)
+                        {
+                                <option value="@item.ID" @(!string.IsNullOrEmpty(Model.ListCanBoPhoiHopID) && Model.ListCanBoPhoiHopID.Contains("," + item.ID + ",") ? "disabled" : "")>@item.ChucVuVaTen</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="text-right col-sm-12">
+                <button type="submit" class="btn btn-primary">Giao</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+
+
+        }
+        <style>
+            .picker__box .picker__table .picker__day--infocus {
+                text-align: center !important;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                $('.mdb-select-csa').materialSelect();
+            });
+
+            $('#fForm').on('submit', function () {
+                var PhoiHopXuLy = $('#PhoiHopXuLy').val();
+                if (PhoiHopXuLy == '' || PhoiHopXuLy == '0') {
+                    toastr.error('Bạn chưa chọn phối hợp xử lý!');
+                    return false;
+                };
+            })
+
+        </script>

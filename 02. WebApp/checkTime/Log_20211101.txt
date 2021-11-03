@@ -1,0 +1,630 @@
+--------- 21:05:54 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:07:33 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:07:57 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:08:29 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 21:08:29 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 21:10:59 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:12:07 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:12:13 ---------
+Ref URL: http://localhost:3939/AlertGroup/Index
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:33:17 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:33:38 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:34:42 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:34:52 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:36:01 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:37:26 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:38:40 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:38:51 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:38:58 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:39:05 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:39:16 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:40:37 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:40:37 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:41:09 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:41:52 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:42:38 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:45:03 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:46:56 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:47:16 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:51:43 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:52:08 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:52:08 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:52:21 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:52:48 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:52:58 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:59:30 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:00:37 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:00:52 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:01:47 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:02:13 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:03:45 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:07:36 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:08:00 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:08:11 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:08:21 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:09:26 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:09:52 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:10:20 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:10:46 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:11:02 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:12:42 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:13:00 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:13:01 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:13:10 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:13:19 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:13:38 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:13:39 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:14:27 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:14:46 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:15:01 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:15:30 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:15:46 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:16:03 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:16:14 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:16:31 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:16:44 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:17:05 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:18:08 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:18:42 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:18:56 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:18:58 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:19:20 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:21:24 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:21:47 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:21:53 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:22:30 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:23:04 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:23:43 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: 127.0.0.1
+Text: timeToGo - 0:0:2
+--------- 22:23:44 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:24:52 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:24:58 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:25:43 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:26:31 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:26:44 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:31:10 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:31:14 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:56:03 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:56:25 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:56:36 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:58:56 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:59:07 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:59:12 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:59:43 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:59:49 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 22:59:54 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:00 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:08 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:19 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:24 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:29 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:37 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:46 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:00:58 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:11:20 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:11:41 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:16:41 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:29:53 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: timeToGo - 0:0:2

@@ -1,0 +1,131 @@
+﻿@model TKM.WebApp.LoginModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Đăng nhập";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Assets/css/login.css" rel="stylesheet">
+    <link rel="stylesheet" href="/Assets/css/font-awesome.min.css">
+</head>
+
+<body>
+    @*<script type="text/javascript">
+        </script>
+        <div class="peers ai-s fxw-nw h-100vh">
+            <div class="d-n@sm- peer peer-greed h-100 pos-r bgr-n bgpX-c bgpY-c bgsz-cv" style="background-image:url(/Assets/images/bg.jpg)">
+            </div>
+            <div class="col-12 col-md-4 peer pX-40 pY-80 h-100 bgc-white scrollable pos-r" style="min-width:320px">
+                <h4 class="fw-300 c-grey-900 mB-40">Truy cập ứng dụng</h4>
+                <form action="/Authentication/Login" id="login-form" class="smart-form client-form" method="POST">
+                    @if (Model != null)
+                    {
+                        if (Model.ErrMess != null)
+                        {
+                            @Html.Raw(Model.ErrMess)
+                        }
+                    }
+
+                    @if (string.IsNullOrEmpty(ViewBag.ReturnUrl))
+                    {
+                        <input type="hidden" name="returnUrl">
+                    }
+                    else
+                    {
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl">
+                    }
+                    <div class="form-group">
+                        <label class="text-normal text-dark">Tài khoản</label>
+
+                        <input type="text" name="TenDangNhap" class="form-control" placeholder="Nhập tên đăng nhập">
+                        @Html.ValidationMessageFor(model => model.TenDangNhap)
+                    </div>
+                    <div class="form-group">
+                        <label class="text-normal text-dark">Mật khẩu</label>
+                        <input type="password" name="MatKhau" class="form-control" placeholder="Nhập mật khẩu">
+                        @Html.ValidationMessageFor(model => model.MatKhau)
+                    </div>
+                    <div class="form-group">
+                        <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                                <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                                    <input type="checkbox" id="inputCall1" name="inputCheckboxesCall" class="peer">
+                                    <label for="inputCall1" class="peers peer-greed js-sb ai-c"><span class="peer peer-greed">Ghi nhớ tài khoản</span></label>
+                                </div>
+                            </div>
+                            <div class="peer">
+                                <a href="Authentication/">Đăng ký</a> | <a href="resetpw.html">Quên mật khẩu</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                            </div>
+                            <div class="peer">
+                                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>*@
+
+    <div class="limiter">
+        <div class="container-login100" style="background-image: url('/Assets/images/bg-index.jpg');">
+            <div class="wrap-login100">
+                @*<form class="login100-form validate-form">*@
+
+                <form action="/Authentication/Login" id="login-form" class="smart-form client-form" method="POST">
+                    <span class="login100-form-logo">
+                        <span style="background-image: url('https://tkmgroup.com.vn/wp-content/uploads/2020/02/tkm-logo.png'); background-size: cover; background-repeat: no-repeat; width: 220px; height: 75px;"></span>
+                    </span>
+
+                    <span class="login100-form-title p-b-34 p-t-27">
+                        Truy cập ứng dụng
+                    </span>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter username">
+                        <input type="text" name="TenDangNhap" class="input100" placeholder="Tên đăng nhập">
+                        <span class="focus-input100"><i class="fa fa-user"></i></span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.TenDangNhap)
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                        <input type="password" name="MatKhau" class="input100" placeholder="Mật khẩu">
+                        <span class="focus-input100"><i class="fa fa-lock"></i></span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MatKhau)
+
+                    @*<div class="contact100-form-checkbox">
+                        <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+                        <label class="label-checkbox100" for="ckb1">
+                            Nhớ tài khoản
+                        </label>
+                    </div>*@
+
+                    <div class="container-login100-form-btn">
+                        <button class="login100-form-btn">
+                            Đăng nhập
+                        </button>
+                    </div>
+
+                    <div class="text-center p-t-90">
+                        <a class="txt1" href="#">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

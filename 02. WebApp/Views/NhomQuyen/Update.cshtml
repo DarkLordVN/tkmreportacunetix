@@ -1,0 +1,240 @@
+﻿@using TKM.Utils.Enums
+
+@model TKM.BLL.NhomQuyenViewModel
+
+@{
+    ViewBag.Title = "Cập nhật nhóm quyền";
+    var lstNhomQuyenQuyen = (List<TKM.DAO.EntityFramework.NhomQuyenQuyen>)ViewBag.lstNhomQuyenQuyen;
+    var lstDescription = (List<string>)ViewBag.lstDescription;
+}
+
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/NhomQuyen/Index">Quản lý nhóm quyền</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+
+        }
+        <div class="row">
+            <div class="col">
+
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                           @using (Html.BeginForm("Update", "NhomQuyen", null, FormMethod.Post))
+            {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.ID)
+                                <div class="col-md-12 row p-0 m-0 mb-2">
+                                    <div class="col-md-12 p-0">
+                                        <h6 class="c-grey-900 font-weight-bold">Thông tin chung</h6>
+
+                                        <div class="form-group row">
+                                            <label for="TenNhom" class="col-sm-2 col-form-label pr-0">Nhập tên nhóm quyền <span class="c-red-500"> (*)</span></label>
+                                            <div class="col-sm-4">
+                                                @Html.TextBoxFor(model => model.TenNhom, new { @class = "form-control ", @id = "TenNhom" })
+                                                @Html.ValidationMessageFor(model => model.TenNhom, "", new { @class = "alert-danger" })
+                                            </div>
+                                            <label for="KyHieu" class="col-sm-2 col-form-label">Ký hiệu</label>
+                                            <div class="col-sm-4">
+                                                @Html.TextBoxFor(model => model.KyHieu, new { @class = "form-control ", @id = "KyHieu" })
+                                                @Html.ValidationMessageFor(model => model.KyHieu, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="ThuTu" class="col-sm-2 col-form-label">Thứ tự <span class="c-red-500">(*)</span></label>
+                                            <div class="col-sm-4">
+                                                @Html.TextBoxFor(model => model.ThuTus, new { @class = "form-control ", @id = "ThuTu", @Type = "number" })
+                                                @Html.ValidationMessageFor(model => model.ThuTus, "", new { @class = "alert-danger" })
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-check form-check-inline px-3 my-3">
+                                                    <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" @(Model.TrangThai ? "checked" : "")>
+                                                    <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @*<div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <div class="md-form">
+                                                    @Html.TextBoxFor(model => model.TenNhom, new { @class = "form-control ", @id = "TenNhom" })
+                                                    @Html.ValidationMessageFor(model => model.TenNhom, "", new { @class = "alert-danger" })
+                                                    <label for="TenNhom">Nhập tên nhóm quyền <span class="c-red-500">(*)</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="md-form">
+                                                    @Html.TextBoxFor(model => model.KyHieu, new { @class = "form-control ", @id = "KyHieu" })
+                                                    @Html.ValidationMessageFor(model => model.KyHieu, "", new { @class = "alert-danger" })
+                                                    <label for="KyHieu">Ký hiệu</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <div class="md-form">
+                                                    @Html.TextBoxFor(model => model.ThuTus, new { @class = "form-control ", @id = "ThuTu", @Type = "number" })
+                                                    @Html.ValidationMessageFor(model => model.ThuTus, "", new { @class = "alert-danger" })
+                                                    <label for="ThuTu">Thứ tự <span class="c-red-500">(*)</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="md-form">
+                                                    <div class="form-check form-check-inline px-3 my-3">
+                                                        <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" @(Model.TrangThai == true ? "checked" : "") style="opacity:0 !important">
+                                                        <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                        
+                                        <div class="form-group row">
+                                            <div class="text-right col-sm-12">
+                                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                                <a class="btn cur-p btn-light" href="/NhomQuyen/Index">Hủy bỏ</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 row p-0 m-0 mb-2">
+                                    <h6 class="c-grey-900 font-weight-bold">Phân quyền chức năng</h6>
+                                    <table class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="fwb">
+                                                    Tên quyền
+                                                </th>
+                                                <th class="fwb">
+                                                    Chọn tất cả
+                                                    <input type="hidden" name="slQuyen" id="slQuyen" value="@Enum.GetValues(typeof(Quyen)).Length" />
+                                                </th>
+                                                @if (lstDescription != null && lstDescription.Count > 0)
+                                                {
+                                                    foreach (var item in lstDescription)
+                                                    {
+                                                        <th class="fwb">@item</th>
+                                                    }
+                                                }
+                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model != null && Model.LstQuyen != null && Model.LstQuyen.Count > 0)
+                                            {
+                                                foreach (var itemQ in Model.LstQuyen)
+                                                {
+                                                    <tr>
+                                                        <td class="fwb">
+                                                            @itemQ.TenQuyen
+                                                        </td>
+                                                        <td class="fwb">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input checkallitem checkallitem_@itemQ.ID" id="chkall_@(itemQ.ID)" name="checkbox" value="@itemQ.ID">
+                                                                <label class="form-check-label" for="chkall_@(itemQ.ID)"></label>
+                                                            </div>
+                                                            <input type="hidden" id="Quyen" name="Quyen" value="@itemQ.ID" />
+                                                        </td>
+                                                        @{
+                                                            var QuyenChiTietCheck = lstNhomQuyenQuyen.Where(g => g.QuyenID == itemQ.ID).FirstOrDefault();
+                                                        }
+                                                        @foreach (int itemCheck in Enum.GetValues(typeof(Quyen)))
+                                                        {
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <input type="checkbox" class="form-check-input checkeditem_@(itemQ.ID)" id="chkitem_@(itemQ.ID)_@itemCheck" name="CheckedQuyen_@(itemQ.ID)" value="@itemCheck" @(QuyenChiTietCheck!= null && !string.IsNullOrEmpty(QuyenChiTietCheck.QuyenChiTiet) && QuyenChiTietCheck.QuyenChiTiet.Contains(","+itemCheck.ToString()+",")?"checked":"")>
+                                                                    <label class="form-check-label" for="chkitem_@(itemQ.ID)_@itemCheck"></label>
+                                                                </div>
+
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                                }
+                                                            }
+
+                                            <tr></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                           }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<style>
+    [type=checkbox]:checked, [type=checkbox]:not(:checked) {
+        opacity: 1 !important;
+    }
+</style>*@
+<script>
+    $(document).ready(function () {
+        var arrQuyen = [];
+        $('input[type=hidden][name=Quyen]').each(function () {
+            arrQuyen.push($(this).val());
+        })
+        var slQuyen = $('#slQuyen').val();
+        for (var i = 0; i < arrQuyen.length; i++) {
+            $('#chkall_' + arrQuyen[i]).on('change', function () {
+                var propQuyen = $(this).prop('checked');
+                var valueQ = $(this).val();
+                if (propQuyen) {
+                    for (var j = 1; j <= slQuyen; j++) {
+                        $('#chkitem_' + valueQ + '_' + j).prop('checked', true);
+                    }
+                }
+                else {
+                    for (var j = 1; j <= slQuyen; j++) {
+                        $('#chkitem_' + valueQ + '_' + j).prop('checked', false);
+                    }
+                }
+            });
+            $('.checkeditem_' + arrQuyen[i] +'_');
+        }
+        for (var i = 0; i < arrQuyen.length; i++) {
+            for (var j = 1; j <= slQuyen; j++) {
+                $('#chkitem_' + arrQuyen[i] + '_' + j).on('change', function (e) {
+                    var valueQ = e.currentTarget.id.split('_')[1];
+                    var countitemchecked = $('input:checkbox:checked.checkeditem_' + valueQ).length;
+                    if (countitemchecked == slQuyen)
+                        $('#chkall_' + valueQ).prop('checked', true);
+                    else
+                        $('#chkall_' + valueQ).prop('checked', false);
+                });
+            }
+        }
+        for (var i = 0; i < arrQuyen.length; i++) {
+            for (var j = 1; j <= slQuyen; j++) {
+                $('#chkitem_' + arrQuyen[i] + '_' + j).each(function (e) {
+                    var countitemchecked = $('input:checkbox:checked.checkeditem_' + arrQuyen[i]).length;
+                    if (countitemchecked == slQuyen)
+                        $('#chkall_' + arrQuyen[i]).prop('checked', true);
+                    else
+                        $('#chkall_' + arrQuyen[i]).prop('checked', false);
+                });
+            }
+        }
+    });
+
+
+</script>

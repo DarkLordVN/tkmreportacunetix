@@ -1,0 +1,110 @@
+﻿@using TKM.BLL
+@model VanBanDenTrangThaiNguoiDungViewModel
+@{
+    Layout = null;
+    //var lstTrangThaiVanBan = (Dictionary<int, string>)ViewBag.lstTrangThaiVanBan;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@using (Ajax.BeginForm("PopupUpdateStatusUser", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onUpdateStatusUserSuccess"
+}, new { @id = "fForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ID" value="@Model.ID" />
+    <input type="hidden" name="MaVanBan" value="@Model.MaVanBan" />
+    <input type="hidden" name="VanBanID" value="@Model.VanBanID" />
+    <div class="row">
+        <label class="col-sm-3 col-form-label" for="TrangThaiXuLy">
+            Trạng thái xử lý <span class="c-red-500">(*)</span>
+        </label>
+        <select class="mdb-select mdb-select-csa md-form col-sm-9 md-outline colorful-select dropdown-primary m-0 p-0" id="TrangThaiXuLy" name="TrangThaiXuLy" searchable="Nhập từ khóa..">
+            <option value="0"> -- Chọn --</option>
+            <option value="1" @(Model.TrangThaiXuLy == 1 ? "selected" : "")>Chưa xử lý</option>
+            <option value="2" @(Model.ID == 0 || Model.TrangThaiXuLy == 2 ? "selected" : "")>Đang xử lý</option>
+            <option value="3" @(Model.TrangThaiXuLy == 3 ? "selected" : "")>Hoàn thành</option>
+            @*@if (lstTrangThaiVanBan != null && lstTrangThaiVanBan.Count > 0)
+            {
+                foreach (var itemTT in lstTrangThaiVanBan.Keys)
+                {
+                    <option value="@itemTT">@lstTrangThaiVanBan[itemTT]</option>
+                }
+            }*@
+        </select>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3">
+            <label class="active fwb" for="CoQuanBanHanhID">
+                Ý kiến xử lý <span class="c-red-500">(*)</span>
+            </label>
+        </div>
+        <div class="col-sm-9">
+            @Html.TextAreaFor(model => model.NoiDungYKien, new { @class = "form-control rounded-0", @id = "NoiDungYKien", @placeholder = "Nội dung ý kiến...", @rows = "3" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+
+}
+<style>
+    .picker__box .picker__table .picker__day--infocus{text-align:center !important;}
+</style>
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-csa').materialSelect();
+        $('.datepicker').pickadate({
+            monthsFull: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10',
+            'Tháng 11', 'Tháng 12'],
+            monthsShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            weekdaysFull: ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
+            weekdaysShort: ['CN', '2', '3', '4', '5', '6', '7'],
+            showMonthsShort: undefined,
+            showWeekdaysFull: undefined,
+
+            // Buttons
+            today: 'Hôm nay',
+            clear: 'Xóa',
+            close: 'Đóng',
+
+            // Accessibility labels
+            labelMonthNext: 'Tháng sau',
+            labelMonthPrev: 'Tháng trước',
+            labelMonthSelect: 'Chọn tháng',
+            labelYearSelect: 'Chọn năm',
+
+            // Formats
+            format: 'dd/mm/yyyy',
+            formatSubmit: undefined,
+            hiddenPrefix: undefined,
+            hiddenSuffix: '_submit',
+            hiddenName: undefined,
+
+        });
+    });
+    $("#fForm").validate({
+        rules: {
+            NoiDungYKien: {
+                required: true,
+            }
+        },
+        messages: {
+            NoiDungYKien: {
+                required: "Vui lòng nhập nội dung ý kiến!",
+            }
+        }
+    });
+    $('#fForm').on('submit', function () {
+        var TrangThaiXuLy = $('#TrangThaiXuLy').val();
+        if (TrangThaiXuLy == '' || TrangThaiXuLy == '0') {
+            toastr.error('Bạn chưa chọn trạng thái văn bản!');
+            return false;
+        };
+    })
+   
+</script>

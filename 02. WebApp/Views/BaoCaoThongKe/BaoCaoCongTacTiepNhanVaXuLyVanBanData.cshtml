@@ -1,0 +1,195 @@
+﻿@using TKM.BLL;
+@model TKM.BLL.v_BaoCaoCTTNListView
+@{
+    Layout = null;
+    string TuNgayNVB = ViewBag.TuNgayNVB;
+    string DenNgayNVB = ViewBag.DenNgayNVB;
+
+    //var lstDoiTuongGuiVBDi = (List<DoiTuongGuiVanBanDiViewModel>)ViewBag.lstDoiTuongGuiVBDi;
+    //var dicDoiTuongGuiVBDi = (Dictionary<string, int>)ViewBag.dicDoiTuongGuiVBDi;
+
+    //var lstDoiTuongGuiVBDen = (List<DoiTuongGuiVanBanDenViewModel>)ViewBag.lstDoiTuongGuiVBDen;
+    //var dicDoiTuongGuiVBDen = (Dictionary<string, int>)ViewBag.dicDoiTuongGuiVBDen;
+
+    //var lstLoaiVBDen = (List<DmLoaiVanBanViewModel>)ViewBag.lstLoaiVBDen;
+    //var dicLoaiVBDen = (Dictionary<string, int>)ViewBag.dicLoaiVBDen;
+
+    //var dicTong = (Dictionary<string, int>)ViewBag.dicTong;
+
+    var lstDoiTuongGuiVBDi = Model.lstDoiTuongGuiVBDi;
+    var dicDoiTuongGuiVBDi = Model.dicDoiTuongGuiVBDi;
+
+    var lstDoiTuongGuiVBDen = Model.lstDoiTuongGuiVBDen;
+    var dicDoiTuongGuiVBDen = Model.dicDoiTuongGuiVBDen;
+
+    var lstLoaiVBDen = Model.lstLoaiVBDen;
+    var dicLoaiVBDen = Model.dicLoaiVBDen;
+
+    var dicTong = Model.dicTong;
+    var donVi = (string)ViewBag.donVi;
+
+}
+
+<style>
+    .padding-left {
+        padding-left: 10%;
+    }
+
+    .color-red {
+        color: red;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .border {
+        /*border-color: darkgray;*/
+        border: 0.5px solid darkgray;
+        float:left;
+    }
+    
+
+    .align-center {
+        text-align: center;
+    }
+
+    .col-6 {
+        width: 60%;
+    }
+
+    .col-2 {
+        width: 20%;
+    }
+</style>
+
+<p style="padding-top: 10px; font-weight: bold; text-align: center">
+    Báo cáo công tác tiếp nhận và xử lý công văn tháng   @if (!string.IsNullOrEmpty(DenNgayNVB))
+    {
+    <span>@DenNgayNVB</span>
+    }
+    else
+    {
+    <span>@DateTime.Now.Month/@DateTime.Now.Year</span>
+    } @Html.Raw(!string.IsNullOrEmpty(donVi) ? " - " + donVi : "")
+</p>
+<p style="font-style: italic; text-align: center;">
+    (Từ
+    @if (!string.IsNullOrEmpty(TuNgayNVB))
+    {
+    <span style="color: red"> @TuNgayNVB</span>
+    }
+    else
+    {
+    <span style="color: red"> ... / ...</span>
+    }
+    đến
+    @if (!string.IsNullOrEmpty(DenNgayNVB))
+    {
+    <span style="color: red"> @DenNgayNVB</span>
+    }
+    else
+    {
+    <span style="color: red"> @DateTime.Now.ToString("dd/MM/yyyy")</span>
+    }
+    )
+</p>
+
+<p style="font-weight: bold">1. Văn bản đi</p>
+
+@if (lstDoiTuongGuiVBDi != null && lstDoiTuongGuiVBDi.Count > 0)
+            {
+    <p style="padding-left: 20px">
+        Từ
+        @if (!string.IsNullOrEmpty(TuNgayNVB))
+        {
+            string TuNgay = TuNgayNVB;
+            TuNgay = TuNgay.Replace(" ", "");
+        <span style="color: red"> @TuNgay</span>
+        }
+        else
+        {
+        <span style="color: red"> ... / ... / ...</span>
+        }
+        đến
+        @if (!string.IsNullOrEmpty(DenNgayNVB))
+        {
+        <span style="color: red"> @DenNgayNVB</span>
+        }
+        else
+        {
+        <span style="color: red"> @DateTime.Now.ToString("dd/MM/yyyy")</span>
+        }
+        , Cục ban hành <span style="color: red; font-weight: bold">@dicTong["DoiTuongGuiVBDi"]</span> văn bản, cụ thể:
+    </p>
+    <p style="padding-left: 20px"><span style="font-weight: bold; font-style: italic">a) Văn bản: </span></p>
+
+    int quyetDinh = 0;
+    string qd = "Quyết định";
+    string quyetDinhStr = "";
+    for (int i = 0; i < Model.lstDoiTuongGuiVBDi.Count; i++)
+    {
+        quyetDinhStr = Model.lstDoiTuongGuiVBDi[i].TenDoiTuong.ToLower();
+        if (quyetDinhStr.Contains(qd.ToLower()))
+        {
+            quyetDinh += Model.dicDoiTuongGuiVBDi["itemDTGuiVBDi_" + i];
+        }
+        else
+        {
+            <div class="row padding-left">
+                <div class="col-xs-6 border col-6">+/ @Model.lstDoiTuongGuiVBDi[i].TenDoiTuong:</div>
+                <div class="col-xs-6 border col-2 align-center color-red">@Model.dicDoiTuongGuiVBDi["itemDTGuiVBDi_" + i]</div>
+                <div class="col-xs-6 border col-2 align-center">văn bản;</div>
+            </div>
+        }
+    }
+    <div class="row padding-left">
+        <div class="col-xs-6 border col-6 bold">Tổng cộng:</div>
+        <div class="col-xs-6 border col-2 align-center color-red bold">@(Model.dicTong["DoiTuongGuiVBDi"] - quyetDinh)</div>
+        <div class="col-xs-6 border col-2 align-center bold">văn bản;</div>
+    </div>
+
+    <p style="padding-left: 20px; padding-top: 20px;"><span style="font-weight: bold; font-style: italic;">b) Quyết định: </span><span style="color: red">@quyetDinh</span> quyết định</p>
+}
+
+
+<p><span style="font-weight: bold">2. Văn bản đến: </span>Cục tiếp nhận, xử lý <span style="color: red">@Model.dicTong["DoiTuongGuiVBDen"]</span> văn bản.</p>
+
+@if (Model.lstDoiTuongGuiVBDen != null && Model.lstDoiTuongGuiVBDen.Count > 0)
+{
+    <p style="padding-left: 20px">Trong đó: </p>
+    <p style="padding-left: 20px"><span style="font-style: italic">a) Phân loại văn bản đến theo đơn vị: </span></p>
+
+    for (int i = 0; i < Model.lstDoiTuongGuiVBDen.Count; i++)
+    {
+        <div class="row padding-left">
+            <div class="col-xs-6 border col-6">+/ @Model.lstDoiTuongGuiVBDen[i].TenDoiTuong:</div>
+            <div class="col-xs-6 border col-2 align-center color-red">@Model.dicDoiTuongGuiVBDen["itemDTGuiVBDen_" + i]</div>
+            <div class="col-xs-6 border col-2 align-center">văn bản;</div>
+        </div>
+    }
+    <div class="row padding-left">
+        <div class="col-xs-6 border col-6 bold">Tổng cộng:</div>
+        <div class="col-xs-6 border col-2 align-center color-red bold">@Model.dicTong["DoiTuongGuiVBDen"]</div>
+        <div class="col-xs-6 border col-2 align-center bold">văn bản;</div>
+    </div>
+}
+
+@if (Model.lstLoaiVBDen != null && Model.lstLoaiVBDen.Count > 0)
+{
+    <p style="padding-left: 20px; padding-top: 20px"><span style="font-style: italic;">b) Phân loại văn bản đến theo loại văn bản: </span></p>
+
+    for (int i = 0; i < Model.lstLoaiVBDen.Count; i++)
+    {
+        <div class="row padding-left">
+            <div class="col-xs-6 border col-6">+/ @Model.lstLoaiVBDen[i].TenLoaiVanBan:</div>
+            <div class="col-xs-6 border col-2 align-center color-red">@Model.dicLoaiVBDen["itemLoaiVBDen_" + i]</div>
+            <div class="col-xs-6 border col-2 align-center">văn bản;</div>
+        </div>
+    }
+    <div class="row padding-left">
+        <div class="col-xs-6 border col-6 bold">Tổng cộng:</div>
+        <div class="col-xs-6 border col-2 align-center color-red bold">@Model.dicTong["LoaiVBDen"]</div>
+        <div class="col-xs-6 border col-2 align-center bold">văn bản;</div>
+    </div>
+}

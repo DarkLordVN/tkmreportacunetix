@@ -1,0 +1,121 @@
+﻿@model List<TKM.BLL.VanBanDenQuaTrinhXuLyViewModel>
+@{
+    Layout = null;
+    var vbid = (int)ViewBag.vbid;
+}
+<div class="row box-content bg-white z-depth-1 mx-0">
+    <div class="col-12 col-lg-4 px-3">
+        <h4 class="py-3">Luồng xử lý văn bản</h4>
+
+        <div class="tree well">
+            <p class="row justify-content-center">
+                <span class="col-6 py-2"><i class="fas fa-circle text-warning mr-2"></i>Chỉ đạo</span>
+                <span class="col-6 py-2"><i class="fas fa-circle text-success mr-2"></i>Xử lý chính</span>
+                <span class="col-6 py-2"><i class="fas fa-circle text-info mr-2"></i>Phối hợp xử lý</span>
+                <span class="col-6 py-2"><i class="fas fa-circle text-danger mr-2"></i>Nhận để biết</span>
+            </p>
+            @{Html.RenderAction("QuaTrinhXuLyTreeView", "VanBanDen", new { vbid = vbid });}
+
+        </div>
+
+    </div>
+
+    <div class="col-12 col-lg-8 table-responsive-sm mb-4 my-lg-0 px-3">
+        <h4 class="py-3">Thông tin gửi, nhận văn bản</h4>
+        <table id="t-quatrinh" class="table table-hover table-bordered table-sm mb-0" cellspacing="0" width="100%">
+            <thead class="bg-primary text-white lighten-3">
+                <tr>
+                    <th class="th-sm">
+                        Người gửi
+                    </th>
+                    <th class="th-sm">
+                        Thời gian gửi
+                    </th>
+                    <th class="th-sm">
+                        Người nhận
+                    </th>
+                    <th class="th-sm">
+                        Đơn vị nhận
+                    </th>
+                    <th class="th-sm">
+                        Thời gian nhận
+                    </th>
+                    <th class="th-sm">
+                        Trạng thái
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{Html.RenderAction("QuaTrinhXuLyThongTinGuiNhan", "VanBanDen", new { vbid = vbid, view = "popup" });}
+            </tbody>
+        </table>
+    </div>
+    <div class="w-100">
+        <!--Accordion wrapper-->
+        <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+            <!-- Accordion card -->
+            <div class="card">
+
+                <!-- Card header -->
+                <div class="card-header" role="tab" id="headingOne1">
+                    <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="true"
+                       aria-controls="collapseOne1">
+                        <h4 class="mb-0">
+                            Lịch sử xử lý văn bản <i class="fal fa-angle-down rotate-icon"></i>
+                        </h4>
+                    </a>
+                </div>
+
+                <!-- Card body -->
+                <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1"
+                     data-parent="#accordionEx">
+                    <div class="card-body">
+                        <div class="timeline-main">
+                            <ul class="timeline-light">
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (!string.IsNullOrEmpty(item.NoiDungLichSuXuLy))
+                                        {
+                                            <li class="timeline-light-item">
+                                                <small class="border py-1 px-2 text-muted mr-lg-3 rounded"><i class="fal fa-clock mr-2"></i>@TKM.Utils.ConvertDateTime.ConvertDateTimeToTimeString(item.NgayTao)</small>
+                                                <strong>@Html.Raw(item.ChucVuNguoiGui + " " + item.NguoiGui + ": " + "<span class='text-danger'>" + item.NoiDungLichSuXuLy + "</span>")</strong>
+                                            </li>
+                                        }
+                                    }
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Accordion card -->
+
+        </div>
+        <!-- Accordion wrapper -->
+
+    </div>
+
+</div>
+
+<style>
+    .modal-lg, .modal-xl {
+        max-width: 1300px !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('#rmcBody').removeClass('modal-body');
+    })
+</script>

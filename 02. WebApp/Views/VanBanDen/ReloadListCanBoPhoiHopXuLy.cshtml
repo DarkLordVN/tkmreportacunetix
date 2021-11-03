@@ -1,0 +1,25 @@
+﻿@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstCanBo = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstCanBo;
+    var lstcanbophid = (string)ViewBag.lstcanbophid;
+}
+
+<select class="mdb-select mdb-select-phcb md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListCanBoPhoiHopXuLyID" id="ListCanBoPhoiHopXuLyID" multiple searchable="Chọn cán bộ...">
+    <option value="" disabled selected>-- Chọn cán bộ --</option>
+    @if (lstCanBo != null && lstCanBo.Count > 0)
+    {
+        foreach (var item in lstCanBo)
+        {
+            <option value="@item.ID" @(!string.IsNullOrEmpty(lstcanbophid) && lstcanbophid.Contains("," + item.ID.ToString() + ",") ? "selected" : "")>@item.ChucVuVaTen</option>
+        }
+    }
+</select>
+@*<button class="btn-save btn btn-primary btn-sm">Chọn</button>*@
+
+ <script>
+        $(document).ready(function () {
+            //$('.select2').select2();
+            $('.mdb-select-phcb').materialSelect();
+        });
+    </script>

@@ -1,0 +1,141 @@
+﻿@model TKM.BLL.NhomNguoiDungViewModel
+@using TKM.BLL
+
+@{
+    ViewBag.Title = "Cập nhật nhóm người dùng";
+    var lstNguoiDung = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiDung;
+
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/NhomNguoiDung/Index">Quản lý nhóm người dùng</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            { <div class="alert @TempData["AlertType"]">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>@Html.Raw(@TempData["AlertData"])</strong>
+            <a id="lblMessage"></a>
+        </div>
+
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+
+                            @using (Html.BeginForm("Update", "NhomNguoiDung", null, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(m => m.ID)
+
+                                <div class="form-group row">
+                                    <label for="TenNhom" class="col-sm-2 col-form-label pr-0">Tên nhóm người dùng<span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.TenNhom, new { @class = "form-control ", @id = "TenNhom" })
+                                        @Html.ValidationMessageFor(model => model.TenNhom, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="ddlListNguoiDungThuocNhomID" class="col-sm-2 col-form-label">Chọn người dùng</label>
+                                    <div class="col-sm-4">
+                                        <select id="ddlListNguoiDungThuocNhomID" class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple name="ListNguoiDungThuocNhomID">
+                                            <option value="0">--- Chọn người dùng ---</option>
+                                            @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                                            {
+                                                foreach (var item in lstNguoiDung)
+                                                {
+                                                    <option value="@item.ID" @(!string.IsNullOrEmpty(Model.ListNguoiDungThuocNhomID) && Model.ListNguoiDungThuocNhomID.Contains("," + item.ID + ",") ? "selected" : "")>@item.HoVaTen</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                            <div class="form-check form-check-inline px-3 my-3">
+                                                <input type="checkbox" class="form-check-input" id="PhamViSuDung" name="PhamViSuDung" value="true" @(Model.PhamViSuDung == true ? "checked" : "")>
+                                                <label class="form-check-label" for="PhamViSuDung">Nhóm dùng chung/ Cá nhân</label>
+                                            </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-check-inline px-3 my-3">
+                                            <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" @(Model.TrangThai ? "checked" : "")>
+                                            <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            @Html.TextBoxFor(model => model.TenNhom, new { @class = "form-control ", @id = "TenNhom" })
+                                            @Html.ValidationMessageFor(model => model.TenNhom, "", new { @class = "alert-danger" })
+                                            <label for="TenNhom">Tên nhóm người dùng <span class="c-red-500">(*)</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            <label class="active" for="ddlListNguoiDungThuocNhomID">
+                                                Chọn người dùng
+                                            </label>
+                                            <select id="ddlListNguoiDungThuocNhomID" class="select2 md-form" multiple name="ListNguoiDungThuocNhomID">
+                                                <option value="0">-- Chọn người dùng  --</option>
+                                                @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                                                {
+                                                    foreach (var item in lstNguoiDung)
+                                                    {
+                                                        <option value="@item.ID" @(!string.IsNullOrEmpty(Model.ListNguoiDungThuocNhomID) && Model.ListNguoiDungThuocNhomID.Contains("," + item.ID + ",") ? "selected" : "")>@item.HoVaTen</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            <div class="form-check form-check-inline px-3 my-3">
+                                                <input type="checkbox" class="form-check-input" id="PhamViSuDung" name="PhamViSuDung" value="true" @(Model.PhamViSuDung == true ? "checked" : "")>
+                                                <label class="form-check-label" for="PhamViSuDung">Nhóm dùng chung/ Cá nhân</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="md-form">
+                                            <div class="form-check form-check-inline px-3 my-3">
+                                                <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" @(Model.TrangThai == true ? "checked" : "")>
+                                                <label class="form-check-label" for="TrangThai">Có sử dụng</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+
+                                <div class="form-group row">
+                                    <div class="text-right col-sm-12">
+                                        <button type="submit" class="btn btn-primary">Lưu</button>
+                                        <a class="btn cur-p btn-light" href="/NhomNguoiDung/Index">Hủy bỏ</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    span.select2 {
+        padding-top: 4px;
+    }
+</style>

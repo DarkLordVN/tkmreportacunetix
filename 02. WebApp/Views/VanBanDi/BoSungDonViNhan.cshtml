@@ -1,0 +1,52 @@
+﻿@using TKM.BLL
+@model VanBanDiViewModel
+@{
+    Layout = null;
+    var act = (string)ViewBag.act;
+    var lstDonVi = (List<TKM.BLL.DmDonViViewModel>)ViewBag.lstDonVi;
+    lstDonVi.ForEach(x => x.TenDonVi = string.Concat(Enumerable.Repeat("--", x.Level)) + x.TenDonVi);
+}
+@using (Ajax.BeginForm("BoSungDonViNhan", "VanBanDi", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onBoSungDonViNhanSuccess"
+}, new { @id = "fFormBS" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+    <div class="form-group row">
+        <label for="LstDonViNhanNoiBoID" class="col-sm-3 col-form-label">Đơn vị nhận <span class="c-red-500">(*)</span></label>
+        <div class="col-sm-9">
+            @Html.DropDownListFor(model => model.LstDonViNhanNoiBoID, new SelectList(lstDonVi, "ID", "TenVaKyHieu"), "-- Chọn đơn vị --", new { @class = "mdb-select mdb-select-csa md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "LstDonViNhanNoiBoID", @searchable = "Nhập từ khóa..", @multiple = "true" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary">Lưu và gửi</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+
+}
+<style>
+     .modal-lg, .modal-xl {
+        max-width: 1300px !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-csa').materialSelect();
+    })
+    $('#fFormBS').on('submit', function () {
+        $("#loading").show();
+        var donvinhanid = $('#LstDonViNhanNoiBoID').val().toString();
+        if (donvinhanid == '' || donvinhanid == ',') {
+            toastr.error('Bạn chưa chọn đơn vị nhận!');
+            $("#loading").hide();
+            return false;
+        }
+        //$('#btn-luu').attr("disabled", true);
+    })
+</script>

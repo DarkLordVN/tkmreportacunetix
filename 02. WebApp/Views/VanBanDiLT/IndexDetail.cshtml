@@ -1,0 +1,129 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.VanBanDiLTListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.lstVanBanDiLT != null && Model.lstVanBanDiLT.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.lstVanBanDiLT)
+    {
+        index++;
+        <tr>
+
+            <td align="center">@index</td>
+            <td align="center">@item.TrichYeu</td>
+            <td align="center">
+                <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.TenFile) ? item.LinkFileDinhKem : "")"><span><i class="fal fa-file"></i></span></a>
+            </td>
+            <td align="center">
+                <a style="color:#4040fa" href="/VanBanDiLT/Detail/@item.ID" class="f-hov1 h-tdu">@item.KyHieuVanBan</a>
+            </td>
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(item.NgayBanHanh)</td>
+            <td align="center">@item.CoQuanNhan</td>
+            <td align="center">Còn hạn</td>
+            @{
+                string background = "";
+                string color = "#fff";
+                string disabled = "disabled";
+                //string disabled = "";
+                switch (item.TrangThaiVanBan)
+                {
+                    case 1:
+                        //Đã đến
+                        disabled = "";
+                        background = "#4f4f4f";
+                        break;
+                    case 2:
+                        //Từ chối tiếp nhận
+                        background = "#f44336";
+                        break;
+                    case 3:
+                        //Đã tiếp nhận
+                        background = "#4285f4";
+                        break;
+                    case 4:
+                        //Phân công
+                        background = "#ff9800";
+                        break;
+                    case 5:
+                        //Đang xử lý
+                        background = "rgba(0,188,212,.7)";
+                        break;
+                    case 6:
+                        //Hoàn thành
+                        background = "#00c851";
+                        break;
+                    default:
+                        background = "#544f90";
+                        break;
+                }
+            }
+            <td align="center" style='@string.Format("background-color:{0} !important;color:{1} !important",background,color)'>@item.TrangThaiVanBanStr</td>
+            <td class="t_action">
+                <button id="test" type="button" onclick="onTiepNhan(@item.ID, @item.LoaiNghiepVu)" class="btn btn-sm rounded-pill btn-primary waves-effect waves-light @string.Format("{0}",disabled)">Tiếp nhận</button>
+            </td>
+            <td class="t_action">
+                <button type="button" onclick="onTuChoi(@item.ID, @item.LoaiNghiepVu)" class="btn btn-sm rounded-pill btn-danger waves-effect waves-light" @string.Format("{0}", disabled)>Từ chối</button>
+            </td>
+            @*<td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                        <label class="form-check-label" for="chk'@item.ID'"></label>
+                    </div>
+                </td>*@
+
+        </tr>
+                    }
+
+                }
+@if (Model != null && Model.lstVanBanDiLT == null || Model.lstVanBanDiLT.Count == 0)
+{
+    <tr>
+        <td colspan="12" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="12">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "VanBanDiLT", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TuKhoa = Model.TuKhoa,
+                   PhamViTimKiem = Model.PhamViTimKiem,
+                   CoQuanBanHanh = Model.CoQuanBanHanh,
+                   TrangThaiVanBanID = Model.TrangThaiVanBanID,
+                   DonViXuLyChinhID = Model.DonViXuLyChinhID,
+                   TuNgayND = Model.TuNgayND,
+                   DenNgayND = Model.DenNgayND,
+                   TuNgayNVB = Model.TuNgayNVB,
+                   DenNgayNVB = Model.DenNgayNVB,
+                   TuNgayTHGQ = Model.TuNgayTHGQ,
+                   DenNgayTHGQ = Model.DenNgayTHGQ,
+                   tab = Model.tab,
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang
+                </div>
+            </div>
+        </td>
+    </tr>
+}

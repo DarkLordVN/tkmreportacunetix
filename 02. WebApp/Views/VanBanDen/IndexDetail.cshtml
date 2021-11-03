@@ -1,0 +1,177 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.VanBanDenListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+    var isDonVi = (bool)ViewBag.isDonVi;
+    var typeUser = (string)ViewBag.typeUser;
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.lstVanBanDen != null && Model.lstVanBanDen.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.lstVanBanDen)
+    {
+        index++;
+        <tr>
+
+            @*<td align="center">@index</td>*@
+            <td class="tac">@item.SoDenCuc</td>
+            @if (isDonVi)
+            {
+                <td class="tac">@item.SoDenDonVi</td>
+            }
+            <td class="tal"><div class="ffm-rob">@item.SoKyHieu</div></td>
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(item.NgayVanBan)</td>
+            <td class="tal">
+                <a href="/VanBanDen/Detail/@item.ID?tab=@Model.tab" class="f-hov1 h-tdu text-primary" data-toggle="tooltip" title="Xem chi tiết"><div class="ffm-rob text-primary">@item.TrichYeu</div></a>
+            </td>
+            <td class="tal"><div class="ffm-rob">@item.CoQuanBanHanh</div></td>
+            <td align="center">
+                @if (!String.IsNullOrEmpty(item.FileVanBan))
+                {
+                    var arrLink = item.FileVanBan.Split(new string[] { "[--]" }, StringSplitOptions.None);
+                    if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                    {
+                        for (int i = 0; i < arrLink.Length; i++)
+                        {
+                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@arrLink[i]"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title=""></i></span></a>
+                            if (i != (arrLink.Length - 1))
+                            {
+                                @Html.Raw("</br>")
+                            }
+                        }
+
+                    }
+                }
+            </td>
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(item.NgayDen)</td>
+            <td class="tal">@item.DonViNhan</td>
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(item.ThoiHanGiaiQuyet)</td>
+            @{
+                string background = "";
+                string color = "#fff";
+                string trangThaiStr = "";
+                switch (item.TrangThaiVanBan)
+                {
+                    case 0:
+                        //Chưa tiếp nhận
+                        background = "#e53935";
+                        trangThaiStr = "Chưa tiếp nhận";
+                        break;
+                    case 1:
+                        //Đã tiếp nhận
+                        background = "#4285f4";
+                        trangThaiStr = "Đã tiếp nhận";
+                        break;
+                    case 2:
+                        //Phân công
+                        background = "#ff9100";
+                        trangThaiStr = "Đã phân công";
+                        break;
+                    case 3:
+                        //Đang xử lý
+                        background = "rgba(0,188,212,.7)";
+                        trangThaiStr = "Đang xử lý";
+                        break;
+                    case 4:
+                        //Hoàn thành
+                        background = "#00c851";
+                        trangThaiStr = "Hoàn thành";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            <td align="center" style='@string.Format("background-color:{0} !important;color:{1} !important",background,color)'>@item.TrangThaiVanBanStr</td>
+            @if (SessionInfo.CurrentUser.TenDangNhap.Equals("admin"))
+            {
+                <td>
+                    <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                </td>
+                
+            }
+@*@if (typeUser.Equals("vtc") || typeUser.Equals("vtdv"))
+    {
+        <td class="t_action">
+
+            @if (item.NguoiTaoID == SessionInfo.CurrentUser.ID && item.TrangThaiVanBan == (int)TKM.Utils.Enums.TrangThaiVanBan.ChoXuLy)
+                        {
+                            if (typeUser.Equals("vtc") && ((item.LanhDaoDonViTrinhID == 0 && item.NguoiNhanID != 0) || (item.LanhDaoDonViTrinhID == 0 && item.NguoiNhanID == 0 && item.DonViNhanID == 0)))
+                            {
+                    <a href="javascript://" onclick="location.href='@Url.Action("Update", "VanBanDen", new { id = item.ID })'" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
+                    <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                }
+                if (typeUser.Equals("vtdv") && item.DonViNhanID != 0 && item.NguoiNhanID == 0)
+                {
+                    <a href="javascript://" onclick="location.href='@Url.Action("Update", "VanBanDen", new { id = item.ID })'" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
+                    <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                }
+
+            }
+
+        </td>
+    }*@
+
+                @*<td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                            <label class="form-check-label" for="chk'@item.ID'"></label>
+                        </div>
+                    </td>*@
+
+            </tr>
+                    }
+
+                }
+@if (Model != null && Model.lstVanBanDen == null || Model.lstVanBanDen.Count == 0)
+{
+    <tr>
+        <td colspan="14" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="14">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "VanBanDen", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TuKhoa = Model.TuKhoa,
+                   PhamViTimKiem = Model.PhamViTimKiem,
+                   CoQuanBanHanhID = Model.CoQuanBanHanhID,
+                   TrangThaiVanBanID = Model.TrangThaiVanBanID,
+                   DonViXuLyChinhID = Model.DonViXuLyChinhID,
+                   DoiTuongGuiVanBanDenID = Model.DoiTuongGuiVanBanDenID,
+                   TuNgayND = Model.TuNgayND,
+                   DenNgayND = Model.DenNgayND,
+                   TuNgayNVB = Model.TuNgayNVB,
+                   DenNgayNVB = Model.DenNgayNVB,
+                   TuNgayTHGQ = Model.TuNgayTHGQ,
+                   DenNgayTHGQ = Model.DenNgayTHGQ,
+                   VanBanHeThong = Model.VanBanHeThong,
+                   tab = Model.tab,
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem văn bản
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+

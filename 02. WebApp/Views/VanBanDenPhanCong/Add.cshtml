@@ -1,0 +1,106 @@
+﻿@model TKM.BLL.VanBanDenPhanCongViewModel
+@using TKM.DAO.EntityFramework
+@{
+    ViewBag.Title = "Thêm mới văn bản đến phân công";
+    var lstDonVi = (List<TKM.BLL.DmDonViViewModel>)ViewBag.lstDonVi;
+    var lstNguoiDung = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiDung;
+}
+
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDenPhanCong/Index">Quản lý văn bản đến phân công</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+
+                            @using (Html.BeginForm("Add", "VanBanDenPhanCong", null, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-2 col-form-label">Thuộc đơn vị <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.DonViID, new SelectList(lstDonVi, "ID", "TenVaKyHieu"), "--- Chọn đơn vị ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "DonViID", @searchable = "Nhập từ khóa.." })
+                                    </div>
+                                    <label for="" class="col-sm-2 col-form-label">Người xử lý <span class="c-red-500">(*)</span></label>
+                                    <div id="reloadND" class="col-sm-4">
+                                        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NguoiXuLyID" name="NguoiXuLyID" searchable="Nhập từ khóa..">
+                                            <option value="0">-- Chọn người xử lý --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-check-inline px-3 my-3">
+                                            <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                            <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group row">
+                                    <div class="col-sm-6">
+                                        @Html.DropDownListFor(model => model.DonViID, new SelectList(lstDonVi, "ID", "TenVaKyHieu"), "-- Chọn đơn vị --", new { @class = "mdb-select md-form", @id = "DonViID", @searchable = "Nhập từ khóa.." })                                       
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div id="reloadND">
+                                            <select class="mdb-select md-form" id="NguoiXuLyID" name="NguoiXuLyID" searchable="Nhập từ khóa..">
+                                                <option value="0">-- Chọn người xử lý --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>*@
+                             
+                                <div class="form-group row">
+                                    <div class="text-right col-sm-12  mt-3">
+                                        <button type="submit" class="btn btn-primary">Lưu</button>
+                                        <a class="btn cur-p btn-light" href="/VanBanDenPhanCong/Index">Hủy bỏ</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $('#DonViID').on('change', function () {
+        var iddonvi = $('#DonViID').val();
+        $.ajax({
+            type: "GET",
+            url: '/VanBanDenPhanCong/ReloadNguoiDung',
+            data: { iddonvi: iddonvi },
+            dataType: "html",
+            success: function (res) {
+                $('#reloadND').html(res);
+            },
+            error: function (response) {
+            }
+        });
+    })
+</script>

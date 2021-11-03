@@ -1,0 +1,70 @@
+﻿@{ 
+    var loaiBaoCao = (int)ViewBag.LoaiBaoCao;
+    Layout = null;
+}
+<style>
+    .col-lab {
+            padding-left: 10px;
+            font-size: 16px;
+            padding-top: 20px;
+            width: 6%;
+        }
+
+        .col-text {
+            padding-right: 10px;
+            padding-top: 20px;
+            width: 35%;
+        }
+</style>
+<div class="row">
+    <table style="width:100%">
+        <tr>
+            <td class="col-lab">
+                <label for="txtTuNgayStr" class="fwb pt8">Chọn loại báo cáo</label>
+            </td>
+            <td class="col-text">
+                <select class="mdb-select mar md-form md-outline colorful-select dropdown-primary p-0" id="LoaiBaoCao" searchable="Nhập từ khóa..">
+                    <option value="1" @(loaiBaoCao == 1 ? "selected" : "")>Thống kê văn bản đi/đến theo năm</option>
+                    <option value="2" @(loaiBaoCao == 2 ? "selected" : "")>Báo cáo công tác tiếp nhận và xử lý văn bản</option>
+                    <option value="3" @(loaiBaoCao == 3 ? "selected" : "")>Báo cáo kết quả thực hiện chỉ đạo của Lãnh đạo tại các TBKL</option>
+                    <option value="4" @(loaiBaoCao == 4 ? "selected" : "")>Báo cáo công tác tiếp nhận và kết quả xử lý văn bản đến trong tháng</option>
+                    <option value="5" @(loaiBaoCao == 5 ? "selected" : "")>Bảng tổng hợp các nội dung công việc cần thực hiện trong (Tuần/Tháng/Quý/Năm)</option>
+                    <option value="6" @(loaiBaoCao == 6 ? "selected" : "")>Báo cáo kết quả thực hiện các nhiệm vụ do Chính phủ, Thủ tướng chính phủ giao</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    $('#LoaiBaoCao').on('change', function () {
+        var LoaiBaoCao = $('#LoaiBaoCao').val();
+        var href = '';
+        switch (LoaiBaoCao) {
+            case "1":
+                href = '/BaoCaoThongKe/ThongKeVanBanDiDen';
+                break;
+            case "2":
+                href = '/BaoCaoThongKe/BaoCaoCongTacTiepNhanVaXuLyVanBan';
+                break;
+            case "3":
+                href = '/BaoCaoThongKe/BaoCaoKetQuaThucHienChiDao';
+                break;
+            case "4":
+                href = '/BaoCaoThongKe/BaoCaoCongTacTiepNhanVaKetQuaXuLy';
+                break;
+            case "5":
+                href = '/BaoCaoThongKe/NoiDungCongViecThucHien';
+                break;
+            case "6":
+                href = '/BaoCaoThongKe/BCKQThucHienNhiemVu';
+                break;
+            default:
+                href = '/BaoCaoThongKe/BCKQThucHienNhiemVu';
+                break;
+
+                console.log(href);
+        }
+        window.location.href = href;
+    })
+</script>

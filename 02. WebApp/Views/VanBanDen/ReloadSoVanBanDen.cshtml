@@ -1,0 +1,12 @@
+﻿@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstSoVanBanDen = (List<SoVanBanDenViewModel>)ViewBag.lstSoVanBanDen;
+    var idNew = (int)ViewBag.idNew;
+    var DonViID = (int)ViewBag.DonViID;
+
+}
+@Html.DropDownList("SoVanBanDenID", new SelectList(lstSoVanBanDen.Where(g=>g.DonViID == DonViID), "ID", "Ten", idNew),"-- Chọn sổ văn bản --", new { @class = "mdb-select mdb-select-cusvb md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "SoVanBanDenID", @searchable = "Nhập từ khóa.." })
+<script>
+    $('.mdb-select-cusvb').materialSelect();
+</script>

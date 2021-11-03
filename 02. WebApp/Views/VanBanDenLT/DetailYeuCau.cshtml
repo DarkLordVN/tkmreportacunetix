@@ -1,0 +1,404 @@
+﻿@using TKM.Utils
+@model TKM.BLL.VanBanDenLTViewModel
+@{
+    ViewBag.Title = "Thông tin văn bản đến liên thông";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string a = "";
+}
+
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDenLT">Danh sách văn bản đến liên thông</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="container-fluid mt-lg-5" id="tbKetQua">
+            <div class="row">
+                <div class="col">
+                    <div class="row box-content">
+                        <div class="col">
+                                <h3 class="titleInfo fwb">Thông tin yêu cầu</h3>
+                            <!--Table-->
+                            <table class="table table-bordered table-detail-vb bg-white">
+                                <!--Table body-->
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Bên gửi</th>
+                                        <td>@Model.CoQuanBanHanh</td>
+                                        <th scope="row">Thời gian gửi</th>
+                                        <td>@Model.NgayGui</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Loại yêu cầu</th>
+                                        <td colspan="3">@Model.LoaiNghiepVuStr</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Lý do @Model.LoaiNghiepVuStr.ToLower()</th>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                    </tbody>
+                                    <!--Table body-->
+                                </table>
+                                <h3 class="titleInfo fwb">Văn bản @Model.LoaiNghiepVuStr.ToLower()</h3>
+                            <table class="table table-bordered table-detail-vb bg-white">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Ngày văn bản</th>
+                                        <td>@Model.NgayBanHanh</td>
+                                        <th scope="row">Số ký hiệu</th>
+                                        <td>@Model.KyHieuVanBan</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Trích yếu nội dung</th>
+                                        <td colspan="3">@Model.TrichYeu</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">File văn bản</th>
+                                        <td>
+                                            @if (Model.LinkFileDinhKem.Contains(','))
+            {
+                foreach (var item in Model.LinkFileDinhKem.Replace("\"", "").Split(','))
+                {
+                                                <br />
+                                                <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(Model.TenFileDinhKem) ? item.Trim() : "")"><span><i class="fal fa-file"></i></span>@item.Trim()</a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <br />
+                                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(Model.TenFileDinhKem) ? Model.LinkFileDinhKem : "")"><span><i class="fal fa-file"></i></span>@Model.LinkFileDinhKem</a>
+                                        }
+                                    </td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                                <!--Table-->
+                                @if (Model.LoaiNghiepVu != 0)
+                                {
+                                    <h3 class="titleInfo fwb">Văn bản bị @Model.LoaiNghiepVuStr.ToLower()</h3>
+                                    <table class="table table-bordered table-detail-vb bg-white">
+                                        <!--Table body-->
+                                        @if ((int)Model.LoaiNghiepVu == 2)
+                                        {
+                                            <tbody>
+
+                                                <tr>
+                                                    <th>Phiên bản</th>
+                                                    <th>Thời gian cập nhật</th>
+                                                </tr>
+                                                @foreach (var item in Model.lstVanBanDenLTLQuan)
+                                                {
+                                                    var version = Model.lstVanBanDenLTLQuan.IndexOf(item) + 1;
+                                                    if (Model.lstVanBanDenLTLQuan.IndexOf(item) == 0)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a style="color:#4040fa" href="/VanBanDenLT/Detail/@item.ID" class="f-hov1 h-tdu">@version</a>
+                                                            </td>
+                                                            <td>@item.ThoiGianChapNhanYCau</td>
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (item.ThoiGianChapNhanYCau != null && Model.ThoiGianChapNhanYCau != null)
+                                                        {
+                                                            DateTime test = DateTime.ParseExact(item.ThoiGianChapNhanYCau, "dd/MM/yyyy HH:mm:ss",
+                                               System.Globalization.CultureInfo.InvariantCulture);
+                                                            DateTime test2 = DateTime.ParseExact(Model.ThoiGianChapNhanYCau, "dd/MM/yyyy HH:mm:ss",
+                                               System.Globalization.CultureInfo.InvariantCulture);
+                                                            if (test < test2)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <a style="color:#4040fa" href="/VanBanDenLT/Detail/@item.ID" class="f-hov1 h-tdu">@version</a>
+                                                                    </td>
+                                                                    <td>@item.ThoiGianChapNhanYCau</td>
+                                                                </tr>
+
+                                                            }
+                                                        }
+                                                    }
+
+                                                }
+                                            </tbody>
+                                        }
+
+                                        @if (Model.LoaiNghiepVu != 2 && Model.LoaiNghiepVu != 0)
+                                        {
+                                            <tbody>
+                                                @switch (Model.LoaiNghiepVu)
+                                                {
+                                                    case 3:
+
+                                                        <tr>
+                                                            <th>Ngày văn bản</th>
+                                                            @foreach (var item in Model.lstVanBanDenLTLQuan)
+                                                            {
+                                                                <td>@item.NgayBanHanh</td>
+                                                            }
+                                                            <th>Số ký hiệu</th>
+                                                            @if (Model.ThayTheVB_MaVB != null && Model.ThayTheVB_MaVB.Contains('|'))
+                                                            {
+                                                                foreach (var test in Model.ThayTheVB_MaVB.Replace("\"", "").Split('|')) { a += test.Trim().Replace("\"", "").Split(',')[2] + Environment.NewLine; }
+                                                            }
+                                                            <td align="center" style="white-space:pre">@(Model.ThayTheVB_MaVB == null ? "" : Model.ThayTheVB_MaVB.Contains('|') ? @a : Model.ThayTheVB_MaVB.Replace("\"", "").Split(',')[2]) </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Trích yếu nội dung</th>
+                                                            @foreach (var item in Model.lstVanBanDenLTLQuan)
+                                                            {
+                                                                <td colspan="3">@item.TrichYeu</td>
+                                                            }
+                                                        </tr>
+                                                            <tr>
+                                                                <th>File văn bản</th>
+                                                                <td>
+                                                                    @foreach (var item in Model.lstVanBanDenLTLQuan)
+                                                                    {
+                                                                        if (item.LinkFileDinhKem.Contains(','))
+                                                                        {
+                                                                            foreach (var item2 in item.LinkFileDinhKem.Split(','))
+                                                                            {
+                                                                                <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.LinkFileDinhKem) ? item2.Trim() : "")"><span><i class="fal fa-file"></i></span>@item2.Trim()</a>
+                                                                                <br />
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <br />
+                                                                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.LinkFileDinhKem) ? item.LinkFileDinhKem.Trim() : "")"><span><i class="fal fa-file"></i></span>@item.LinkFileDinhKem.Trim()</a>
+                                                                        }
+                                                                    }
+
+                                                                </td>
+                                                            </tr>
+                                                        break;
+                                                }
+
+                                            </tbody>
+                                            @*<tbody>
+                            <tr>
+                            <td colspan="3">
+                                <div class="table-responsive-sm">
+                                    <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                        <thead class="bg-primary text-white lighten-3">
+                                            <tr>
+                                                <th class="th-sm pointer" data-colname="SoKyHieu" data-orderby="asc">Số ký hiệu văn bản bị @Model.LoaiNghiepVuStr.ToLower()<span><i class="fas fa-sort"></i></span></th>
+                                                <th class="th-sm pointer">Trích yếu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbKetQua">
+                                            <tr>
+                                                @switch (Model.LoaiNghiepVu)
+                                                {
+
+                                                    case 3:
+                                                        if (Model.ThayTheVB_MaVB != null && Model.ThayTheVB_MaVB.Contains('|'))
+                                                            {
+                                                                foreach (var test in Model.ThayTheVB_MaVB.Replace("\"", "").Split('|')) { a += test.Trim().Replace("\"", "").Split(',')[2] + Environment.NewLine; }
+                                                            }
+                                                        <td align="center" style="white-space:pre">@(Model.ThayTheVB_MaVB == null ? "" : Model.ThayTheVB_MaVB.Contains('|') ? @a : Model.ThayTheVB_MaVB.Replace("\"", "").Split(',')[2]) </td>
+                                                        foreach(var item in Model.lstVanBanDenLTLQuan)
+                                                        {
+                                                            <td>@item.TrichYeu</td>
+                                                        }
+                                                        break;
+                                                    case 4:
+                                                        if (Model.ThuHoiVB_MaVB != null && Model.ThuHoiVB_MaVB.Contains('|'))
+                                                        {
+                                                            for (int i = 0; i < Model.ThuHoiVB_MaVB.Trim().Replace("\"", "").Split('|').Count(); i++)
+                                                            {
+                                                                a += Model.ThuHoiVB_MaVB.Replace("\"", "").Split('|')[i].Trim().Split('@')[1].Split(',')[2] + Environment.NewLine;
+                                                            }
+                                                        }
+                                                        <td align="center" style="white-space:pre">@(Model.ThuHoiVB_MaVB == null ? "" : Model.ThuHoiVB_MaVB.Contains('|') ? @a : Model.ThuHoiVB_MaVB.Replace("\"", "").Split('@')[1].Split(',')[2]) </td>
+                                                        break;
+
+                                                }
+
+
+                                                <td>@Model.TrichYeu</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+
+                        </tr>
+                        </tbody>*@
+                                        }
+                                        <!--Table body-->
+                                    </table>
+                                }
+
+
+
+
+                                <div class="w-100 text-center text-lg-left mt-4">
+                                    @if (Model.TrangThaiYeuCau == 1)
+                                    {
+                                        <a class="btn btn-primary" role="button" aria-pressed="true" onclick="onTiepNhan(@Model.ID, @Model.LoaiNghiepVu)">Tiếp nhận</a>
+                                    }
+                                    @if ((Model.LoaiNghiepVu != 3 && Model.TrangThaiYeuCau == 1))
+                                    {
+                                        <a class="btn btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#modalConfirmDelete" onclick="onTuChoi(@Model.ID, @Model.LoaiNghiepVu)">Từ chối</a>
+
+                                    }
+                                    <a href="/VanBanDenLT" class="btn btn-dark" role="button" aria-pressed="true">Thoát</a>
+                                </div>
+</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <style>
+        table td {
+            text-align: left !important;
+        }
+
+        .titleInfo {
+            font-size: 17px;
+            padding-bottom: 3px;
+        }
+
+        .thr-line {
+            background-color: #808080;
+            width: 20%;
+            height: 3px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .table-infomation td:nth-child(2n+1) {
+            font-weight: bold !important;
+        }
+
+        .table-infomation td:nth-child(2n) {
+            width: 30% !important;
+        }
+
+        .table-infomation td:nth-child(3n) {
+            width: 20% !important;
+        }
+    </style>
+    <script>
+
+    function onTiepNhan(id, nghiepvu) {
+            swal({
+            title: "Tiếp nhận?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+       .then((willDelete) => {
+        if (willDelete) {
+            
+               $.ajax({
+                type: "POST",
+                   url: '/VanBanDenLT/TiepNhan',
+                   data: { id: id, nghiepvu: nghiepvu },
+                   dataType: "html",
+                   success: function (res) {
+                    res = JSON.parse(res);
+                    if (res.isSuccess)
+                        swal("Đã tiếp nhận!", {
+                        icon: "success",
+                           });
+                       else
+                           swal("Có lỗi xảy ra", {
+                                        icon: "error",
+                           });
+                                    loadData("", "");
+                                },
+                   error: function (response) {
+                                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                                }
+               });
+
+           }
+       });
+
+    }
+    function onTuChoi(id, nghiepvu) {
+                                    swal({
+                                        title: "Từ chối?",
+            content: {
+                                            element: "input",
+                attributes: {
+                                                placeholder: "Lý do từ chối",
+                    type: "text",
+                },
+            },
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+       .then((willDelete) => {
+        if (willDelete) {
+               $.ajax({
+                type: "POST",
+                   url: '/VanBanDenLT/TuChoi',
+                   data: { id: id, content : willDelete, nghiepvu: nghiepvu },
+                   dataType: "html",
+                   success: function (res) {
+                    res = JSON.parse(res);
+                    if (res.isSuccess)
+                        swal("Đã từ chối!", {
+                        icon: "success",
+                           });
+                       else
+                           swal("Có lỗi xảy ra", {
+                                        icon: "error",
+                           });
+                                    loadData("", "");
+                                },
+                   error: function (response) {
+                                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                                }
+               });
+
+           }
+       });
+    }
+
+
+    function loadData(col, order, pnum, psize) {
+            $.ajax({
+                                        type: "GET",
+                url: '@Url.Action("Detail/" + Model.ID, "VanBanDenLT")',
+                data: { },
+                dataType: "html",
+                success: function (response) {
+                                            setTimeout(function () {
+                                                location.reload();
+                                            }, 1000);
+                                        },
+                error: function (response) {
+                                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                                        }
+                                    });
+    }
+
+
+    </script>

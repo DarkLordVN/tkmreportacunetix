@@ -1,0 +1,116 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.ThongBaoListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+    var tab = (int)ViewBag.tab;
+}
+
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (tab == 0)
+{
+    if (Model != null && Model.lstThongBao != null && Model.lstThongBao.Count() > 0)
+    {
+        var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+        foreach (var item in Model.lstThongBao)
+        {
+            index++;
+        <tr class="tbody">
+
+            <td align="center">@index</td>
+            <td class="tal">
+                <a href="/ThongBao/Detail/@item.ID" class="f-hov1 h-tdu text-primary" data-toggle="tooltip" title="Xem chi tiết">@item.TieuDe</a>
+            </td>
+            <td class="tal">@item.NoiDung</td>
+            <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateToString(item.NgayTao)</td>
+            <td class="tac"><i class="fal fa-user-tag mr-1"></i>@item.ChucVuVaTen</td>
+            <td class="t_action">
+               @if (item.NguoiTaoID.Value == SessionInfo.CurrentUser.ID && item.IsDaGui == false && SessionInfo.CurrentUser.TenDangNhap != "admin")
+               {
+                <a href="javascript://" onclick="location.href='@Url.Action("Update", "ThongBao", new { id = item.ID })'" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
+                <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                    <a href="javascript://" onclick="onSend(@item.ID);" class="btn-floating btn-sm btn-default mx-1" data-toggle="tooltip" data-original-title="Gửi thông báo" title="Gửi thông báo"><i class="fal fa-paper-plane"></i></a>
+               }
+               else if (SessionInfo.CurrentUser.TenDangNhap == "admin")
+               {
+                <a href="javascript://" onclick="onSend(@item.ID);" class="btn-floating btn-sm btn-default mx-1" data-toggle="tooltip" data-original-title="Gửi thông báo" title="Gửi thông báo"><i class="fal fa-paper-plane"></i></a>
+                <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+               }
+            </td>
+        </tr>
+        }
+    }
+}
+@if (tab == 1)
+{
+    if (Model != null && Model.lstThongBao != null && Model.lstThongBao.Count() > 0)
+    {
+        var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+        foreach (var item in Model.lstThongBao)
+        {
+            index++;
+            <tr class="tbody">
+                <td align="center">@index</td>
+                <td class="tal">
+                    @item.ChucNang
+                </td>
+                <td class="tal">@item.TieuDe</td>
+                <td class="tal">
+                    <a href="/ThongBao/Detail/@item.ID" class="f-hov1 h-tdu text-primary" data-toggle="tooltip" title="Chi tiết">@item.NoiDung</a>
+                </td>
+                <td align="center">@TKM.Utils.ConvertDateTime.ConvertDateToString(item.NgayTao)</td>
+                <td class="t_action">
+                    @if ((item.NguoiTaoID.Value == SessionInfo.CurrentUser.ID && item.IsDaGui) || SessionInfo.CurrentUser.TenDangNhap == "admin")
+                    {
+                        <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                    }
+                  
+                </td>
+            </tr>
+        }
+
+    }
+}
+@if (Model != null && Model.lstThongBao == null || Model.lstThongBao.Count == 0)
+{
+    <tr>
+        <td colspan="12" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="12">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "ThongBao", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TuKhoa = Model.TuKhoa,
+                   TieuDe = Model.TieuDe,
+                   NguoiTaoID = Model.NguoiTaoID,
+                   ChucNangID = Model.ChucNangID,
+                   TuNgayTaoTB = Model.TuNgayTaoTB,
+                   DenNgayTaoTB = Model.DenNgayTaoTB,
+                   tab = Model.tab
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem thông báo
+                </div>
+            </div>
+        </td>
+    </tr>
+}

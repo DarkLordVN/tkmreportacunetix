@@ -1,0 +1,421 @@
+﻿
+@{
+    ViewBag.Title = "Lịch làm việc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Css{
+    <link href="~/Assets/css/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <link href="~/Assets/css/fullcalendar/fullcalendar.print.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+<div class="row mx-0 box-ct">
+    <div class="col">
+        <div class="row">
+            <div class="col px-0">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent px-0">
+                        <li class="breadcrumb-item"><a href="#"><i class="fal fa-home"></i></a></li>
+                        <li class="breadcrumb-item active">Lịch làm việc của lãnh đạo</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row justify-content-between">
+            <div class="col-12 col-lg-3 bg-white border mb-4 mb-lg-0">
+                <h5 class="font-weight-bolder my-4"><i class="fal fa-calendar-plus mr-2"></i>Thêm mới lịch làm việc</h5>
+                <div class="form-group">
+                    <label class="active" style="font-size: .8rem" for="selectLD"><span class="mr-2 red-text">*</span>Lãnh đạo</label>
+                    <select id="selectLD" class="mdb-select md-form mt-0" searchable="Tìm lãnh đạo..">
+                        <option value="" disabled selected>Chọn lãnh đạo</option>
+                        <option value="1">Nguyễn Duy Sinh</option>
+                        <option value="2">Phạm Văn Tiến</option>
+                        <option value="3">Trần Văn Long</option>
+                        <option value="4">Nguyễn Ngọc Trinh</option>
+                        <option value="5">Hoàng Thái Bảo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size: .8rem" for="exampleFormControlTextarea2"><span class="mr-2 red-text">*</span>Nội dung làm việc</label>
+                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" placeholder="Nhập nội dung" rows="3"></textarea>
+                </div>
+
+                <div class="md-form">
+                    <label class="d-flex" style="z-index: 100; font-size: .8rem; top: -15px;" for="datetimepicker"><span class="mr-2 red-text" style="font-size: 16px">*</span>Thời gian bắt đầu</label>
+                    <input class="datetimepicker form-control" title="Chọn ngày,giờ">
+                </div>
+
+                <div class="md-form">
+                    <label class="d-flex" style="z-index: 100; font-size: .8rem; top: -15px;" for="datetimepicker"><span class="mr-2 red-text" style="font-size: 16px">*</span>Thời gian kết thúc</label>
+                    <input class="datetimepicker form-control" title="Chọn ngày,giờ">
+                </div>
+                <div class="color-checker border p-3">
+                    <p>Chọn màu</p>
+                    <!-- Material inline 1 -->
+                    <div class="form-check pl-0">
+                        <input type="radio" class="form-check-input danger-radio" id="materialInline1" name="inlineMaterialRadiosExample">
+                        <label class="form-check-label text-danger" for="materialInline1">Việc Quan trọng</label>
+                    </div>
+
+                    <!-- Material inline 2 -->
+                    <div class="form-check pl-0">
+                        <input type="radio" class="form-check-input warning-radio" id="materialInline2" name="inlineMaterialRadiosExample">
+                        <label class="form-check-label text-warning" for="materialInline2">Cần chú ý</label>
+                    </div>
+
+                    <!-- Material inline 3 -->
+                    <div class="form-check pl-0">
+                        <input type="radio" class="form-check-input" id="materialInline3" name="inlineMaterialRadiosExample" checked="">
+                        <label class="form-check-label text-primary" for="materialInline3">Theo dõi</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block mt-3" type="button" id="button-addon2">Tạo mới</button>
+            </div>
+            <div class="col px-0 pl-lg-3 pr-lg-0">
+                <div class="w-100 bg-white p-3 border border-bottom-0">
+                    <div class="form-group grey lighten-4 p-3">
+                        <label class="active" style="font-size: .8rem" for="selectLD2">Chọn lãnh đạo cần xem</label>
+                        <select id="selectLD2" class="mdb-select md-form mt-0" searchable="Tìm lãnh đạo..">
+                            <option value="1">Nguyễn Duy Sinh</option>
+                            <option value="2">Phạm Văn Tiến</option>
+                            <option value="3">Trần Văn Long</option>
+                            <option value="4">Nguyễn Ngọc Trinh</option>
+                            <option value="5">Hoàng Thái Bảo</option>
+                        </select>
+                    </div>
+
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-bold" scope="col">Ngày (trong tuần)</th>
+                                <th class="font-weight-bold" scope="col">Thời gian</th>
+                                <th class="font-weight-bold" scope="col">Lịch làm việc</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th rowspan="2" scope="row">Thứ 2 - 26/8/2019</th>
+                                <td>Sáng</td>
+                                <td>9 - 10 AM: họp giao ban</td>
+                            </tr>
+                            <tr>
+                                <td>Chiều</td>
+                                <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" scope="row">Thứ 3 - 27/8/2019</th>
+                                <td>Sáng</td>
+                                <td>9 - 10 AM: họp giao ban</td>
+                            </tr>
+                            <tr>
+                                <td>Chiều</td>
+                                <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" scope="row">Thứ 4 - 28/8/2019</th>
+                                <td>Sáng</td>
+                                <td>9 - 10 AM: họp giao ban</td>
+                            </tr>
+                            <tr>
+                                <td>Chiều</td>
+                                <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" scope="row">Thứ 5 - 29/8/2019</th>
+                                <td>Sáng</td>
+                                <td>9 - 10 AM: họp giao ban</td>
+                            </tr>
+                            <tr>
+                                <td>Chiều</td>
+                                <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" scope="row">Thứ 6 - 30/8/2019</th>
+                                <td>Sáng</td>
+                                <td>9 - 10 AM: họp giao ban</td>
+                            </tr>
+                            <tr>
+                                <td>Chiều</td>
+                                <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id='calendar' class="border"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="phathanhdvmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chuyển phát hành</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("PhatHanh", "VanBanDuThaoDi", FormMethod.Post))
+            {
+                @Html.Hidden("DuThaoId")
+                @*<input id="PhatHanhDuThaoId" name="DuThaoId" hidden />*@
+                @Html.Hidden("IsDonVi")
+                <div class="modal-body">
+                    <div class="form-group row">
+                        @*<label for="inputMaNV" class="col-sm-4 col-form-label">Đơn vị</label>*@
+                        <div class="col-sm-12">
+                            @*<textarea type="text" class="form-control" id="txtNoiDung" name="NoiDungYKien" placeholder="Nhập nội dung góp ý (nếu có)"></textarea>*@
+                            <label class="active" for="DonViChuyenPhatHanhID">Đơn vị chuyển phát hành</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Script {
+    <script src="~/Assets/js/fullcalendar/fullcalendar.js"></script>
+    <script src="~/Assets/js/fullcalendar/jquery-ui.custom.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var t = new Date, i = t.getDate(), a = t.getMonth(), n = t.getFullYear();
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'vi',
+                plugins: ['dayGrid', 'timeGrid', 'list', 'interaction'],
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                nowIndicator: true,
+                views: {
+                    listWeek: {
+                        buttonText: 'Lịch tuần',
+                    }
+                },
+                titleFormat: {
+                    month: 'short',
+                    year: 'numeric',
+                    day: 'numeric',
+                    weekday: 'long',
+                },
+                //defaultDate: '2019-06-12',
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                eventClick: function (calEvent, jsEvent, view) {
+                    if (calEvent.etype == "1") {
+                        $("#phathanhdvmodal").modal("toggle");
+                        $("#cMucDich").val(calEvent.title);
+                        $("#cChuTri").val(calEvent.chutri);
+                        $("#cSoLuong").val(calEvent.soluong);
+                        $("#cBatDau").val(calEvent.start);
+                        $("#cKetThuc").val(calEvent.end);
+                        $("#cGhiChu").val(calEvent.note);
+                        $("#cThanhPhan").val(calEvent.thanhphan);
+                        $("#meetingroom").val(calEvent.room);
+                    }
+                    else {
+                        $("#phathanhdvmodal").modal("toggle");
+                    }
+                },
+                events: [
+                    {
+                        title: "Họp tổng công ty", start: new Date(n, a, 1, 12, 0), end: new Date(n, a, 1, 12, 30), desc: "Họp tổng công ty HTC", bullet: "success", chutri: "Nguyễn Văn A", soluong: "20", room: "1", color: "#5cb85c", note: "+ Máy chiếu \n+ Bản in photo slide tổng kết", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Hoàng Minh Châu, Vũ Thế Hải", etype: "1"
+                    }
+			, {
+			    title: "Họp tổng công ty 1", start: new Date(n, a, 1, 13, 0), end: new Date(n, a, 1, 15, 30), desc: "Họp tổng công ty HTC - Miền Nam", bullet: "success", chutri: "Lê Đức Thọ", soluong: "25", room: "2", color: "#5cb85c", textColor: "#337ab7", note: "+ Máy chiếu", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Hoàng Minh Châu", etype: "1"
+			}
+            , {
+                title: "Họp tổng kết toàn TCG", start: new Date(n, a, i - 5, 9, 0), end: new Date(n, a, i - 2, 18, 0), desc: "Họp tổng kết TCG ba miền", bullet: "success", chutri: "Nguyễn Văn B", soluong: "5", room: "2", color: "#5cb85c", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Hoàng Minh Châu", etype: "1"
+            }
+            , {
+                title: "Họp nội bộ 2", start: new Date(n, a, i - 3, 16, 0), allDay: !1, desc: "Họp nội bộ 2 - VP Tổng giám đốc", bullet: "warning", chutri: "Hoàng Minh Giám", soluong: "5", room: "1", color: "#337ab7", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Vũ Thế Kiệt", etype: "2"
+            }
+            , {
+                title: "Họp nội bộ 3", start: new Date(n, a, i + 4, 16, 0), allDay: !1, desc: "Họp nội bộ 3 - Họp đột xuất", bullet: "danger", editable: "true", chutri: "Nguyễn Văn A", soluong: "5", room: "3", color: "#337ab7", note: "+ Máy chiếu", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+            }
+            , {
+                title: "Họp nội bộ 4", start: new Date(n, a, i + 1, 17, 30), end: new Date(n, a, i + 1, 18, 0), allDay: !1, desc: "Họp nội bộ 4 - Bộ phận chăm sóc khách hàng", chutri: "Nguyễn Văn A", soluong: "5", room: "3", color: "#337ab7", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+            }
+            , {
+                title: "Họp nội bộ 5", start: new Date(n, a, 28, 1, 13, 0), end: new Date(n, a, 29), desc: "Họp nội bộ 5 - bộ phận HCNS", bullet: "success", chutri: "Hoàng Thị Hòa", soluong: "10", room: "2", color: "#5cb85c", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "1"
+            },
+             {
+                 title: "Công tác Sài Gòn", start: new Date(n, a, i + 3, 17, 30), end: new Date(n, a, i + 5, 18, 0), allDay: !1, desc: "kế hoạch công tác tháng 1", chutri: "Nguyễn Văn A", soluong: "5", room: "3", color: "#ff8000", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+             }
+            , {
+                title: "Nghỉ phép", start: new Date(n, a, i + 6, 17, 30), end: new Date(n, a, i + 7, 18, 0), allDay: !1, desc: "Nghỉ phép", chutri: "Nguyễn Văn A", soluong: "1", room: "3", color: "#666666", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+            }
+                ]
+            });
+
+            calendar.render();
+        });
+        $(document).ready(function () {
+            var date = new Date();
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+
+            /*  className colors
+        
+            className: default(transparent), important(red), chill(pink), success(green), info(blue)
+        
+            */
+
+
+            /* initialize the external events
+            -----------------------------------------------------------------*/
+
+            $('#external-events div.external-event').each(function () {
+
+                // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                // it doesn't need to have a start or end
+                var eventObject = {
+                    title: $.trim($(this).text()) // use the element's text as the event title
+                };
+
+                // store the Event Object in the DOM element so we can get to it later
+                $(this).data('eventObject', eventObject);
+
+                // make the event draggable using jQuery UI
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,      // will cause the event to go back to its
+                    revertDuration: 0  //  original position after the drag
+                });
+
+            });
+
+
+            /* initialize the calendar
+            -----------------------------------------------------------------*/
+
+            var calendar = $('#calendar').fullCalendar({
+                header: {
+                    left: 'title',
+                    center: 'agendaDay,agendaWeek,month',
+                    right: 'prev,next today'
+                },
+                editable: true,
+                firstDay: 1, //  1(Monday) this can be changed to 0(Sunday) for the USA system
+                selectable: true,
+                defaultView: 'month',
+
+                axisFormat: 'h:mm',
+                columnFormat: {
+                    month: 'ddd',    // Mon
+                    week: 'ddd d', // Mon 7
+                    day: 'dddd M/d',  // Monday 9/7
+                    agendaDay: 'dddd d'
+                },
+                titleFormat: {
+                    month: 'MMMM yyyy', // September 2009
+                    week: "MMMM yyyy", // September 2009
+                    day: 'MMMM yyyy'                  // Tuesday, Sep 8, 2009
+                },
+                allDaySlot: false,
+                selectHelper: true,
+                select: function (start, end, allDay) {
+                    var title = prompt('Event Title:');
+                    if (title) {
+                        calendar.fullCalendar('renderEvent',
+                          {
+                              title: title,
+                              start: start,
+                              end: end,
+                              allDay: allDay
+                          },
+                          true // make the event "stick"
+                        );
+                    }
+                    calendar.fullCalendar('unselect');
+                },
+                droppable: true, // this allows things to be dropped onto the calendar !!!
+                drop: function (date, allDay) { // this function is called when something is dropped
+
+                    // retrieve the dropped element's stored Event Object
+                    var originalEventObject = $(this).data('eventObject');
+
+                    // we need to copy it, so that multiple events don't have a reference to the same object
+                    var copiedEventObject = $.extend({}, originalEventObject);
+
+                    // assign it the date that was reported
+                    copiedEventObject.start = date;
+                    copiedEventObject.allDay = allDay;
+
+                    // render the event on the calendar
+                    // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+                    // is the "remove after drop" checkbox checked?
+                    if ($('#drop-remove').is(':checked')) {
+                        // if so, remove the element from the "Draggable Events" list
+                        $(this).remove();
+                    }
+
+                },
+
+                events: [
+                  {
+                      title: 'Họp giao ban',
+                      start: new Date(y, m, 1)
+                  },
+                  {
+                      id: 999,
+                      title: 'Báo cáo lãnh đạo',
+                      start: new Date(y, m, d - 3, 16, 0),
+                      allDay: false,
+                      className: 'warning'
+                  },
+                  {
+                      id: 999,
+                      title: 'Gia hạn hợp đồng',
+                      start: new Date(y, m, d + 4, 16, 0),
+                      end: new Date(y, m, d + 6, 14, 30),
+                      allDay: false,
+                      className: 'primary'
+                  },
+                  {
+                      title: 'Họp với Ông Nguyễn Duy Sinh',
+                      start: new Date(y, m, d, 10, 30),
+                      allDay: false,
+                      className: 'important'
+                  },
+                  {
+                      title: 'Họp với lãnh đạo phòng VAQ',
+                      start: new Date(y, m, d, 13, 0),
+                      end: new Date(y, m, d, 17, 0),
+                      allDay: false,
+                      className: 'important'
+                  },
+                  {
+                      title: 'Sinh nhật sếp',
+                      start: new Date(y, m, d - 6, 18, 0),
+                      end: new Date(y, m, d - 6, 14, 30),
+                      allDay: false,
+                      className: 'warning'
+                  },
+                  {
+                      title: 'Phê duyệt VB',
+                      start: new Date(y, m, 30),
+                      end: new Date(y, m, 31),
+                      url: 'http://google.com/',
+                      className: 'primary'
+                  }
+                ],
+            });
+
+
+        });
+
+    </script>
+}

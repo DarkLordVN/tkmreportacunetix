@@ -1,0 +1,169 @@
+﻿@model TKM.BLL.QuyenViewModel
+
+@{
+    ViewBag.Title = "Thêm mới quyền";
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/Quyen/Index">Quản lý quyền</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+
+        }
+        <div class="row">
+            <div class="col">
+
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @using (Html.BeginForm("Add", "Quyen", null, FormMethod.Post))
+            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group row">
+                                    <label for="ddlQuyen" class="col-sm-2 col-form-label">Thuộc quyền <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.KhoaChaId, new SelectList(Model.LstQuyenCha, "ID", "TenQuyen"), new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlQuyen", @searchable = "Nhập từ khóa.." })
+                                        @Html.ValidationMessageFor(model => model.KhoaChaId, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="TenQuyen" class="col-sm-2 col-form-label">Tên quyền <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.TenQuyen, new { @class = "form-control ", @id = "TenQuyen" })
+                                        @Html.ValidationMessageFor(model => model.TenQuyen, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="ddlController" class="col-sm-2 col-form-label">Điều hướng </label>
+                                    <div class="col-sm-4">
+                                    @Html.DropDownListFor(model => model.Controller, new SelectList(Model.LstController), new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlController", @onchange = "onchangeController();", @searchable = "Nhập từ khóa.." })
+                                    @Html.ValidationMessageFor(model => model.Controller, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="" class="col-sm-2 col-form-label">Hành động </label>
+                                    <div class="col-sm-2" id="divaction">
+                                        @*@Html.DropDownListFor(model => model.Action, new SelectList(Model.LstAction),"--- Chọn hành động ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlAction", @searchable = "Nhập từ khóa.." })*@
+                                        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" searchable="Nhập từ khóa.."><option>--- Chọn hành động ---</option></select>
+                                    </div>
+                                    <div class="col-sm-2">@Html.TextBoxFor(model => model.ActionCustom, new { @class = "form-control ", @id = "txtAction" })</div>
+                                </div>
+
+                                @*<div class="form-group row mb-4">
+                                    <label for="ddlController" class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-4">
+                                    </div>
+                                    <label for="TenQuyen" class="col-sm-2 col-form-label">Hành động khác</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.Action, new { @class = "form-control ", @id = "txtAction" })
+                                        @Html.ValidationMessageFor(model => model.Action, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>*@
+
+                                <div class="form-group row">
+                                    <label for="IconPath" class="col-sm-2 col-form-label">Icon</label>
+                                    <div class="col-sm-4 boundicon">
+                                        @Html.TextBoxFor(model => model.IconPath, new { @class = "form-control ", @id = "IconPath" })
+                                        @Html.ValidationMessageFor(model => model.IconPath, "", new { @class = "alert-danger" })
+                                        <span class="loadicon"></span>
+                                        <span style="font-size:14px;font-style:italic">Bạn có thể tìm icon <a href="https://fontawesome.com/icons" style="text-decoration:underline;color:blue" target="_blank" title="Font-awesome">ở đây</a></span>
+                                    </div>
+                                    
+                                    <label for="ThuTu" class="col-sm-2 col-form-label">Thứ tự <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.ThuTus, new { @class = "form-control ", @id = "ThuTu", @Type = "number" })
+                                        @Html.ValidationMessageFor(model => model.ThuTus, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="GhiChu" class="col-sm-2 col-form-label">Ghi chú</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.GhiChu, new { @class = "form-control rounded-0", @id = "GhiChu", rows = 4, @placeholder = "Ghi chú" })
+                                        @Html.ValidationMessageFor(model => model.GhiChu, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-check-inline px-3 my-3">
+                                            <input type="checkbox" class="form-check-input" id="IsMenu" name="IsMenu" value="true" checked>
+                                            <label class="form-check-label" for="IsMenu">Hiển thị</label>
+                                        </div>
+                                        <div class="form-check form-check-inline px-3 my-3">
+                                            <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                            <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+
+                                    <div class="text-right col-sm-12">
+                                        <button type="submit" class="btn btn-primary">Lưu</button>
+                                        <a class="btn cur-p btn-light" href="/Quyen/Index">Hủy bỏ</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script{
+    <script>
+        $('#IconPath').on('keyup', function () {
+            
+            $('.loadicon').html('<i class="' + $(this).val() + '"></i>');
+        })
+        function setDataAction(data) {
+            var newContent = '<select class="mdb-select mdb-select-act md-form md-outline colorful-select dropdown-primary m-0 p-0" id = "action" name="Action" onchange="onchangeAction();" searchable="Nhập từ khóa..">'
+            for (var item in data) {
+                newContent += '<option value="' + data[item] + '">' + data[item] + '</option>';
+            }
+            newContent += '</select>';
+
+            $('#divaction').html(newContent);
+            $('.mdb-select-act').materialSelect();
+        }
+
+        function onchangeAction() {
+            var valAction = $('#action').val();
+            $('#txtAction').val(valAction);
+        }
+
+        function onchangeController() {
+            var controller = $('#ddlController').val();
+
+            $.ajax({
+                url: '/Quyen/LoadAction',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ cname: controller }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    setDataAction(data);
+                },
+                error: function (xhr) {
+                    swal("Đã có lỗi xảy ra", {icon: "error",});
+                }
+            });
+        }
+    </script>
+}

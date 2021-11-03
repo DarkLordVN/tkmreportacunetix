@@ -1,0 +1,256 @@
+﻿@model TKM.BLL.NguoiDungViewModel
+@using TKM.DAO.EntityFramework
+@{
+    ViewBag.Title = "Thêm mới người dùng";
+    //var lstChucVu = (List<TKM.BLL.DmChucVuViewModel>)ViewBag.lstChucVu;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/NguoiDung/Index">Quản lý người dùng</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            { <div class="alert @TempData["AlertType"]">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>@Html.Raw(@TempData["AlertData"])</strong>
+            <a id="lblMessage"></a>
+        </div>
+
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @*@using (Html.BeginForm("Add", "NguoiDung", null, FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+                                {*@
+                            @using (Ajax.BeginForm("Add", "NguoiDung", null, new AjaxOptions
+                            {
+                                HttpMethod = "POST",
+                                OnSuccess = "onAddSuccess"
+                            }, new { @id = "fForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" id="typeSubmit" name="typeSubmit" value="luu" />
+                                <div class="form-group row">
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Tên đăng nhập <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.TenDangNhap, new { @class = "form-control ", @id = "TenDangNhap" })
+                                    </div>
+                                    <label for="HoVaTen" class="col-sm-2 col-form-label">Họ tên <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.HoVaTen, new { @class = "form-control ", @id = "HoVaTen" })
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-1">
+                                    <label for="NhomQuyenList" class="col-sm-2 col-form-label">Nhóm quyền <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="NhomQuyenList" name="NhomQuyenList" searchable="Nhập từ khóa..">
+                                            @{
+                                                <option value="" disabled>--- Chọn nhóm quyền ---</option>
+                                                if (Model.LstNhomQuyen != null && Model.LstNhomQuyen.Count > 0)
+                                                {
+                                                    foreach (var item in Model.LstNhomQuyen)
+                                                    {
+                                                        <option value="@item.ID">@item.TenNhom</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                        @Html.ValidationMessageFor(model => model.NhomQuyenID, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="Email" class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control ", @id = "Email", @type = "email" })
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-1">
+                                    <label for="NgaySinhStr" class="col-sm-2 col-form-label">Ngày sinh</label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="input-group date datepicker">
+                                                @Html.TextBoxFor(model => model.NgaySinhStr, new { @class = "form-control ", @id = "NgaySinhStr" })
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label for="GioiTinh" class="col-sm-2 col-form-label">Giới tính</label>
+                                    <div class="col-sm-4 col-form-label">
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" class="form-check-input" id="rbGioiTinhNam" name="GioiTinh" value="true" checked>
+                                            <label class="form-check-label" for="rbGioiTinhNam">Nam</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" class="form-check-input" id="rbGioiTinhNu" name="GioiTinh" value="false">
+                                            <label class="form-check-label" for="rbGioiTinhNu">Nữ</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mb-1">
+                                    <label for="SoDienThoai" class="col-sm-2 col-form-label">Số điện thoại</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.SoDienThoai, new { @class = "form-control ", @id = "SoDienThoai" })
+                                        @Html.ValidationMessageFor(model => model.SoDienThoai, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <div class="form-check form-check-inline px-3 my-3">
+                                        <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                        <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="AnhDaiDien" class="col-sm-2 col-form-label">Ảnh đại diện</label>
+                                    <div class="col-sm-10">
+                                        @Html.Partial("~/Views/Shared/_JqueryUpload.cshtml", new { changeName = true, auto = true, Name = "AnhDaiDien", Multiple = false, Value = "", type = "image", setname = "AttachmentName", valueName = "", setSize = "Size", valueSize = "", intFolder = 1 })
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <div class="text-right col-sm-12">
+                                        <button type="submit" class="btn btn-primary" id="btn-luu">Lưu</button>
+                                        <button type="button" class="btn btn-primary" id="luuvanhaptiep">Lưu, nhập tiếp</button>
+                                        <a class="btn cur-p btn-light" href="/NguoiDung/Index">Hủy bỏ</a>
+                                    </div>
+                                </div>
+                                                }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Script {
+    <script>
+        $('#luuvanhaptiep').on('click', function (e) {
+            $('#typeSubmit').val('luuvanhaptiep');
+            $('#fForm').submit();
+        });
+        function onAddSuccess(res) {
+            
+            if (res.isSuccess == true) {
+                toastr.success('Thêm mới người dùng thành công.');
+                if (res.typeSubmit == 'luuvanhaptiep') {
+                    window.location.href = '/NguoiDung/Add';
+                } else {
+                    window.location.href = '/NguoiDung';
+                }
+            } else {
+                if (res.message != "")
+                    toastr.error(res.message);
+                else
+                    toastr.error('Có lỗi khi thêm mới người dùng.');
+            }
+        };
+        $(document).ready(function () {
+            $('.groupCheck input[type=checkbox][name=IsLanhDao]').on('click', function () {
+                var prop = $(this).is(':checked');
+                if (prop) {
+                    $('#idCheckCapBac').removeClass('dn');
+                } else {
+                    $('#idCheckCapBac').addClass('dn');
+                }
+            })
+        });
+        $("#fForm").validate({
+            rules: {
+                TenDangNhap: {
+                    required: true,
+                    maxlength: 100,
+                },
+                //MatKhau: {
+                //    required: true,
+                //    minlength: 6,
+                //},
+                //XacNhanMatKhau: {
+                //    required: true,
+                //    minlength: 6,
+                //    equalTo: '#MatKhau'
+                //},
+                HoVaTen: {
+                    required: true,
+                },
+                Email: {
+                    email: true,
+                },
+
+            },
+            messages: {
+                TenDangNhap: {
+                    required: "Vui lòng nhập tên đăng nhập!",
+                    maxlength: "Không nhập quá 100 ký tự",
+                },
+                //MatKhau: {
+                //    required: "Vui lòng nhập mật khẩu!",
+                //    minlength: "Mật khẩu tối thiểu 6 ký tự",
+                //},
+                //XacNhanMatKhau: {
+                //    required: "Vui lòng nhập xác nhận mật khẩu!",
+                //    minlength: "Xác nhận mật khẩu tối thiểu 6 ký tự",
+                //    equalTo: "Mật khẩu không trùng khớp"
+                //},
+                HoVaTen: {
+                    required: "Vui lòng nhập họ và tên!",
+                },
+                Email: {
+                    email: "Vui lòng nhập đúng định danh email!",
+                },
+            }
+        });
+
+       
+        $('#fForm').on('submit', function () {
+            $("#fForm").valid();
+            
+            var donviid = $('#DonViID').val();
+            var nhomquyenid = $('#NhomQuyenID').val();
+            var chucvuid = $('#ChucVuID').val();
+            if (donviid == '0' || donviid == '') {
+                toastr.error('Bạn chưa chọn đơn vị!');
+                $('#btn-luu').prop('disabled', false);
+                return false;
+            }
+            if (nhomquyenid == '0' || nhomquyenid == '') {
+                toastr.error('Bạn chưa chọn nhóm quyền!');
+                $('#btn-luu').prop('disabled', false);
+                return false;
+            }
+            if (chucvuid == '0' || chucvuid == '') {
+                toastr.error('Bạn chưa chọn chức vụ!');
+                $('#btn-luu').prop('disabled', false);
+                return false;
+            }
+            var checkGroup = $('.groupCheck input[type=checkbox]:checked').length;
+            if (checkGroup > 1) {
+                toastr.error('Chỉ được chọn 1 chức danh!');
+                $('#btn-luu').prop('disabled', false);
+                return false;
+            }
+            var checkLanhDao = $('.groupCheck input[type=checkbox][name=IsLanhDao]').is(':checked');
+            if (checkLanhDao) {
+                var checkCapBac = $('.groupCheckCapBac input[type=radio][name=IsTruong]:checked').length;
+                if (checkCapBac == 0 || checkCapBac == undefined) {
+                    toastr.error('Bạn chưa chọn cấp bậc!');
+                    $('#btn-luu').prop('disabled', false);
+                    return false;
+                }
+            }
+            $('#btn-luu').prop('disabled', true);
+            return true;
+        })
+    </script>
+}

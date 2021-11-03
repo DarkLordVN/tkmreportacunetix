@@ -1,0 +1,146 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.VanBanDuThaoDiListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+<input type="hidden" id="cTabTatCa" value="@(Model.CountTab != null ? Model.CountTab.TabTatCa : 0)" />
+<input type="hidden" id="cTabChoDuyet" value="@(Model.CountTab != null ? Model.CountTab.TabChoDuyet : 0)" />
+<input type="hidden" id="cTabTuChoiDuyet" value="@(Model.CountTab != null ? Model.CountTab.TabTuChoiDuyet : 0)" />
+<input type="hidden" id="cTabChoGopY" value="@(Model.CountTab != null ? Model.CountTab.TabChoGopY : 0)" />
+<input type="hidden" id="cTabChoPhatHanh" value="@(Model.CountTab != null ? Model.CountTab.TabChoPhatHanh : 0)" />
+@if (Model != null && Model.LstVanBanDuThaoDi != null && Model.LstVanBanDuThaoDi.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.LstVanBanDuThaoDi)
+    {
+        index++;
+        <tr>
+
+            @*<td align="center">@index</td>*@
+            <td class="tal">
+                <a href="/VanBanDuThaoDi/Detail/@item.ID" class="f-hov1 h-tdu text-primary" data-toggle="tooltip" title="" data-original-title="Xem chi tiết">@item.TrichYeu</a>
+            </td>
+            <td align="center">
+                <a href="/VanBanDuThaoDi/Detail/@item.ID" class="f-hov1 h-tdu text-primary" data-toggle="tooltip" title="" data-original-title="Xem chi tiết">@TKM.Utils.ConvertDateTime.ConvertDateToString(item.NgayTao)</a>
+            </td>
+            <td class="tal">
+                <a href="/VanBanDuThaoDi/Detail/@item.ID" class="f-hov1 h-tdu text-primary" data-toggle="tooltip" title="" data-original-title="Xem chi tiết"><span style="white-space: pre-line">@item.DonViNhan</span></a>
+            </td>
+            <td class="tal">@item.NguoiTao</td>
+            <td class="tal">@item.NguoiKy</td>
+            @{
+                string background = "";
+                string color = "#fff";
+                switch (item.TrangThai)
+                {
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.BanNhap:
+                        background = "#4285f4";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoGopY:
+                        background = "#00c461";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoLanhDaoCucDuyet:
+                        background = "#ff9100";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoLanhDaoDVDuyet:
+                        background = "#ff9100";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoPhatHanh:
+                        background = "#e2c300";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.DaDuyet:
+                        //background = "rgba(0,188,212,.7)";
+                        background = "#00c851";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.DaKyDuyet:
+                        background = "#00c851";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.TuChoiDuyet:
+                        background = "#e53935";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.LanhDaoCucTuChoiDuyet:
+                        background = "#e53935";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.LanhDaoDonViTuChoiDuyet:
+                        background = "#e53935";
+                        break;
+                    case (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.DaPhatHanh:
+                        background = "#9c19ff";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            <td align="center" style='@string.Format("background-color:{0} !important;color:{1} !important",background,color)'>@item.TrangThaiStr</td>
+            <td class="t_action">
+                @if (SessionInfo.CurrentUser.TenDangNhap == "admin")
+                {
+                    <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                }
+                else if (item.NguoiTaoID == SessionInfo.CurrentUser.ID)
+                {
+                    if (item.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.BanNhap || item.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.ChoGopY || item.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.LanhDaoCucTuChoiDuyet || item.TrangThai == (int)TKM.Utils.Enums.TrangThaiDuThaoVanBanDi.LanhDaoDonViTuChoiDuyet)
+                    {
+                        <a href="javascript://" onclick="location.href='@Url.Action("Update", "VanBanDuThaoDi", new { id = item.ID })'" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
+                        <a href="javascript://" onclick="onDelete(@item.ID);" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa" title="Xóa"><i class="fal fa-times"></i></a>
+                    }
+                }
+            </td>
+            @*<td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                        <label class="form-check-label" for="chk'@item.ID'"></label>
+                    </div>
+                </td>*@
+        </tr>
+                    }
+
+                }
+@if (Model != null && Model.LstVanBanDuThaoDi == null || Model.LstVanBanDuThaoDi.Count == 0)
+{
+    <tr>
+        <td colspan="10" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="10">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "VanBanDuThaoDi", new
+               {
+                   ColumnName = Model.ColumnName,
+                   OrderBy = Model.OrderBy,
+                   PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TuKhoa = Model.TuKhoa,
+                   TuNgay = Model.TuNgay,
+                   DenNgay = Model.DenNgay,
+                   NguoiKyId = Model.NguoiKyId,
+                   DonViId = Model.DonViId,
+                   NguoiSoanId = Model.NguoiSoanId,
+                   NoiNhanId = Model.NoiNhanId,
+                   TrangThaiId = Model.TrangThaiId,
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging(" + Model.CountTab.TabTatCa + ");" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả / @Model.TotalItem văn bản
+                </div>
+            </div>
+        </td>
+    </tr>
+}

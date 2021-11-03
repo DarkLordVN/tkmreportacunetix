@@ -1,0 +1,527 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.VanBanDenLTListView
+@{
+    ViewBag.Title = "Danh sách văn bản đến liên thông";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}<link href="/Assets/css/jquery-ui.css" rel="Stylesheet" type="text/css" />
+<script type="text/javascript" src="~/Assets/js/jquery-ui.min.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDenLT">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <input type="hidden" name="tab" id="tab" value="@Model.tab" />
+                    <ul class="nav f-bg1 flex-nowrap fwb" id="myClassicTabShadow" role="tablist">
+                        <li class="nav-item">
+                            <a href="/VanBanDenLT" class="nav-link waves-light" title="Văn bản mới">Văn bản mới</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/VanBanDenLT/YeuCau" class="nav-link waves-light active show" title="Yêu cầu">Yêu cầu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/VanBanDenLT/CapNhat" class="nav-link waves-light" title="Cập nhật">Cập nhật</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/VanBanDenLT/ThuHoi" class="nav-link waves-light" title="Thu hồi">Thu hồi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/VanBanDenLT/ThayThe" class="nav-link waves-light" title="Thay thế">Thay thế</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/VanBanDenLT/LayLai" class="nav-link waves-light" title="Lấy lại">Lấy lại</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row mt-3">
+                                <div class="col-md-9 fwb">
+                                    Tìm kiếm văn bản
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    @*<a href="javascript://" onclick="onLienThong()" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="Lấy gói tin liên thông" data-original-title="Lấy gói tin liên thông"><i class="fal fa-download"></i></a>*@
+                                    <a class="btn-floating btn-sm btn-warning mx-1" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" title="Tìm kiếm" data-original-title="Tìm kiếm">
+                                        <i class="fal fa-search"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="row bg-white mx-0">
+                                <div class="col-12 col-lg-12 row">
+                                    <label for="txtTuKhoa" class="col-lg-2 col-form-label">Từ khóa</label>
+                                    <div class="col-lg-4">
+                                        @Html.TextBoxFor(model => model.TuKhoa, new { @class = "form-control keyenter", @id = "txtTuKhoa" })
+                                    </div>
+                                    <label for="ddlPhamViTimKiem" class="col-sm-2 col-form-label">Phạm vi tìm kiếm</label>
+                                    <div class="col-sm-4">
+                                        <div>
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="ddlPhamViTimKiem" name="PhamViTimKiem" searchable="Nhập từ khóa..">
+                                                <option value="trichyeu" selected>Trích yếu</option>
+                                                <option value="sokyhieu" selected>Số ký hiệu</option>
+                                                <option value="ghichu" selected>Ghi chú</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="collapse" id="collapseExample">
+                                <div class="row bg-white mx-0">
+                                    @*<div class="col-12 col-lg-12 row">
+                                        <label for="ddlPhamViTimKiem" class="col-sm-2 col-form-label">Phạm vi tìm kiếm</label>
+                                        <div class="col-sm-4">
+                                            <div>
+                                                <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="ddlPhamViTimKiem" name="PhamViTimKiem" searchable="Nhập từ khóa..">
+                                                    <option value="trichyeu" selected>Trích yếu</option>
+                                                    <option value="sokyhieu">Số ký hiệu</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <label for="txtTuKhoa" class="col-lg-2 col-form-label">Từ khóa</label>
+                                        <div class="col-lg-4">
+                                            @Html.TextBoxFor(model => model.TuKhoa, new { @class = "form-control keyenter", @id = "txtTuKhoa" })
+                                        </div>
+                                    </div>
+                                    <div class="w-100"></div>*@
+                                    <div class="col-12 col-lg-12 row">
+                                        <label for="txtBenGui" class="col-sm-2 col-form-label">Bên gửi</label>
+                                        <div class="col-sm-4">
+                                            @Html.TextBoxFor(model => model.CoQuanBanHanh, new { @class = "form-control keyenter", @id = "txtBenGui" })
+                                            <input type="hidden" id="maDinhDanh" name="maDinhDanh" />
+                                            <a href="javascript://" class="fr h-tdu" style="color:#0b51c5;" onclick="onPopupAddVanBanLienQuan();" title="Chọn đơn vị gửi">Chọn đơn vị gửi</a>
+                                        </div>
+
+                                        <label for="TrangThaiVanBanID" class="col-lg-2 col-form-label">Trạng thái văn bản</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="TrangThaiVanBanID">
+                                                <option value="">-- Tất cả --</option>
+                                                <option value="1">Đã đến</option>
+                                                <option value="2">Từ chối tiếp nhận</option>
+                                                <option value="3">Đã tiếp nhận</option>
+                                                <option value="11">Chưa xử lý</option>
+                                                <option value="4">Phân công</option>
+                                                <option value="5">Đang xử lý</option>
+                                                <option value="6">Hoàn thành</option>
+                                                <option value="7">Bị lấy lại</option>
+                                                <option value="8">Bị thu hồi</option>
+                                                <option value="9">Bị thay thế</option>
+                                                <option value="10">Bị cập nhật</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="w-100"></div>
+                                    <p class="fwb mb-0 pl-3">Thời gian gửi</p>
+                                    <div class="col-12 col-lg-12 row">
+                                        <label for="txtTuNgayND" class="col-lg-2 col-form-label">Từ ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.TuNgayND, new { @class = "form-control keyenter", @id = "txtTuNgayND" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label for="txtDenNgayND" class="col-lg-2 col-form-label">Đến ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.DenNgayND, new { @class = "form-control keyenter", @id = "txtDenNgayND" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col text-center text-lg-right">
+                                        <button id="btnSearch" class="btn text-white f-bg1 my-4" type="button">Tìm kiếm</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+                                                   
+                                                    <th class="t_action th-sm">STT</th>
+                                                    <th class="th-sm pointer" data-colname="CoQuanBanHanh" data-orderby="asc">Bên gửi<span><i class="fas fa-sort"></i></span></th>
+                                                    <th class="th-sm pointer">Thời gian gửi</th>
+                                                    @* //Todo: Thêm colname + order by *@
+                                                    <th class="th-sm pointer">Số ký hiệu</th>
+                                                    <th class="th-sm pointer">Ngày văn bản</th>
+                                                    <th class="th-sm pointer">Loại yêu cầu</th>
+                                                    <th class="th-sm pointer">Lý do</th>
+                                                    <th class="th-sm pointer" style="width:120px">Trạng thái xử lý yêu cầu</th>
+                                                    <th class="th-sm pointer" colspan="3" style="width:300px">Xử lý</th>
+                                                    @*<th class="th-sm" style="width:50px">
+                                                        <input type="hidden" id="hdfID" />
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="chkall" name="checkbox">
+                                                            <label class="form-check-label" for="chkall"></label>
+                                                        </div>
+                                                    </th>*@
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("YeuCauDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    span.select2{padding-top:4px !important}
+</style>
+@section Script {
+    <script>
+        function onPopupAddVanBanLienQuan() {
+            var arrCheckedID = [];
+            $('input[type=hidden][name=VanBanLienQuanID]').each(function () {
+                arrCheckedID.push($(this).val());
+            })
+            arrCheckedID.splice($.inArray("0", arrCheckedID), 1);
+            modal.Render('/VanBanDenLT/PopupChonCoQuanLT', 'Chọn đơn vị gửi', 'modal-lg');
+        }
+
+        $(document).ready(function () {
+            InitClickCheckAllInTable("chkall", function (res) {
+                $("#hdfID").val(res);
+            });
+            //loadPaging();
+            function split(val) {
+                return val.split(/ & /);
+            }
+
+            function extractLast(term) {
+                return split(term).pop();
+            }
+            $(function () {
+
+                //$('#txtBenGui').change(function () {
+                //    $("#maDinhDanh").val("");
+                //});
+                $("#txtBenGui").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '/VanBanDenLT/AutoComplete',
+                            data: "{ 'prefix': '" + request.term + "'}",
+                            dataType: "json",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return item;
+                                }))
+                            },
+                            error: function (response) {
+                                alert(response.responseText);
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            },
+                            select: function (event, ui) {
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                terms.push(ui.item.value);
+                                terms.push("");
+                                this.value = terms.join(" & ");
+                                return false;
+                            },
+                        });
+                    },
+                    minLength: 0,
+                    select: function (e, i) {
+                        alert(i.item.val);
+                        $("#maDinhDanh").val(i.item.val);
+                    },
+                    change: function (e, ui) {
+                        if (ui.item === null) {
+                            $("#maDinhDanh").val("");
+                        }
+                    },
+                }).autocomplete("widget").addClass("mdb-autocomplete-wrap");
+            });
+        });
+
+        function onChangeStatus(id) {
+            swal({
+                title: "Thay đổi trạng thái?",
+                text: "Trạng thái sẽ được thay đổi, hãy nhấn OK!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/VanBanDen/onChangeStatus',
+                        data: { id: id },
+                        dataType: "html",
+                        success: function (res) {
+                            res = JSON.parse(res);
+                            if (res.isSuccess)
+                                swal("Thay đổi trạng thái thành công!", {
+                                    icon: "success",
+                                });
+                            else
+                                swal("Có lỗi xảy ra", {
+                                    icon: "error",
+                                });
+                            loadData("", "");
+                        },
+                        error: function (response) {
+                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                        }
+                    });
+
+                }
+            });
+        }
+        function loadfrmView(id) {
+            modal.Render("/VanBanDen/Detail/" + id, "Thông tin văn bản đến", "modal-lg");
+        }
+
+        function onTiepNhan(id, nghiepvu) {
+            swal({
+                title: "Tiếp nhận?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+           .then((willDelete) => {
+               if (willDelete) {
+                   $.ajax({
+                       type: "POST",
+                       url: '/VanBanDenLT/TiepNhan',
+                       data: { id: id, nghiepvu: nghiepvu },
+                       dataType: "html",
+                       success: function (res) {
+                           res = JSON.parse(res);
+                           if (res.isSuccess)
+                               swal("Đã tiếp nhận!", {
+                                   icon: "success",
+                               });
+                           else
+                               swal("Có lỗi xảy ra", {
+                                   icon: "error",
+                               });
+                           loadData("", "");
+                       },
+                       error: function (response) {
+                           swal("Đã có lỗi xảy ra", { icon: "error", });
+                       }
+                   });
+
+               }
+           });
+
+        }
+        function onTuChoi(id, nghiepvu) {
+            swal({
+                title: "Từ chối?",
+                content: {
+                    element: "input",
+                    attributes: {
+                        placeholder: "Lý do từ chối",
+                        type: "text",
+                    },
+                },
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+           .then((willDelete) => {
+               if (willDelete) {
+                   $.ajax({
+                       type: "POST",
+                       url: '/VanBanDenLT/TuChoi',
+                       data: { id: id, content : willDelete, nghiepvu: nghiepvu },
+                       dataType: "html",
+                       success: function (res) {
+                           res = JSON.parse(res);
+                           if (res.isSuccess)
+                               swal("Đã từ chối!", {
+                                   icon: "success",
+                               });
+                           else
+                               swal("Có lỗi xảy ra", {
+                                   icon: "error",
+                               });
+                           loadData("", "");
+                       },
+                       error: function (response) {
+                           swal("Đã có lỗi xảy ra", { icon: "error", });
+                       }
+                   });
+
+               }
+           });
+
+        }
+
+        function onDelete(id) {
+            swal({
+                title: "Xóa?",
+                text: "Bạn có chắc chăn muốn xóa văn bản đến này?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+              .then((willDelete) => {
+                  if (willDelete) {
+                      $.ajax({
+                          type: "POST",
+                          url: '/VanBanDen/Delete',
+                          data: { id: id },
+                          dataType: "html",
+                          success: function (res) {
+                              res = JSON.parse(res);
+                              if (res.isSuccess == 1)
+                                  swal("Xóa văn bản đến thành công!", {
+                                      icon: "success",
+                                  });
+                              else
+                                  swal("Đã có lỗi xảy ra", { icon: "error", });
+                              loadData("", "");
+                          },
+                          error: function (response) {
+                              swal("Đã có lỗi xảy ra", { icon: "error", });
+                          }
+                      });
+
+                  }
+              });
+        }
+        function onDeleteMul() {
+            if ($("table tbody").find("input[type=checkbox]:checked").length == 0) {
+                swal("Bạn cần chọn ít nhất 1 danh mục cần xóa", { icon: "error", });
+            } else {
+                swal({
+                    title: "Xóa?",
+                    text: "Bạn có chắc chăn muốn xóa những văn bản đến này?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+             .then((willDelete) => {
+                 if (willDelete) {
+                     $.ajax({
+                         type: "POST",
+                         url: '/VanBanDen/DeleteMul',
+                         data: { lstid: $("#hdfID").val() },
+                         dataType: "html",
+                         success: function (res) {
+                             res = JSON.parse(res);
+                             if (res.isSuccess)
+                                 swal("Xóa thành công!", {
+                                     icon: "success",
+                                 });
+                             else
+                                 swal("Có lỗi xảy ra", {
+                                     icon: "error",
+                                 });
+                             loadData("", "");
+                         },
+                         error: function (response) {
+                             swal("Đã có lỗi xảy ra", { icon: "error", });
+                         }
+                     });
+
+                 }
+             });
+            }
+        }
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+       
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        //Thêm event xử lý load ajax
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+        //, SoKyHieu: $("#txtSoKyHieu").val(), LoaiVanBanID: $("#LoaiVanBanID").val(), TrichYeu: $("#txtTrichYeu").val()
+        function loadData(col, order, pnum, psize) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("YeuCauDetail", "VanBanDenLT")',
+                data: { CoQuanBanHanh: $("#txtBenGui").val(), TuKhoa: $("#txtTuKhoa").val(), PhamViTimKiem: $("#ddlPhamViTimKiem").val().toString(), TrangThaiVanBanID: $("#TranThaiYeuCauID").val(), TuNgayND: $("#txtTuNgayND").val(), DenNgayND: $("#txtDenNgayND").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val(), tab: $("#tab").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+    </script>
+}

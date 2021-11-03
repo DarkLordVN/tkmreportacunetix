@@ -1,0 +1,174 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.LichLanhDaoListView
+@{
+    ViewBag.Title = "Lịch lãnh đạo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Css{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.css" integrity="sha256-nJK+Jim06EmZazdCbGddx5ixnqfXA13Wlw3JizKK1GU=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" integrity="sha256-saO3mkZVAcyqsfgsGMrmE7Cs/TLN1RgVykZ5dnnJKug=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.css" integrity="sha256-QG5qcyovbK2zsUkGMWTVn0PZM1P7RVx0Z05QwB9dCeg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" integrity="sha256-DOWdbe6a1VwJwFpkimY6z5tW9mmrBNre2jZsAige5PE=" crossorigin="anonymous" />
+    <style>
+        .fc-button, .fc-button:disabled {
+            background-color: #fff !important;
+            outline: 0;
+            color: #4fc3f7 !important;
+            border-color: #4fc3f7 !important;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            text-shadow: none;
+        }
+
+            .fc-button:hover, .fc-button-active {
+                color: #fff !important;
+                background-color: #4fc3f7 !important;
+                outline: none;
+            }
+
+        button:focus {
+            outline: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+        }
+
+        .fc-button:disabled {
+            opacity: .65;
+            box-shadow: none;
+        }
+
+        .fc-scroller.fc-day-grid-container {
+            overflow: hidden !important;
+        }
+
+        .fc-toolbar h2 {
+            font-size: 24px;
+        }
+
+        .fc .fc-toolbar {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+    </style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fal fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDuThaoDi">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+        {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="form-group row col mb-0">
+                                <label for="LoaiVanBanID" class="col-form-label pl-3">Lãnh đạo</label>
+                                <div class="col-sm-4">
+                                    @Html.DropDownListFor(model => model.NguoiDungID, new SelectList(Model.LstNguoiDung, "ID", "ChucVuVaTen"), "--- Chọn lãnh đạo ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlNguoiDungID", @searchable = "Nhập từ khóa.." })
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div id="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Script {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js" integrity="sha256-GBryZPfVv8G3K1Lu2QwcqQXAO4Szv4xlY4B/ftvyoMI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js" integrity="sha256-MUHmW5oHmLLsvmMWBO8gVtKYrjVwUSFau6pRXu8dtnA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js" integrity="sha256-FT1eN+60LmWX0J8P25UuTjEEE0ZYvpC07nnU6oFKFuI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js" integrity="sha256-q57s73NpMCTQ4ZXqb1X5bIywrICySeB6WvYxFGfz/PA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js" integrity="sha256-L9T+qE3Ms6Rsuxl+KwLST6a3R/2o6m33zB5mR2KyPjU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/locales-all.min.js" integrity="sha256-W3h/kWvQYYadUwb7/Tcf5WkDq3q0VPleove6MyKZS8o=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/locales/vi.js" integrity="sha256-TDZwkRcrNwaAJUK4XGP2IDSf+Dfz0JamA1AJ0OVdyB4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            refreshData();
+        });
+
+        $("#ddlNguoiDungID").change(function () {
+            refreshData();
+        });
+
+        function refreshData() {
+            $.ajax({
+                type: "GET",
+                url: '/LichLanhDao/GetLichLamViec',
+                data: { id: $("#ddlNguoiDungID").val() },
+                dataType: "json",
+                success: function (res) {
+                    if (res.length > 0) {
+                        var list = new Array();
+                        $.each(res, function (i, item) {
+                            var item = { "id": item.id, "title": item.title, "start": new Date(parseFloat(item.start.replace("/Date(", "").replace(")/", ""))), "end": new Date(parseFloat(item.end.replace("/Date(", "").replace(")/", ""))) };
+                            list.push(item);
+                        });
+                        initCalendar(list);
+                    }
+                    else {
+                        initCalendar();
+                    }
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+
+        function initCalendar(data) {
+            $("#calendar").html("");
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'vi',
+                plugins: ['dayGrid', 'timeGrid', 'list', 'interaction'],
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'listWeek,dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                nowIndicator: true,
+                views: {
+                    listWeek: {
+                        buttonText: 'Lịch tuần',
+                    }
+                },
+                titleFormat: {
+                    month: 'short',
+                    year: 'numeric',
+                    day: 'numeric',
+                    weekday: 'long',
+                },
+                defaultView: 'listWeek',
+                //defaultDate: '2019-06-12',
+                navLinks: true,
+                editable: false,
+                eventLimit: true,
+                eventClick: function (info) {
+                    modal.Render("/LichLanhDao/Detail/" + info.event.id, "Thông tin lịch lãnh đạo", "modal-lg");
+                },
+                events: data
+            });
+            calendar.render();
+        };
+    </script>
+}

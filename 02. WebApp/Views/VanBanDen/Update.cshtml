@@ -1,0 +1,544 @@
+﻿@model TKM.BLL.VanBanDenViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutHiddenTop.cshtml";
+    ViewBag.Title = "Chỉnh sửa văn bản đến";
+    var lstQuanHeLienKet = (Dictionary<int, string>)ViewBag.lstQuanHeLienKet;
+    var typeUser = (string)SessionInfo.CurrentUser.TypeUser;
+    var lstLanguage = (Dictionary<int, string>)ViewBag.lstLanguage;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDen">Danh sách văn bản đến</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+
+                           @using (Ajax.BeginForm("Update", "VanBanDen", null, new AjaxOptions
+                           {
+                               HttpMethod = "POST",
+                               OnSuccess = "onUpdateSuccess"
+                           }, new { @id = "fFormVanBan", enctype = "multipart/form-data" }))
+                           {
+                                <input type="hidden" name="LoaiHinhVanBanChinh" value="den" />
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(m => m.ID)
+                                if (typeUser.Equals("vtdv"))
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <label class="active" for="SoVanBanDenID">
+                                                Số đến tại cục: @Model.SoDenCuc
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <label for="SoVanBanDenID" class="col-sm-2 col-form-label">Sổ văn bản <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        <div class="fl w90pt" id="reloadSoVanBanDen">
+                                            @Html.DropDownListFor(model => model.SoVanBanDenID, new SelectList(Model.lstSoVanBanDen.Where(g => g.DonViID == SessionInfo.CurrentUser.DonViID), "ID", "Ten", Model.SoVanBanDenID), new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "SoVanBanDenID", @searchable = "Nhập từ khóa.." })
+
+                                        </div>
+                                        <div class="fl w10pt">
+                                            <a href="javascript://" onclick="onAddSoVanBan()" style="padding:.3rem 0.6rem" class="btn text-white btn-default btn-sm pointer" data-toggle="tooltip" data-original-title="Thêm mới sổ văn bản"><i class="fal fa-plus"></i></a>
+                                        </div>
+                                        <div class="cb"></div>
+                                    </div>
+                                    <label for="SoDen" class="col-sm-2 col-form-label pr-0">Số đến <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.SoDen, new { @class = "form-control number", @id = "SoDen", @placeholder = "0", @maxlength = "9", @type = "number" })
+                                        @Html.ValidationMessageFor(model => model.SoDen, "", new { @class = "alert-danger" })
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <label for="NgayDenStr" class="col-sm-2 col-form-label">Ngày đến <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="input-group date datepicker">
+                                                @Html.TextBoxFor(model => model.NgayDenStr, new { @class = "form-control keyenter", @id = "NgayDenStr" })
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label for="LoaiVanBanID" class="col-sm-2 col-form-label">Loại văn bản <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.LoaiVanBanID, new SelectList(Model.lstLoaiVanBan.Where(x => x.ID != 0), "ID", "TenLoaiVanBan", Model.LoaiVanBanID), new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "LoaiVanBanID", @searchable = "Nhập từ khóa.." })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="SoKyHieu" class="col-sm-2 col-form-label pr-0">Số ký hiệu <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.SoKyHieu, new { @class = "form-control", @id = "SoKyHieu" })
+                                    </div>
+                                    <label for="NgayVanBanStr" class="col-sm-2 col-form-label">Ngày ban hành <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="input-group date datepicker">
+                                                @Html.TextBoxFor(model => model.NgayVanBanStr, new { @class = "form-control ", @id = "NgayVanBanStr" })
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="TrichYeu" class="col-sm-2 col-form-label">Trích yếu <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(model => model.TrichYeu, new { @class = "form-control rounded-0", @id = "TrichYeu", @rows = "2" })
+                                    </div>
+                                </div>
+
+                                                    <div class="row">
+                                                        <label for="CoQuanBanHanhID" class="col-sm-2 col-form-label">
+                                                            Cơ quan ban hành <span class="c-red-500">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-4">
+                                                            <div class="fl w90pt" id="reloadCoQuanBanHanh">
+                                                                @Html.DropDownListFor(model => model.CoQuanBanHanhID, new SelectList(Model.lstCoQuanBanHanh.Where(x => x.ID != 0), "ID", "TenVaKyHieu", Model.CoQuanBanHanhID), "-- Chọn cơ quan ban hành --", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "CoQuanBanHanhID", @searchable = "Nhập từ khóa.." })
+                                                            </div>
+                                                            <div class="fl w10pt">
+                                                                <a href="javascript://" onclick="onAddCoQuanBanHanh()" style="padding:.3rem 0.6rem" class="btn text-white btn-default btn-sm pointer" data-toggle="tooltip" data-original-title="Thêm mới cơ quan ban hành"><i class="fal fa-plus"></i></a>
+                                                            </div>
+                                                            <div class="cb"></div>
+                                                        </div>
+                                                        <label for="DoiTuongGuiVanBanDenID" class="col-sm-2 col-form-label">
+                                                            Đối tượng gửi vb đến <span class="c-red-500">(*)</span>
+                                                        </label>
+                                                        <div class="col-sm-4">
+                                                            @Html.DropDownListFor(model => model.DoiTuongGuiVanBanDenID, new SelectList(Model.lstDoiTuongGuiVanBanDen.Where(x => x.ID != 0), "ID", "TenVaKyHieu", Model.DoiTuongGuiVanBanDenID), "-- Chọn đối tượng gửi văn bản đến --", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "DoiTuongGuiVanBanDenID", @searchable = "Nhập từ khóa.." })
+                                                        </div>
+                                                    </div>
+                                                        <div class="row">
+                                                            <label for="DonViID" class="col-sm-2 col-form-label">
+                                                                Đơn vị nhận
+                                                            </label>
+                                                            <div class="col-sm-4">
+                                                                @Html.DropDownListFor(model => model.DonViID, new SelectList(Model.lstDonViNhanForm, "ID", "TenVaKyHieu", Model.DonViID), "-- Chọn đơn vị --", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "DonViID", @searchable = "Nhập từ khóa.." })
+                                                            </div>
+                                                            <label for="NguoiKy" class="col-sm-2 col-form-label pr-0">Người ký</label>
+                                                            <div class="col-sm-4">
+                                                                @Html.TextBoxFor(model => model.NguoiKy, new { @class = "form-control", @id = "NguoiKy" })
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <label for="ChucVuNguoiKy" class="col-sm-2 col-form-label pr-0">Chức vụ người ký</label>
+                                                            <div class="col-sm-4">
+                                                                @Html.TextBoxFor(model => model.ChucVuNguoiKy, new { @class = "form-control", @id = "ChucVuNguoiKy" })
+                                                            </div>
+                                                            <label for="DoKhanID" class="col-sm-2 col-form-label">
+                                                                Độ khẩn
+                                                            </label>
+                                                            <div class="col-sm-4">
+                                                                @Html.DropDownListFor(model => model.DoKhanID, new SelectList(Model.lstDoKhan.Where(x => x.ID != 0), "ID", "TenDoKhan", Model.DoKhanID), new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "DoKhanID", @searchable = "Nhập từ khóa.." })
+                                                            </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label for="LinhVucID" class="col-sm-2 col-form-label">
+                                                            Lĩnh vực
+                                                        </label>
+                                                        <div class="col-sm-4">
+                                                            @Html.DropDownListFor(model => model.LinhVucID, new SelectList(Model.lstLinhVucDangKiem.Where(x => x.ID != 0), "ID", "TenVaKyHieu", Model.LinhVucID), "-- Chọn lĩnh vực --", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "LinhVucID", @searchable = "Nhập từ khóa.." })
+                                                        </div>
+                                                        <label for="NgonNguID" class="col-sm-2 col-form-label">
+                                                            Ngôn ngữ
+                                                        </label>
+                                                        <div class="col-sm-4">
+                                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NgonNguID" name="NgonNguID" searchable="Nhập từ khóa..">
+                                                                @if (lstLanguage != null && lstLanguage.Count > 0)
+                                                                {
+                                                                    foreach (var itemNN in lstLanguage.Keys)
+                                                                    {
+                                                                        <option value="@itemNN" @(itemNN == Model.NgonNguID ? "selected" : "")>@lstLanguage.Values.ElementAt(itemNN)</option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+
+                                                    </div>
+                                                        <div class="form-group row">
+                                                            <label for="SoTrang" class="col-sm-2 col-form-label pr-0">Số trang</label>
+                                                            <div class="col-sm-4">
+                                                                @Html.TextBoxFor(model => model.SoTrang, new { @class = "form-control number", @id = "SoTrang", @placeholder = "0", @maxlength = "9" })
+                                                            </div>
+                                                            <label for="ThoiHanGiaiQuyetStr" class="col-sm-2 col-form-label">Thời hạn giải quyết</label>
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <div class="input-group date datepicker">
+                                                                        @Html.TextBoxFor(model => model.ThoiHanGiaiQuyetStr, new { @class = "form-control ", @id = "ThoiHanGiaiQuyetStr" })
+                                                                        <span class="input-group-addon">
+                                                                            <span class="fa fa-clock"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-2 fwb">
+                                                                File văn bản @*<span class="c-red-500">(*)</span>*@
+                                                            </div>
+                                                            <div class="col-sm-10">
+                                                                @*@Html.TextBoxFor(m => m.Files, new { @id = "txtFile", @type = "file", @multiple = "multiple", @onclick = "IsSubmit();" })*@
+                                                                @{
+                                                                    var group_link = (string)TempData["group_link"];
+                                                                    var group_name = (string)TempData["group_name"];
+                                                                    var group_replacename = (string)TempData["group_replacename"];
+                                                                    var group_size = (string)TempData["group_size"];
+                                                                }
+                                                                @Html.Partial("~/Views/Shared/_JqueryUpload.cshtml", new { changeName = true, auto = true, Name = "Attachment", Multiple = true, Value = group_link, type = "document", setname = group_replacename, valueName = group_name, setSize = "Size", valueSize = group_size, intFolder = 2 })
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="GhiChu" class="col-sm-2 col-form-label"> Ghi chú</label>
+                                                            <div class="col-sm-10">
+                                                                @Html.TextAreaFor(model => model.GhiChu, new { @class = "form-control rounded-0", @id = "GhiChu", @rows = "1" })
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-2 fwb" style="padding-top:30px;padding-bottom:30px">
+                                                                Văn bản liên quan
+                                                            </div>
+                                                            <div class="col-sm-10">
+                                                                <a href="javascript://" class="fr h-tdu" style="color:#0b51c5;" onclick="onPopupAddVanBanLienQuan();" title="Chọn văn bản liên quan">Chọn văn bản liên quan</a>
+                                                                <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:150px">Số ký hiệu</th>
+                                                                            <th>Trích yếu</th>
+                                                                            <th style="width:85px">File</th>
+                                                                            <th style="width:200px">Quan hệ liên kết <span class="c-red-500">(*)</span></th>
+                                                                            <th style="width:85px">Thao tác</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="reloadTableLienQuan">
+                                                                        <input type="hidden" name="VanBanLienQuanID" value="0" />
+                                                                        <input type="hidden" name="LoaiHinhVanBanLienKet" value="" />
+                                                                        @if (Model.lstVanBanLienQuan != null && Model.lstVanBanLienQuan.Count > 0)
+                                                                        {
+                                                                            foreach (var itemVBLQ in Model.lstVanBanLienQuan)
+                                                                            {
+                                                                                <tr class="removed_@itemVBLQ.VanBanLienKetID">
+                                                                                    <input type="hidden" class="VanBanLienQuan" name="VanBanLienQuanID" value="@itemVBLQ.VanBanLienKetID" />
+                                                                                    <input type="hidden" name="LoaiHinhVanBanLienKet" value="@itemVBLQ.LoaiHinhVanBanLienKet" />
+                                                                                    <td align="center">
+                                                                                        @(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.SoKyHieu : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.SoKyHieu : "")
+                                                                                    </td>
+                                                                                    <td align="left">@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.TrichYeu : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.TrichYeu : "")</td>
+                                                                                    <td class="tac">
+                                                                                        <a href="@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.FileVanBan : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.FileVanBan : "javascript://")" target="_blank" class="h-tdu" style="color:#0b51c5;"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title=""></i></span></a>
+                                                                                    </td>
+                                                                                    <td align="center">
+                                                                                        <select class="mdb-select mdb-select-cs-@itemVBLQ.VanBanLienKetID" id="LoaiLienKet" name="LoaiLienKet" searchable="Nhập từ khóa..">
+                                                                                            <option value="0"> -- Chọn --</option>
+                                                                                            @if (lstQuanHeLienKet != null && lstQuanHeLienKet.Count > 0)
+                                                                                            {
+                                                                                                foreach (var itemLK in lstQuanHeLienKet.Keys)
+                                                                                                {
+                                                                                                    <option value="@itemLK" @(itemLK == itemVBLQ.LoaiLienKet ? "selected" : "")>@lstQuanHeLienKet[itemLK]</option>
+                                                                                                }
+                                                                                            }
+                                                                                        </select>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a href="javascript://" title="Xóa" onclick="RemoveItem(@itemVBLQ.VanBanLienKetID)" class="btn btn-sm btn-danger br-50pt"><span><i class="fal fa-times"></i></span></a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="text-right col-sm-12">
+                                                                <button type="submit" class="btn btn-primary" id="btn-luu">Lưu</button>
+                                                                @*<button type="button" id="luuvatrinhlanhdao" data-type="vtcuc" class="btn btn-primary">Lưu và trình lãnh đạo</button>
+                                                                    <button type="button" id="luuvaduaykienxuly" data-type="vtcuc" class="btn btn-primary">Lưu và đưa ý kiến xử lý</button>
+                                                                    <button type="button" id="luuvachuyenxuly" class="btn btn-primary">Lưu và chuyển xử lý</button>*@
+                                                                <a class="btn btn-primary" href="/VanBanDen">Đóng</a>
+                                                            </div>
+                                                        </div>
+                                                                    }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $('#SoKyHieu').on("keyup", function () {
+            $(this).val($(this).val().toUpperCase());
+        })
+        function onUpdateSuccess(res) {
+            $("#loading").show();
+            if (res.isSuccess == true) {
+                toastr.success('Cập nhật văn bản thành công.');
+                window.location.href = '/VanBanDen/Detail/' + res.idNew+'?tab=cxl';
+            } else {
+                $("#loading").hide();
+                toastr.error(res.message);
+            }
+        }
+        function RemoveItem(id) {
+            $('.removed_' + id).remove();
+        }
+        $('#SoVanBanDenID').on('change', function () {
+            var value = $(this).val();
+            if (value == '') {
+                $('#SoDen').val('');
+            }
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: '/VanBanDen/GetSoDenCuaSoVanBan',
+                    data: { id: $(this).val() },
+                    dataType: "html",
+                    success: function (res) {
+                        res = JSON.parse(res);
+                        $('#SoDen').val(res.soDen);
+                        $('#SoDen').focus();
+                    },
+                    error: function (response) {
+                        $('#SoDen').val('');
+                    }
+                });
+            }
+        });
+        @*$('#SoDen').on('keyup', function () {
+            
+            var sovanbanden = $('#SoVanBanDenID').val();
+            if (sovanbanden == '') {
+                toastr.error('Bạn chưa chọn sổ văn bản sổ văn bản.');
+                return false;
+            }
+            else {
+                if ($('#SoDen').val() == '') {
+                    toastr.error('Bạn chưa nhập số đến!');
+                    $('#SoDen').focus();
+                    return false;
+                }
+                else if ($('#SoDen').val() <= 0) {
+                    toastr.error('Số đến phải lớn hơn 0!');
+                    $('#SoDen').focus();
+                    return false;
+                } else if ($('#SoDen').val().toString().length > 9) {
+                    toastr.error('Số đến chỉ nhập tối đa 9 ký tự!');
+                    $('#SoDen').focus();
+                    return false;
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        url: '/VanBanDen/CheckSoDenHopLe',
+                        data: { id: $('#SoVanBanDenID').val(), soDen: $('#SoDen').val(), idvb:@Model.ID },
+                        dataType: "html",
+                        success: function (res) {
+                            res = JSON.parse(res);
+                            if (res.isSuccess == false) {
+                                toastr.error(res.message);
+                                $('#SoDen').focus();
+                                return false;
+                            } else {
+                                toastr.success('Số đến có thể dùng!');
+                            }
+                        },
+                        error: function (response) {
+                            return false;
+                        }
+                    });
+                }
+            }
+        });*@
+        $('#luuvatrinhlanhdao').on('click', function (e) {
+            var type = e.target.dataset.type;
+            modal.Render('/VanBanDen/PopupLuuVaTrinhLanhDao?type=' + type, 'Trình lãnh đạo', 'modal-lg');
+        })
+        $('#luuvaduaykienxuly').on('click', function (e) {
+            var type = e.target.dataset.type;
+            modal.Render('/VanBanDen/PopupLuuVaDuaYKienXuLy?type=' + type, 'Đưa ý kiến xử lý', 'modal-lg');
+        })
+        $('#luuvachuyenxuly').on('click', function () {
+            modal.Render('/VanBanDen/PopupLuuVaChuyenXuLy', 'Chuyển xử lý văn bản đến', 'modal-lg');
+        })
+        function onAddSoVanBan() {
+            modal.Render('/VanBanDen/PopupAddSoVanBan', 'Thêm mới sổ văn bản đến', 'modal-lg');
+        }
+        function onAddSoVanBanSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Thêm mới sổ văn bản thành công.');
+                $.ajax({
+                    type: "GET",
+                    url: '/VanBanDen/ReloadSoVanBanDen',
+                    data: { idNew: res.idNew },
+                    dataType: "html",
+                    success: function (res) {
+                        $('#reloadSoVanBanDen').html(res);
+                    },
+                    error: function (response) {
+                        swal("Đã có lỗi xảy ra", { icon: "error", });
+                    }
+                });
+                modal.hide();
+            } else {
+                if (res.message != "")
+                    toastr.error(res.message);
+                else
+                    toastr.error('Có lỗi khi thêm mới sổ văn bản.');
+            }
+        }
+        function onAddCoQuanBanHanh() {
+            modal.Render('/VanBanDen/PopupAddCoQuanBanHanh', 'Thêm mới cơ quan ban hành', 'modal-lg');
+        }
+        function onAddCoQuanBanHanhSuccess(res) {
+            if (res.isSuccess == true) {
+                toastr.success('Thêm mới cơ quan ban hành thành công.');
+                $.ajax({
+                    type: "GET",
+                    url: '/VanBanDen/ReloadCoQuanBanHanh',
+                    data: { idNew: res.idNew },
+                    dataType: "html",
+                    success: function (res) {
+                        $('#reloadCoQuanBanHanh').html(res);
+                    },
+                    error: function (response) {
+                        swal("Đã có lỗi xảy ra", { icon: "error", });
+                    }
+                });
+                modal.hide();
+            } else {
+                if (res.message != "")
+                    toastr.error(res.message);
+                else
+                    toastr.error('Có lỗi khi thêm mới cơ quan ban hành.');
+            }
+        }
+        function onPopupAddVanBanLienQuan() {
+            var arrCheckedID = [];
+            $('input[type=hidden][name=VanBanLienQuanID]').each(function () {
+                arrCheckedID.push($(this).val());
+            })
+            arrCheckedID.splice($.inArray("0", arrCheckedID), 1);
+            modal.Render('/VanBanDen/PopupAddVanBanLienQuan?lstid=' + arrCheckedID, 'Chọn văn bản liên quan', 'modal-lg');
+        }
+        $("#fFormVanBan").validate({
+            rules: {
+                SoKyHieu: {
+                    required: true,
+                },
+                SoDen: {
+                    required: true,
+                },
+                TrichYeu: {
+                    required: true,
+                },
+                SoTrang: {
+                    min: 0,
+                }
+            },
+            messages: {
+                SoKyHieu: {
+                    required: "Vui lòng nhập số ký hiệu!",
+                },
+                SoDen: {
+                    required: "Vui lòng nhập số đến!",
+                },
+                TrichYeu: {
+                    required: "Vui lòng nhập trích yếu!",
+                },
+                SoTrang: {
+                    min: "Số trang phải bắt đầu từ 0!",
+                }
+            }
+        });
+        $('#fFormVanBan').on('submit', function () {
+            $("#fFormVanBan").valid();
+           anid = $('#SoVanBanDenID').val();
+            var loaivanbanid = $('#LoaiVanBanID').val();
+            var coquanbanhanhid = $('#CoQuanBanHanhID').val();
+            var ngayden = $('#NgayDenStr').val();
+            var ngayvanban = $('#NgayVanBanStr').val();
+            var filevanban = $('#txtFile').val();
+            var sokyhieu = $('#SoKyHieu').val();
+            var doituongguivanbanden = $('#DoiTuongGuiVanBanDenID').val();
+
+            //var regex = /^[a-zA-Z/_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳýỵỷỹ]+$/;
+            //if (sokyhieu != "" && sokyhieu.match(regex)) {
+            //    toastr.error('Số ký hiệu không được chứa dấu và khoảng trắng!');
+            //    return false;
+            //}
+            if (sokyhieu.includes(' ')) {
+                toastr.error('Số ký hiệu không được chứa khoảng trắng!');
+                return false;
+            }
+            if (sokyhieu.length > 50) {
+                toastr.error('Số ký hiệu không nhập quá 50 ký tự!');
+                return false;
+            }
+            if (sovanbanid == '') {
+                toastr.error('Bạn chưa chọn sổ văn bản!');
+                return false;
+            }
+            if (loaivanbanid == '') {
+                toastr.error('Bạn chưa chọn loại văn bản!');
+                return false;
+            }
+            if (ngayden == '') {
+                toastr.error('Bạn chưa chọn ngày đến!');
+                return false;
+            }
+            if (ngayvanban == '') {
+                toastr.error('Bạn chưa chọn ngày văn bản!');
+                $('#NgayDenStr').focus();
+                return false;
+            }
+            if (coquanbanhanhid == '') {
+                toastr.error('Bạn chưa chọn cơ quan ban hành!');
+                return false;
+            }
+            if (doituongguivanbanden == '') {
+                toastr.error('Bạn chưa chọn đối tượng gửi văn bản đến!');
+                return false;
+            }
+            //if (filevanban == '') {
+            //    toastr.error('Bạn chưa chọn file văn bản!');
+            //    return false;
+            //};
+            var arrLoaiLienKet = [];
+            $('select[name=LoaiLienKet]').each(function () {
+                arrLoaiLienKet.push($(this).val());
+            });
+            if (arrLoaiLienKet.toString().includes('0')) {
+                toastr.error('Vui lòng chọn quan hệ liên kết cho văn bản!');
+                return false;
+            }
+            //$('#btn-luu').attr("disabled", true);
+        })
+    </script>

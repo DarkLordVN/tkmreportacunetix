@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title - Quản lý văn bản</title>
+    <!-- Font Awesome -->
+    <link href="/Assets/css/all.css" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <!-- MDBootstrap Datatables  -->
+    <link href="/Assets/css/addons/datatables.min.css" rel="stylesheet">
+    <!-- Apexcharts -->
+    <link href="/Assets/css/apexcharts.css" rel="stylesheet">
+    <!--Custom-->
+    <link href="~/Assets/css/custom.css" rel="stylesheet" />
+    <!-- Your custom styles (optional) -->
+    <link href="/Assets/css/style.css" rel="stylesheet">
+    <!-- JQuery -->
+    <script type="text/javascript" src="/Assets/js/jquery-3.4.0.min.js"></script>
+
+    @if (IsSectionDefined("Css"))
+    {
+        @RenderSection("Css")
+    }
+</head>
+<body class="fixed-sn">
+
+    <!--Double navigation-->
+    <header>
+        <!-- Sidebar navigation -->
+        <div id="slide-out" class="side-nav fixed wide" style="background-image: url(/Assets/images/sidenav.jpg);">
+            <ul class="custom-scrollbar">
+                <!-- Logo -->
+                <li>
+                    <div class="logo-wrapper bg-white">
+                        <a href="/"><img src="~/Assets/images/logo-TKM.png" style="max-height: 84px" class="img-fluid"></a>
+                    </div>
+                </li>
+                <!--/. Logo -->
+                <!--Search Form-->
+                <li>
+                    <form class="search-form d-block d-lg-none" role="search">
+                        <div class="form-group md-form my-0 waves-light">
+                            <input type="text" class="form-control py-3 px-3" placeholder="Tìm kiếm">
+                        </div>
+                    </form>
+                </li>
+                <!--/.Search Form-->
+                <!-- Side navigation links -->
+                <li>
+                    <ul class="collapsible collapsible-accordion mt-0">
+                        @{Html.RenderAction("LoadMenu", "Menu");}
+                        @*<li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-file-import mr-2"></i>Văn bản đến</a>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-file-medical-alt mr-2"></i>Văn bản điện tử<i class="fas fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="VB-LiênThông.html" class="waves-effect">Văn bản liên thông</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Văn bản nội bộ</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-file-import mr-2"></i>Văn bản đến</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-file-export mr-2"></i>Văn bản đi</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-file-alt mr-2"></i>Văn bản dự thảo</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-paste mr-2"></i>Hồ sơ công việc<i class="fas fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Hồ sơ công việc 1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Hồ sơ công việc 2</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Hồ sơ công việc 3</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Hồ sơ công việc 4</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-file-invoice mr-2"></i>Tờ trình</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-file-chart-line mr-2"></i>Báo cáo thống kê</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-calendar-alt mr-2"></i>Lịch làm việc lãnh đạo</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-bell mr-2"></i>Thông báo</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-poll-people mr-2"></i>Uỷ quyền</a>
+                            </li>
+                            <li>
+                                <a class="collapsible-header waves-effect arrow-r"><i class="fal fa-database mr-2"></i>Quản trị hệ thống</a>
+                            </li>*@
+                    </ul>
+
+                </li>
+                <!--/. Side navigation links -->
+            </ul>
+            <div class="sidenav-bg rgba-blue-strong"></div>
+        </div>
+        <!--/. Sidebar navigation -->
+        <!-- Navbar -->
+        <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav bg-white">
+            <!-- SideNav slide-out button -->
+            <div class="float-left">
+                <a href="#" data-activates="slide-out" class="button-collapse"><i class="fal fa-bars"></i> Hệ thống quản lý văn bản và điều hành</a>
+            </div>
+            <!-- Breadcrumb-->
+            <ul class="navbar-nav pl-lg-3 d-none d-lg-inline-block">
+                <li class="nav-item text-uppercase f-cl1">
+                </li>
+            </ul>
+            <ul class="nav navbar-nav ml-lg-auto">
+
+                @*<form class="d-none d-lg-flex form-inline md-form mr-auto my-0 px-lg-3">
+                        <input class="form-control form-custom" type="text" placeholder="Nhập từ khóa cần tìm ..." aria-label="Search">
+                        <button class="btn text-white f-bg1 rounded-pill px-3 btn-sm my-0" type="submit">Tìm<i class="fas fa-search ml-2 fa-flip-horizontal"></i></button>
+                    </form>*@
+                <li class="nav-item">
+                    <a class="nav-link mt-2 px-4 f-hov1">
+                        <i class="fal fa-bell"></i>
+                        <span class="counter">99+</span>
+                    </a>
+
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle f-hov1" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <img src=@(!string.IsNullOrEmpty(SessionInfo.CurrentUser.AnhDaiDien) ? SessionInfo.CurrentUser.AnhDaiDien : "/assets/images/logo/signin.png") alt="" class="rounded-circle z-depth-0"
+                             alt="avatar image" height="35"><span class="clearfix d-none d-sm-inline-block ml-2">@SessionInfo.CurrentUser.HoVaTen</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#"><i class="fal fa-cogs mr-2"></i>Hồ sơ cá nhân</a>
+                            <a class="dropdown-item" href="changepw.html"><i class="fal fa-lock-alt mr-2"></i>Đổi mật khẩu</a>
+                            <a class="dropdown-item" href="/Authentication/DoLogout"><i class="fal fa-sign-out mr-2"></i>Đăng xuất</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </nav>
+            <!-- /.Navbar -->
+        </header>
+        <main>
+            <div class="container-fluid mt-lg-3">
+                @RenderBody()
+                <div class="row">
+                    <div class="d-block d-lg-none col-12 col-md-6 py-3 text-center text-lg-left">
+                        <img class="w-25" src="~/Assets/images/logo/logo-TKM.png" alt="">
+                    </div>
+                    <div class="col py-3">
+                        <p class="mb-0 text-center text-lg-left pl-lg-2">&copy; 2019 - Copyright Tinh Van Solutions</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div class="modal fade" id="mymodal" tabindex="-1" backdrop='static' data-keyboard='false' role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
+        <div class="modal fade" id="responsive" backdrop='static' data-keyboard='false' role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+        <!-- jQuery library -->
+        <!-- Popper JS -->
+        @*<script src="/Assets/js/popper.min.js"></script>*@
+
+        <!-- Latest compiled JavaScript -->
+        @*<script src="/Assets/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="~/Assets/js/mdb.min.js"></script>
+
+            <script src="~/Assets/js/moment.js"></script>
+            <script src="~/Assets/js/bootstrap-datetimepicker.min.js"></script>
+            <script src="~/Assets/js/bootstrap.modal.min.js"></script>
+            <script src="~/Assets/js/select2.min.js"></script>
+            <script type="text/javascript" src="~/Assets/js/popper.min.js"></script>
+            <script type="text/javascript" src="~/Assets/js/treeview.js"></script>
+            <script type="text/javascript" src="~/Assets/js/jquery.maskMoney.js"></script>
+            <script type="text/javascript" src="~/Assets/js/common.js"></script>
+            <script type="text/javascript" src="~/Assets/js/custom.js"></script>
+            <script type="text/javascript" src="~/Assets/js/custom2.js"></script>
+            <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+            <script src="~/Assets/js/sweetalert.min.js"></script>*@
+
+        @*<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>*@
+
+        <!-- SCRIPTS -->
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="/Assets/js/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="/Assets/js/bootstrap.min.js"></script>
+        <!-- Select2 JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="/Assets/js/mdb.min.js"></script>
+        <!-- MDBootstrap Datatables  -->
+        <script type="text/javascript" src="/Assets/js/addons/datatables.min.js"></script>
+
+        <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+        <!-- Apexcharts JavaScript -->
+        <script type="text/javascript" src="/Assets/js/apexcharts.min.js"></script>
+
+        <script>
+            var options = {
+                chart: {
+                    width: 320,
+                    height: 300,
+                    type: 'pie',
+                },
+                legend: {
+                    position: 'bottom'
+                },
+                labels: ['Tổng VB đã phát hành', 'Chờ vào sổ'],
+                colors: ['#4285F4', '#2BBBAD'],
+                series: [70, 30],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+            var chart = new ApexCharts(
+                document.querySelector("#chartVBD"),
+                options
+            );
+
+            chart.render();
+
+
+        </script>
+
+        <script>
+            // Charts Stacked
+            var options = {
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                    stacked: true,
+                    toolbar: {
+                        show: false
+                    },
+                    zoom: {
+                        enabled: true
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            position: 'bottom',
+                            offsetX: -10,
+                            offsetY: 0
+                        }
+                    }
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                    },
+                },
+                series: [{
+                    name: 'VB đi gửi thường',
+                    data: [44, 55, 41, 67, 22, 43, 55, 41, 67, 22, 43, 30]
+                }, {
+                    name: 'VB đi gửi điện tử',
+                    data: [21, 7, 25, 13, 22, 8, 15, 14, 17, 32, 13, 24]
+                }],
+                xaxis: {
+                    categories: ['Tháng 1', 'Tháng 2', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                },
+                legend: {
+                    position: 'bottom',
+                    offsetY: -10
+                },
+                fill: {
+                    opacity: 1
+                },
+            }
+
+            var chart = new ApexCharts(
+                 document.querySelector("#chartSLVBD"),
+                 options
+             );
+
+            chart.render();
+        </script>
+        <!-- Custom core JavaScript -->
+        <script type="text/javascript" src="~/Assets/js/common.js"></script>
+        <script type="text/javascript" src="~/Assets/js/custom.js"></script>
+        @*<script type="text/javascript" src="~/Assets/js/jquery-ui.min.js"></script>*@
+
+        <script src="~/Assets/js/sweetalert.min.js"></script>
+        @if (IsSectionDefined("Script"))
+        {
+            @RenderSection("Script")
+        }
+    </body>
+</html>

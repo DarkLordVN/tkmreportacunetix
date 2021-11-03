@@ -1,0 +1,36 @@
+--------- 00:09:41 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /NhomQuyen/Index
+IP: ::1
+Text: User: user2; Date: 18/04/2021 00:09:41
+--------- 00:09:51 ---------
+Ref URL: http://localhost:3939/NhomQuyen/Index
+Host: localhost:3939
+URL: /Quyen/Index
+IP: ::1
+Text: User: user2; Date: 18/04/2021 00:09:51
+--------- 00:14:06 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /NguoiDung/Index
+IP: ::1
+Text: User: user2; Date: 18/04/2021 00:14:06
+--------- 00:14:15 ---------
+Ref URL: http://localhost:3939/NguoiDung/Index
+Host: localhost:3939
+URL: /Quyen/Index
+IP: ::1
+Text: User: user2; Date: 18/04/2021 00:14:15
+--------- 00:17:04 ---------
+Ref URL: http://localhost:3939/NguoiDung/Index
+Host: localhost:3939
+URL: /Quyen/Index
+IP: ::1
+Text: User: user2; Date: 18/04/2021 00:17:04
+--------- 00:17:21 ---------
+Ref URL: http://localhost:3939/Quyen/Index
+Host: localhost:3939
+URL: /NguoiDung/Index
+IP: ::1
+Text: User: user2; Date: 18/04/2021 00:17:21

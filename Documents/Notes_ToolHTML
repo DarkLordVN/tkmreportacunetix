@@ -1,0 +1,110 @@
+
+
+
+1. Xử lý report
+1.1 Việt hóa
+	=> Lấy thông tin từ report gốc
+	=> Đối chiếu cụm từ đã cấu hình để Việt hóa
+	=> Xuất ra report sau khi Việt hóa
+1.2 Thu thập thông tin	
+	=> Xử lý tách và nhận dạng dữ liệu
+	=> Lưu thông tin chi tiết website scan
+	=> Lưu chi tiết nguy cơ theo cấp độ
+	=> Xử lý giám sát các nguy cơ qua các lần quét
+2. Báo cáo 
+2.1 Báo cáo thống kê số lượt rà quét
+	=> Số lượt rà quét theo tháng/quý/năm để biết được tần suất đã quét trong khoảng thời gian
+		=> Báo cáo sẽ hiển thị theo dạng đồ thị cột
+			+ trục x: số lượng lượt đã rà quét
+			+ trục y: tháng mm/yyyy hoặc quý xx hoặc năm yyyy
+2.2 Báo cáo thống kê thời gian quét và thành phần website đã rà quét theo khoảng thời gian [Scanned items (coverage report)]
+	=> Báo cáo hiển thị dạng biểu đồ hỗn hợp (cột hiển thị thời gian rà quét, biểu đồ đường hiển thị tổng số thành phần trong website)
+2.3 Báo cáo thống kê số lượng nguy cơ theo cấp độ theo lượt
+	=> Biểu đồ tròn (chia theo cấp độ nguy cơ)
+2.4 Báo cáo tổng hợp nguy cơ đã xử lý
+	=> Biểu đồ cột thanh xếp chồng (đã xử lý/chưa xử lý)
+2.5 Báo cáo thống kê số lượng nguy cơ theo thời gian (khoảng thời gian/tháng/quý/năm)
+	=> Biểu đô đường hiển thị 
+
+
+
++ Danh sách thông tin rà soát
++ Danh sách chi tiết rà soát
++ Danh sách nguy cơ	
+	
+========================================
+Thiết kế	
+Dashboard 
+	=> 
+Module Quản trị hệ thống & Danh mục x
++ Người dùng x 
++ Nhóm người dùng x
++ Quyền x
++ Phân quyền người dùng x 
++ Tham số hệ thống x
+	=> Ngôn ngữ mặc định (Dùng cho phần hiển thị ở alert group hoặc alert item
++ Log hệ thống x
++ Login/Logout x
+
+Module Việt hóa
++ Từ điển việt hóa (Danh sách/Thêm/sửa/Xóa) x
++ Danh sách alert group (Danh sách/Chi tiết/Việt hóa) x
+
+Dashboard
+=> Chia 3 ô => Ô 1: số lượng website | ô 2: số lượng scan đã quét | ô 3: Pie chart tổng số lượng nguy cơ (high/medium/low) v
+=> Chia 1 ô => Biểu đồ cột top 10 có tổng số lượng nguy cơ theo website v
+=> Chia 2 ô => Ô 1: Danh sách website có nguy cơ cao nhất [Tên website - sô lượng cao | trung bình] | Ô 2: Danh sách 5 nguy cơ mức cao gặp nhiều nhất [Tên - số lượng]
+
++ Danh sách scan
+	=> Website tổng hợp
+	=> Kết xuất file
+
++ Danh sách website (Danh sách/Xem chi tiết) 
+=> Chia 1 ô => Biểu đồ cột số lượng nguy cơ theo website (Dọc: Số lượng nguy cơ | Ngang: stacked bar theo website) => Cho tùy biến tick chọn tối đa 10 website
+	+ Xem chi tiết
+		=> Thông tin chung website
+		=> Danh sách lượt scan
+		=> Danh sách lỗi
+		
++ Danh sách website scan (Giống acunetix)
+	(2)=> Mức độ cảnh báo | Thông tin website
+	(1)=> Thanh thông tin chung (Thời gian bắt đầu | Thời gian quét | Số mục quét | Số lượng nguy cơ  
+	(2)=> Danh sách 
+
+
+--------2/11/2021
+v_NguyCoWebsite - Tạo view lấy tổng số lượng theo nguy cơ của từng website (websiteid, tên website, tổng nguy cơ, tổng cao, tổng thấp, tổng trung bình, tổng lượt quét)
+- Tạo view lấy tổng số lượng theo nhóm nguy cơ (alertgroupid, tên, tổng)
+
+
+
+
+
+
+Module Báo cáo
++ Báo cáo thống kê số lượt rà quét
++ Báo cáo thống kê thời gian quét và thành phần website
++ Báo cáo thống kê số lượng nguy cơ theo cấp độ
++ Báo cáo tổng hợp nguy cơ đã xử lý
++ Báo cáo thống kê số lượng nguy cơ theo thời gian
+
+
+
+
+
+
+	
+=============Nhật ký===========
+1 ca hiện tại đang quản lý những thông tin gì?
+Sổ nhật ký vận hành mẫu như nào?
+Các thông số vận hành gồm những gì?
+Theo dõi tồn tại trong ca tức là làm gì?
+Tích hợp các hệ thống khác thì các hệ thống khác hiện tại đã có đầu kết nối api hay phương thức tích hợp như thế nào?
+	=> Cập nhật dữ liệu lên PMIS. đồng bộ (hoặc nhập ngược từ file) các dữ liệu thủy văn, sản lượng lên các trang web hồ chứa, PCLB, Trung tâm Điều độ Hệ thống điện Quốc gia (A0), Trung tâm Điều độ Hệ thống điện miền bắc (A3): 
+Các biểu mẫu báo cáo hiện tại đang phải làm?
+
+
+
+
+
+

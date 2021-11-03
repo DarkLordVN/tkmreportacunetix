@@ -1,0 +1,145 @@
+﻿@model TKM.BLL.ThongBaoViewModel
+@{
+    ViewBag.Title = "Cập nhật thông báo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/ThongBao">Danh sách thông báo</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @*@using (Html.BeginForm("Update", "ThongBao", null, FormMethod.Post, htmlAttributes: new { @id = "fFormThongBao", enctype = "multipart/form-data" }))*@
+@using (Ajax.BeginForm("Update", "ThongBao", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onUpdateSuccess"
+}, new { @id = "fFormThongBao", enctype = "multipart/form-data" }))
+{
+                                @Html.AntiForgeryToken()
+    <div class="form-group row">
+        <label for="TieuDe" class="col-sm-2 col-form-label pr-0"> Tiêu đề <span class="c-red-500">(*)</span></label>
+        <div class="col-sm-10">
+            @Html.TextBoxFor(model => model.TieuDe, new { @class = "form-control", @id = "txtTieuDe" })
+        </div>
+    </div>
+                                <div class="form-group row">
+                                    <label for="NoiDung" class="col-sm-2 col-form-label">Nội dung</label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(model => model.NoiDung, new { @class = "form-control rounded-0", @id = "txtNoiDung", @rows = "3" })
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label" for="NhomNguoiNhanID">Nhóm người nhận</label>
+                                    <div class="col-sm-10">
+                                        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="LstNhomNguoiNhanID" name="LstNhomNguoiNhanID" searchable="Nhập từ khóa..">
+                                            @if (Model.lstNhomNguoiDung != null && Model.lstNhomNguoiDung.Count > 0)
+                                            {
+                                                foreach (var item in Model.lstNhomNguoiDung)
+                                                {
+                                                    <option value="@item.ID" @(!string.IsNullOrEmpty(Model.LstNhomNguoiNhanID) && Model.LstNhomNguoiNhanID.Contains("," + item.ID + ",") ? "selected" : "")>@item.TenNhom</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label" for="NguoiNhanID">Người nhận</label>
+                                    <div class="col-sm-10">
+                                        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="LstNguoiNhanID" name="LstNguoiNhanID" searchable="Nhập từ khóa..">
+                                            @if (Model.lstNguoiDung != null && Model.lstNguoiDung.Count > 0)
+                                            {
+                                                foreach (var item in Model.lstNguoiDung)
+                                                {
+                                                    <option value="@item.ID" @(!string.IsNullOrEmpty(Model.LstNguoiNhanID) && Model.LstNguoiNhanID.Contains("," + item.ID + ",") ? "selected" : "")>@item.HoVaTen</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        File đính kèm
+                                    </div>
+                                    <div class="col-sm-10">
+                                        @{
+                                            var group_link = (string)TempData["group_link"];
+                                            var group_name = (string)TempData["group_name"];
+                                            var group_replacename = (string)TempData["group_replacename"];
+                                            var group_size = (string)TempData["group_size"];
+                                        }
+                                        @Html.Partial("~/Views/Shared/_JqueryUpload.cshtml", new { changeName = true, auto = true, Name = "Attachment", Multiple = false, Value = group_link, type = "document", setname = group_replacename, valueName = group_name, setSize = "Size", valueSize = group_size, intFolder = 2 })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="text-right col-sm-12">
+                                        <button id="btn-luu" class="btn btn-primary">Lưu</button>
+                                        <a class="btn btn-primary" href="/ThongBao">Đóng</a>
+                                    </div>
+                                </div>
+                                                    }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function onUpdateSuccess(res) {
+        $("#loading").show();
+        if (res.isSuccess == true) {
+            toastr.success('Cập nhật thông báo thành công.');
+            window.location.href = '/ThongBao';
+        } else {
+            $("#loading").hide();
+            toastr.error(res.message);
+        }
+    }
+    $("#fFormThongBao").validate({
+        rules: {
+            TieuDe: {
+                required: true,
+            }
+        },
+        messages: {
+            TieuDe: {
+                required: "Vui lòng nhập tiêu đề!",
+            }
+        }
+    });
+    //Onclick btn-luu
+    $("#btn-luu").on('click', function () {
+        $("#fFormThongBao").valid();
+        //var LstNguoiNhanID = $('#LstNguoiNhanID').val();
+        //if (LstNguoiNhanID == '') {
+        //    toastr.error('Bạn chưa chọn người nhận');
+        //    return false;
+        //}
+        //submit
+        //$("#fFormThongBao").submit();
+    });
+</script>

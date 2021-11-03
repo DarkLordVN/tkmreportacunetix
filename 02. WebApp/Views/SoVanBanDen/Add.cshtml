@@ -1,0 +1,186 @@
+﻿@model TKM.BLL.SoVanBanDenViewModel
+@using TKM.DAO.EntityFramework
+@{
+    ViewBag.Title = "Thêm mới sổ văn bản";
+    var lstDonVi = (List<TKM.BLL.DmDonViViewModel>)ViewBag.lstDonVi;
+    lstDonVi.ForEach(x => x.TenDonVi = string.Concat(Enumerable.Repeat("--", x.Level)) + x.TenDonVi);
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/SoVanBanDen/Index">Quản lý sổ văn bản đến</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+
+                            @using (Html.BeginForm("Add", "SoVanBanDen", null, FormMethod.Post))
+            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-2 col-form-label">Thuộc đơn vị<span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @if (SessionInfo.CurrentUser.TenDangNhap == "admin")
+                                        {
+                                            @Html.DropDownListFor(model => model.DonViID, new SelectList(lstDonVi, "ID", "TenVaKyHieu"), "-- Chọn đơn vị --", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlSoVanBanDen", @searchable = "Nhập từ khóa.." })
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.DonViID, new SelectList(lstDonVi, "ID", "TenVaKyHieu",SessionInfo.CurrentUser.DonViID), new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlSoVanBanDen", @searchable = "Nhập từ khóa..",@disabled="true" })
+                                            <input type="hidden" name="DonViID" value="@SessionInfo.CurrentUser.DonViID" />
+                                        }
+                                        @Html.ValidationMessageFor(model => model.DonViID, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="Ten" class="col-sm-2 col-form-label">Tên sổ văn bản<span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.Ten, new { @class = "form-control ", @id = "Ten" })
+                                        @Html.ValidationMessageFor(model => model.Ten, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="txtSoBatDauTrongSo" class="col-sm-2 col-form-label">Số bắt đầu trong sổ<span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBox("SoBatDauTrongSo", null, new { @class = "form-control keyenter", @id = "txtSoBatDauTrongSo", @Type = "number", @min = "0" })
+                                        @Html.ValidationMessageFor(model => model.SoBatDauTrongSo, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="txtNamVaoSo" class="col-sm-2 col-form-label">Năm vào sổ<span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBox("NamVaoSo", null, new { @class = "form-control keyenter", @id = "txtNamVaoSo", @Type = "number", @min = "0" })
+                                        @Html.ValidationMessageFor(model => model.NamVaoSo, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="NgayBatDauStr" class="col-sm-2 col-form-label">Ngày bắt đầu</label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="input-group date datepicker">
+                                                @Html.TextBoxFor(model => model.NgayBatDauStr, new { @class = "form-control ", @id = "NgayBatDauStr" })
+                                                @Html.ValidationMessageFor(model => model.NgayBatDauStr, "", new { @class = "alert-danger" })
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label for="NgayKetThucStr" class="col-sm-2 col-form-label">Ngày kết thúc</label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="input-group date datepicker">
+                                                @Html.TextBoxFor(model => model.NgayKetThucStr, new { @class = "form-control ", @id = "NgayKetThucStr" })
+                                                @Html.ValidationMessageFor(model => model.NgayKetThucStr, "", new { @class = "alert-danger" })
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-check-inline px-3 my-3">
+                                            <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                            <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group row">
+                                        <div class="col-sm-6">
+                                            @Html.DropDownListFor(model => model.DonViID, new SelectList(lstDonVi, "ID", "TenVaKyHieu"), "-- Chọn đơn vị --", new { @class = "mdb-select md-form", @id = "ddlSoVanBanDen",@searchable = "Nhập từ khóa.." })
+
+                                            @Html.ValidationMessageFor(model => model.DonViID, "", new { @class = "alert-danger" })
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBoxFor(model => model.Ten, new { @class = "form-control ", @id = "Ten" })
+                                                @Html.ValidationMessageFor(model => model.Ten, "", new { @class = "alert-danger" })
+                                                <label for="Ten">Tên sổ văn bản <span class="c-red-500">(*)</span></label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBox("SoBatDauTrongSo", null, new { @class = "form-control keyenter", @id = "txtSoBatDauTrongSo", @Type = "number", @min = "0" })
+                                                <label for="txtSoBatDauTrongSo">Số bắt đầu trong sổ <span class="c-red-500">(*)</span></label>
+                                                @Html.ValidationMessageFor(model => model.SoBatDauTrongSo, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBox("NamVaoSo", null, new { @class = "form-control keyenter", @id = "txtNamVaoSo", @Type = "number", @min = "0" })
+                                                <label for="txtNamVaoSo">Năm vào sổ <span class="c-red-500">(*)</span></label>
+                                                @Html.ValidationMessageFor(model => model.NamVaoSo, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBoxFor(model => model.NgayBatDauStr, new { @class = "form-control datepicker", @id = "NgayBatDauStr", @placeholder = "Chọn ngày" })
+                                                <label for="NgayBatDauStr">Ngày bắt đầu</label>
+                                                @Html.ValidationMessageFor(model => model.NgayBatDauStr, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBoxFor(model => model.NgayKetThucStr, new { @class = "form-control datepicker", @id = "NgayKetThucStr", @placeholder = "Chọn ngày" })
+                                                <label for="NgayKetThucStr">Ngày kết thúc</label>
+                                                @Html.ValidationMessageFor(model => model.NgayKetThucStr, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                <div class="form-check form-check-inline px-3 my-3">
+                                                    <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                                    <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                                </div>
+                                            </div>
+                                        </div>*@
+
+                                <div class="form-group row">
+
+                                    <div class="text-right col-sm-12">
+                                        <button type="submit" class="btn btn-primary">Lưu</button>
+                                        <a class="btn cur-p btn-light" href="/SoVanBanDen/Index">Hủy bỏ</a>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

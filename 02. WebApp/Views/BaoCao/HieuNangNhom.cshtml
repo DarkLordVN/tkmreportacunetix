@@ -1,0 +1,674 @@
+﻿@using PagedList.Mvc;
+
+@model TKM.BLL.BaoCaoTongHopListView
+@{
+    var title = "Báo cáo hiệu năng CPU theo ";
+    string typeRP = Model.KeyType + "";
+    var groupTitle = "nhóm thiết bị";
+    if (Model != null && Model.GroupBy.Equals("host"))
+    {
+        groupTitle = "thiết bị";
+    }
+    if (typeRP != null)
+    {
+        if (typeRP.Equals("ram"))
+        {
+            title = "Báo cáo hiệu năng RAM theo ";
+        }
+        else if (typeRP.Equals("bwd"))
+        {
+            title = "Báo cáo băng thông đường truyền theo ";
+        }
+        else if (typeRP.Equals("hdd"))
+        {
+            title = "Báo cáo hiệu năng ổ cứng theo ";
+        }
+        ViewBag.Title = title + groupTitle;
+    }
+}
+@section Css {
+    <style></style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/BaoCao/HieuNangNhom?keytype=@Model.KeyType&grouptime=@Model.GroupTime&groupby=@Model.GroupBy">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <input type="hidden" id="txtGroupBy" value="@Model.GroupBy" />
+                            <input type="hidden" id="txtKeyType" value="@Model.KeyType" />
+                            <div class="row lighten-4">
+                                <div class="col p-3">
+                                    <div class="form-group row">
+                                        @*<div class="form-check">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       value=""
+                                                       id="chkBieuDo" checked />
+                                                <label class="form-check-label" for="chkBieuDo">
+                                                    Biểu đồ
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       value=""
+                                                       id="chkChiTiet" checked />
+                                                <label class="form-check-label" for="chkChiTiet">
+                                                    Danh sách chi tiết
+                                                </label>
+                                            </div>*@
+                                        <div class="col-sm-12">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @if (Model.GroupTime.Equals("day"))
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline5" name="GroupTime" value="day" onchange="changeGroupTime();" checked>
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline5" name="GroupTime" value="day" onchange="changeGroupTime();">
+                                                }
+                                                <label class="custom-control-label" for="defaultInline5">Ngày</label>
+                                            </div>
+                                            <!-- Default inline 1-->
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @if (Model.GroupTime.Equals("week"))
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline1" name="GroupTime" value="week" onchange="changeGroupTime();" checked>
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline1" name="GroupTime" value="week" onchange="changeGroupTime();">
+                                                }
+                                                <label class="custom-control-label" for="defaultInline1">Tuần</label>
+                                            </div>
+
+                                            <!-- Default inline 2-->
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @if (Model.GroupTime.Equals("month"))
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline2" name="GroupTime" value="month" onchange="changeGroupTime();" checked>
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline2" name="GroupTime" value="month" onchange="changeGroupTime();">
+                                                }
+                                                <label class="custom-control-label" for="defaultInline2">Tháng</label>
+                                            </div>
+
+                                            <!-- Default inline 3-->
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @if (Model.GroupTime.Equals("quarter"))
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline3" name="GroupTime" value="quarter" onchange="changeGroupTime();" checked>
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline3" name="GroupTime" value="quarter" onchange="changeGroupTime();">
+                                                }
+
+                                                <label class="custom-control-label" for="defaultInline3">Quý</label>
+                                            </div>
+
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @if (Model.GroupTime.Equals("year"))
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline4" name="GroupTime" value="year" onchange="changeGroupTime();" checked>
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" class="custom-control-input" id="defaultInline4" name="GroupTime" value="year" onchange="changeGroupTime();">
+                                                }
+                                                <label class="custom-control-label" for="defaultInline4">Năm</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-0">
+                                        <label for="TrangThai" class="col-sm-2 col-form-label">Nhóm thiết bị</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="ddlGroupName" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="" disabled>--- Tất cả ---</option>
+                                                    if (Model.LstGroupData != null && Model.LstGroupData.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstGroupData)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        @if (Model != null && !string.IsNullOrEmpty(Model.GroupBy) && Model.GroupBy.Equals("host"))
+                                        {
+                                            <label for="txtTenThietBi" class="col-sm-2 col-form-label" style="padding-left:33px">Tên thiết bị</label>
+                                            <div class="col-sm-4">
+                                                @Html.TextBoxFor(model => model.TenThietBi, new { @class = "form-control keyenter", @id = "txtTenThietBi" })
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="form-group row rbtDay">
+                                        <label for="txtTuNgay" class="col-lg-2 col-form-label">Từ ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.TuNgay, new { @class = "form-control keyenter", @id = "txtTuNgay" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label for="txtDenNgay" class="col-lg-2 col-form-label" style="padding-left:33px">Đến ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.DenNgay, new { @class = "form-control keyenter", @id = "txtDenNgay" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row rbtWeek">
+                                        <label for="ddlWeekFrom" class="col-sm-2 col-form-label">Từ tuần</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlWeekFrom" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterWeek != null && Model.LstFilterWeek.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterWeek)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <label for="ddlWeekTo" class="col-sm-2 col-form-label" style="padding-left:33px">Đến tuần</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlWeekTo" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterWeek != null && Model.LstFilterWeek.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterWeek)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row rbtMonth">
+                                        <label for="ddlMonthFrom" class="col-sm-2 col-form-label">Từ tháng</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlMonthFrom" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterMonth != null && Model.LstFilterMonth.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterMonth)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <label for="ddlMonthTo" class="col-sm-2 col-form-label" style="padding-left:33px">Đến tháng</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlMonthTo" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterMonth != null && Model.LstFilterMonth.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterMonth)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row rbtQuarter">
+                                        <label for="ddlQuarterFrom" class="col-sm-2 col-form-label">Từ quý</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlQuarterFrom" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterQuarter != null && Model.LstFilterQuarter.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterQuarter)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <label for="ddlQuarterTo" class="col-sm-2 col-form-label" style="padding-left:33px">Đến quý</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlQuarterTo" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterQuarter != null && Model.LstFilterQuarter.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterQuarter)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row rbtYear">
+                                        <label for="ddlYearFrom" class="col-sm-2 col-form-label">Từ năm</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlYearFrom" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterYear != null && Model.LstFilterYear.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterYear)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <label for="ddlYearTo" class="col-sm-2 col-form-label" style="padding-left:33px">Đến năm</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="ddlYearTo" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="">--- Tất cả ---</option>
+                                                    if (Model.LstFilterYear != null && Model.LstFilterYear.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstFilterYear)
+                                                        {
+                                                            <option value="@item.Text">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col text-center text-lg-right">
+                                        <button id="btnSearch" class="btn text-white f-bg1" type="button">Tổng hợp</button>
+                                    </div>
+                                    <!-- / Collapsible element -->
+                                </div>
+                            </div>
+                            <hr class="my-1 chartflag">
+                            <div class="row chartflag">
+                                <div class="col-md-12">
+                                    @*<a href="javascript://" onclick="saveChart();" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="In Browser" data-original-title="In Browser"><i class="fal fa-print"></i></a>*@
+                                    <a href="javascript://" onclick="exportWord();" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" data-original-title="Xuất Word" title="Xuất Word"><i class="fal fa-file-word"></i></a>
+                                    <a href="javascript://" onclick="exportPDF();" class="btn-floating btn-sm btn-warning mx-1" data-toggle="tooltip" title="Xuất PDF" data-original-title="Xuất PDF"><i class="fal fa-file-pdf"></i></a>
+                                </div>
+                            </div>
+                            @*<div class="row mt-3 mb-3 chartflag" id="table-print">
+                                    <div class="col-12">
+                                        <div class="table-responsive-sm">
+                                            <div class="card card-cascade narrower">
+                                                <!-- Card image -->
+                                                <div class="view view-cascade gradient-card-header f-bg1">
+                                                    <h5 class="mb-0 text-uppercase"><i class="fal fa-chart-bar mr-3"></i>Tổng số lượng vấn đề theo nhóm</h5>
+                                                </div>
+                                                <!-- Card image -->
+                                                <!-- Card content -->
+                                                <div class="card-body card-body-cascade text-center">
+
+                                                    <div id="chart"></div>
+                                                    <button id="btnXoay" class="btn text-white default-color rounded-pill px-3 btn-sm my-0 waves-effect waves-light"><i class="fas fa-redo-alt"></i> Xoay</button>
+
+                                                </div>
+                                                <!-- Card content -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-1">*@
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <h2 class="mb-4 font-weight-bold">Danh sách chi tiết</h2>
+                                        <table id="dt-vblt-den" class="table table-hover table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                                            <thead class="indigo text-white lighten-1">
+                                                <tr>
+                                                    <th style="text-align:center; width: 50px">STT</th>
+                                                    <th class="pointer" style="width: 10%;" data-colname="TenNhom" data-orderby="asc">Nhóm thiết bị</th>
+                                                    @if (Model.GroupBy.Equals("host"))
+                                                    {
+                                                        <th class="pointer" data-colname="TenNhom" data-orderby="asc">Tên thiết bị</th>
+                                                        <th style="text-align:center; width: 100px">IP</th>
+                                                    }
+                                                    <th style="text-align:center;">Tên item</th>
+                                                    <th style="text-align:center; width: 100px">Thời gian</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:150px">@(Model.KeyType.Equals("cpu") ? "CPU nhỏ nhất" : Model.KeyType.Equals("ram") ? "RAM sử dụng thấp nhất" : Model.KeyType.Equals("hdd") ? "Ổ cứng sử dụng đầu kỳ" : "Băng thông sử dụng nhỏ nhất")</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:150px">@(Model.KeyType.Equals("cpu") ? "CPU trung bình" : Model.KeyType.Equals("ram") ? "RAM sử dụng trung bình" : Model.KeyType.Equals("hdd") ? "Ổ cứng sử dụng giữa kỳ" : "Băng thông sử dụng trung bình")</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:150px">@(Model.KeyType.Equals("cpu") ? "CPU lớn nhất" : Model.KeyType.Equals("ram") ? "RAM sử dụng lớn nhất" : Model.KeyType.Equals("hdd") ? "Ổ cứng sử dụng cuối kỳ" : "Băng thông sử dụng lớn nhất")</th>
+                                                    <th style="text-align:center; width: 150px">Hiệu năng</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("HieuNangNhomDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Script {
+    <script>
+        $(function () {
+            changeGroupTime();
+        });
+        function changeGroupTime() {
+            var groupTime = $('input[name="GroupTime"]:checked').val();
+            if (groupTime != undefined && groupTime != null) {
+                if (groupTime == "week") {
+                    $('.rbtWeek').show();
+                    $('.rbtMonth').hide();
+                    $('.rbtQuarter').hide();
+                    $('.rbtYear').hide();
+                    $('.rbtDay').hide();
+                }
+                else if (groupTime == "month") {
+                    $('.rbtWeek').hide();
+                    $('.rbtMonth').show();
+                    $('.rbtQuarter').hide();
+                    $('.rbtYear').hide();
+                    $('.rbtDay').hide();
+                }
+                else if (groupTime == "quarter") {
+                    $('.rbtWeek').hide();
+                    $('.rbtMonth').hide();
+                    $('.rbtQuarter').show();
+                    $('.rbtYear').hide();
+                    $('.rbtDay').hide();
+                }
+                else if (groupTime == "year") {
+                    $('.rbtWeek').hide();
+                    $('.rbtMonth').hide();
+                    $('.rbtQuarter').hide();
+                    $('.rbtYear').show();
+                    $('.rbtDay').hide();
+                }
+                else if (groupTime == "day") {
+                    $('.rbtWeek').hide();
+                    $('.rbtMonth').hide();
+                    $('.rbtQuarter').hide();
+                    $('.rbtYear').hide();
+                    $('.rbtDay').show();
+                }
+            }
+        }
+
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+
+        //Thêm event xử lý load ajax
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        //, SoKyHieu: $("#txtSoKyHieu").val(), LoaiVanBanID: $("#LoaiVanBanID").val(), TrichYeu: $("#txtTrichYeu").val()
+        function loadData(col, order, pnum, psize) {
+            $("#loading").show();
+            var params = getParams(col, order, pnum, psize);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("HieuNangNhomDetail", "BaoCao")',
+                data: params,
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                    $("#loading").hide();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                    $("#loading").hide();
+                }
+            });
+        }
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        function getParams(col, order, pnum, psize) {
+            var tuNgayParams = getTuNgay();
+            var denNgayParams = getDenNgay();
+            var groupTime = $('input[name="GroupTime"]:checked').val();
+            return { LstGroup: $("#ddlGroupName").val().toString(), TrangThai: $("#trangthai").val(), TenThietBi: $("#txtTenThietBi").val(), TuNgay: tuNgayParams, DenNgay: denNgayParams, srTrangThai: $("#srTrangThai").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val(), HasChart: $("#chkBieuDo").is(":checked"), HasTableData: $("#chkChiTiet").is(":checked"), GroupTime: groupTime, GroupBy: $("#txtGroupBy").val(), KeyType: $("#txtKeyType").val() };
+        }
+
+        function getTuNgay() {
+            var tuNgay = "";
+            var groupTime = $('input[name="GroupTime"]:checked').val();
+            if (groupTime != undefined && groupTime != null) {
+                var ddlVal;
+                if (groupTime == "week") {
+                    ddlVal = $("#ddlWeekFrom").val();
+                }
+                else if (groupTime == "month") {
+                    ddlVal = $("#ddlMonthFrom").val();
+                }
+                else if (groupTime == "quarter") {
+                    ddlVal = $("#ddlQuarterFrom").val();
+                }
+                else if (groupTime == "year") {
+                    ddlVal = "nam/" + $("#ddlYearFrom").val();
+                }
+                if (ddlVal != undefined && ddlVal != '' && ddlVal.includes('/')) {
+                    var valSplit = ddlVal.split('/');
+                    if (valSplit[0].includes("Tháng")) {
+                        tuNgay = "1/" + valSplit[0].replace("Tháng ", "") + "/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 1") || valSplit[0].includes("Qúy 1") || valSplit[0].includes("nam")) {
+                        tuNgay = "1/1/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 2") || valSplit[0].includes("Qúy 2")) {
+                        tuNgay = "1/4/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 3") || valSplit[0].includes("Qúy 3")) {
+                        tuNgay = "1/7/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 4") || valSplit[0].includes("Qúy 4")) {
+                        tuNgay = "1/10/" + valSplit[1];
+                    } else if (valSplit[0].includes("Tuần ")) {
+                        var week = valSplit[0].replace("Tuần ", "");
+                        var d = new Date("Jan 01, " + valSplit[1] + " 07:00:00");
+                        var w = d.getTime() + 604800000 * (week - 1);
+                        var n1 = new Date(w);
+                        tuNgay = n1.getDate() + "/" + (n1.getMonth() + 1) + "/" + (n1.getYear() + 1900);
+                    }
+                }
+                if (groupTime == "day") {
+                    tuNgay = $("#txtTuNgay").val();
+                }
+            }
+            return tuNgay;
+        }
+
+        function getDenNgay() {
+            var denNgay = "";
+            var groupTime = $('input[name="GroupTime"]:checked').val();
+            if (groupTime != undefined && groupTime != null) {
+                var ddlVal;
+                if (groupTime == "week") {
+                    ddlVal = $("#ddlWeekTo").val();
+                }
+                else if (groupTime == "month") {
+                    ddlVal = $("#ddlMonthTo").val();
+                }
+                else if (groupTime == "quarter") {
+                    ddlVal = $("#ddlQuarterTo").val();
+                }
+                else if (groupTime == "year") {
+                    ddlVal = "nam/" + $("#ddlYearTo").val();
+                }
+                if (ddlVal != undefined && ddlVal != '' && ddlVal.includes('/')) {
+                    var valSplit = ddlVal.split('/');
+                    if (valSplit[0].includes("Tháng")) {
+                        var monthCheck = valSplit[0].replace("Tháng ", "");
+                        var lastDay = new Date(valSplit[1], monthCheck, 0);
+                        denNgay = lastDay.getDate() + "/" + monthCheck + "/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 1") || valSplit[0].includes("Qúy 1") || valSplit[0].includes("nam")) {
+                        denNgay = "1/1/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 2") || valSplit[0].includes("Qúy 2")) {
+                        denNgay = "31/3/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 3") || valSplit[0].includes("Qúy 3")) {
+                        denNgay = "30/9/" + valSplit[1];
+                    }
+                    else if (valSplit[0].includes("Quý 4") || valSplit[0].includes("Qúy 4")) {
+                        denNgay = "31/12/" + valSplit[1];
+                    } else if (valSplit[0].includes("Tuần ")) {
+                        var week = valSplit[0].replace("Tuần ", "");
+                        var d = new Date("Jan 01, " + valSplit[1] + " 07:00:00");
+                        var w = d.getTime() + 604800000 * (week - 1);
+                        var n1 = new Date(w);
+                        denNgay = n1.getDate() + "/" + (n1.getMonth() + 1) + "/" + (n1.getYear() + 1900);
+                    }
+                }
+                if (groupTime == "day") {
+                    denNgay = $("#txtDenNgay").val();
+                }
+            }
+            return denNgay;
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+
+        function exportWord() {
+            var params = getParams(null, null, 0, 0);
+            //var dataURL = chart.dataURI().then((uri) => {
+            //    var checkBieuDo = $("#chkBieuDo").is(":checked");
+            //    if (checkBieuDo != undefined && checkBieuDo != null && checkBieuDo) {
+            //        params["ChartImage"] = uri.imgURI;
+            //    }
+            $.ajax({
+                type: "POST",
+                url: '/BaoCao/ExportWordHieuNangNhom',
+                data: params,
+                success: function (response, status, xhr) {
+                    var dt = new Date();
+                    var a = document.createElement('a');
+                    a.href = response;
+                    a.download = 'BaoCaoHieuNang_' + dt.getFullYear() + "" + (dt.getMonth() + 1) + dt.getDate() + dt.getHours() + dt.getMinutes() + dt.getSeconds() +'.docx';
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                },
+                error: function (response) {
+                    console.log('error - ' + response);
+                    //swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            //});
+        }
+
+        function exportPDF() {
+            var params = getParams(null, null, 0, 0);
+            //var dataURL = chart.dataURI().then((uri) => {
+            //    var checkBieuDo = $("#chkBieuDo").is(":checked");
+            //    if (checkBieuDo != undefined && checkBieuDo != null && checkBieuDo) {
+            //        params["ChartImage"] = uri.imgURI;
+            //    }
+            $.ajax({
+                type: "POST",
+                url: '/BaoCao/ExportPDFHieuNangNhom',
+                data: params,
+                success: function (response, status, xhr) {
+                    var dt = new Date();
+                    var a = document.createElement('a');
+                    a.href = response;
+                    a.download = 'BaoCaoHieuNang_' + dt.getFullYear() + "" + (dt.getMonth() + 1) + dt.getDate() + dt.getHours() + dt.getMinutes() + dt.getSeconds() +'.pdf';
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                },
+                error: function (response) {
+                    console.log('error - ' + response);
+                    //swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            //});
+        }
+
+
+    </script>
+}

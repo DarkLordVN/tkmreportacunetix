@@ -1,0 +1,77 @@
+﻿@model TKM.BLL.PhongBanViewModel
+
+@{
+    ViewBag.Title = "Thêm mới phòng ban";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bgc-white p-0">
+        <li class="breadcrumb-item"><a href="/Home/Index"><span class="icon-holder"><i class="fa fa-home"></i></span></a></li>
+        <li class="breadcrumb-item"><a href="/PhongBan/Index"><span class="icon-holder"><i class=""></i></span>Quản lý phòng ban</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
+<h4 class="title c-grey-900 mB-20 pB-10">@ViewBag.Title</h4>
+<div class="masonry-item col-md-12">
+    <!-- ./Information of page info success warning danger-->
+    @if (!string.IsNullOrEmpty(ViewBag.AlertContent))
+    {
+        <div class="alert @ViewBag.AlertType">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <div>@Html.Raw(@ViewBag.AlertContent)</div>
+            <a id="lblMessage"></a>
+        </div>
+    }
+    <div class="mT-30 bd">
+        @using (Html.BeginForm("Add", "PhongBan", null, FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", id = "frmMain" }))
+            {
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <label for="ddlPhongBan" class="col-sm-2 col-form-label text-right">Thuộc phòng ban</label>
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(model => model.KhoaChaId, new SelectList(Model.CbPhongBan, "ID", "TenPhongBan"), new { @class = "form-control", @id = "ddlPhongBan" })
+                </div>
+                <label for="inputHoTen" class="col-sm-2 col-form-label text-right">Tên phòng ban <span class="c-red-500">(*)</span></label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(model => model.TenPhongBan, new { @id = "txtTenPB", @class = "form-control", @placeholder = "Nhập tên phòng ban" })
+                    @Html.ValidationMessageFor(model => model.TenPhongBan, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtGhiChu" class="col-sm-2 col-form-label text-right">Ghi chú</label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(model => model.GhiChu, new { @id = "txtGhiChu", @class = "form-control", @placeholder = "Nhập ghi chú" })
+                    @Html.ValidationMessageFor(model => model.GhiChu, "", new { @class = "alert-danger" })
+                </div>
+                <label for="chkTrangThai" class="col-sm-2 text-right">Trạng thái</label>
+                <div class="col-sm-4">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            @Html.CheckBoxFor(m => m.TrangThai, new { @id = "chkTrangThai", @class = "form-check-input", @checked = "true" }) Có hiệu lực
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="text-right col-sm-12">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <a class="btn cur-p btn-light" href="/PhongBan/Index">Hủy bỏ</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Script {
+    <script>
+        $(function () {
+            $("#frmMain").submit(function (event) {
+                if (!check_AlphaNumber(this.MaPhongBan) || !check_AlphaNumber(this.TenPhongBan) || !check_AlphaNumber(this.GhiChu)) {
+                    event.preventDefault();
+                    return
+                }
+            });
+        });
+    </script>
+}
+

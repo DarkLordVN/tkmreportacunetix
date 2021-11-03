@@ -1,0 +1,181 @@
+﻿@model TKM.BLL.DmDonViViewModel
+@using TKM.DAO.EntityFramework
+@{
+    ViewBag.Title = "Thêm mới đơn vị";
+    var lstDonVi = (List<TKM.BLL.DmDonViViewModel>)ViewBag.lstDonVi;
+    lstDonVi.ForEach(x => x.TenDonVi = string.Concat(Enumerable.Repeat("--", x.Level)) + x.TenDonVi);
+    //var lstNguoiDung = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiDung;
+}
+
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/DmDonVi/Index">Quản lý đơn vị</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+
+                            @using (Html.BeginForm("Add", "DmDonVi", null, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-2 col-form-label">Đơn vị cha</label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.KhoaChaID, new SelectList(lstDonVi, "ID", "TenDonVi"), "--- Chọn đơn vị ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlKhoaChaID", @searchable = "Nhập từ khóa.." })
+                                    </div>
+                                    <label for="TenDonVi" class="col-sm-2 col-form-label">Tên đơn vị<span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.TenDonVi, new { @class = "form-control ", @id = "TenDonVi" })
+                                        @Html.ValidationMessageFor(model => model.TenDonVi, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="KyHieu" class="col-sm-2 col-form-label">Ký hiệu<span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.KyHieu, new { @class = "form-control ", @id = "KyHieu" })
+                                        @Html.ValidationMessageFor(model => model.KyHieu, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="MaDinhDanh" class="col-sm-2 col-form-label">Mã định danh</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.MaDinhDanh, new { @class = "form-control ", @id = "MaDinhDanh" })
+                                        <span class="c-grey-500">Mẫu: 000.00.20.G04</span>
+                                        @Html.ValidationMessageFor(model => model.MaDinhDanh, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+                                @*<div class="form-group row">
+                                    <label for="ListCanBoXuLyVanBanDenID" class="col-sm-2 col-form-label p-0-0-0-10">Cán bộ xử lý văn bản đến<span class="c-red-500">(*)</span> </label>
+                                    <div class="col-sm-4">
+                                        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListCanBoXuLyVanBanDenID" id="ListCanBoXuLyVanBanDenID" multiple searchable="Nhập tên...">
+                                            <option value="" disabled selected>-- Chọn cán bộ --</option>
+                                            @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                                            {
+                                                foreach (var item in lstNguoiDung)
+                                                {
+                                                    <option value="@item.ID" @(!string.IsNullOrEmpty(Model.ListCanBoXuLyVanBanDenID) && Model.ListCanBoXuLyVanBanDenID.Contains(","+item.ID+",") ?"selected":"")>@item.ChucVuVaTen</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <label for="ListCanBoXuLyHoSoCongViecID" class="col-sm-2 col-form-label p-0-0-0-10">Cán bộ xử lý hồ sơ công việc<span class="c-red-500">(*)</span> </label>
+                                    <div class="col-sm-4">
+                                        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListCanBoXuLyHoSoCongViecID" id="ListCanBoXuLyHoSoCongViecID" multiple searchable="Nhập tên...">
+                                            <option value="" disabled selected>-- Chọn cán bộ --</option>
+                                            @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                                            {
+                                                foreach (var item in lstNguoiDung)
+                                                {
+                                                    <option value="@item.ID" @(!string.IsNullOrEmpty(Model.ListCanBoXuLyHoSoCongViecID) && Model.ListCanBoXuLyHoSoCongViecID.Contains(","+item.ID+",") ?"selected":"")>@item.ChucVuVaTen</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>*@
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-check-inline px-3 my-3">
+                                            <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                            <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-check form-check-inline px-3 my-3">
+                                            <input type="checkbox" class="form-check-input" id="IsDonVi" name="IsDonVi" value="true" checked>
+                                            <label class="form-check-label" for="IsDonVi">Ngoài Văn phòng cục</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <select class="mdb-select md-form" id="ddlKhoaChaID" name="KhoaChaID" searchable="Nhập từ khóa..">
+                                                <option value="0">-- Thuộc đơn vị --</option>
+                                                @if (lstDonVi != null && lstDonVi.Count > 0)
+                                                {
+                                                    foreach (var item in lstDonVi)
+                                                    {
+                                                        <option value="@item.ID">@item.TenDonVi</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBoxFor(model => model.TenDonVi, new { @class = "form-control ", @id = "TenDonVi" })
+                                                @Html.ValidationMessageFor(model => model.TenDonVi, "", new { @class = "alert-danger" })
+                                                <label for="TenDonVi">Tên đơn vị <span class="c-red-500">(*)</span></label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBoxFor(model => model.KyHieu, new { @class = "form-control ", @id = "KyHieu" })
+                                                @Html.ValidationMessageFor(model => model.KyHieu, "", new { @class = "alert-danger" })
+                                                <label for="KyHieu">Ký hiệu <span class="c-red-500">(*)</span></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="md-form">
+                                                @Html.TextBoxFor(model => model.MaDinhDanh, new { @class = "form-control ", @id = "MaDinhDanh" })
+                                                <span class="c-grey-500">Mẫu: 000.00.20.G04</span>
+                                                @Html.ValidationMessageFor(model => model.MaDinhDanh, "", new { @class = "alert-danger" })
+                                                <label for="MaDinhDanh">Mã định danh đơn vị</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <div class="md-form mt-0">
+                                                <div class="form-check form-check-inline px-3 my-3">
+                                                    <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                                                    <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="md-form mt-0">
+                                                <div class="form-check form-check-inline px-3 my-3">
+                                                    <input type="checkbox" class="form-check-input" id="IsDonVi" name="IsDonVi" value="true" checked>
+                                                    <label class="form-check-label" for="IsDonVi">Là đơn vị trực thuộc</label>
+                                                </div>
+                                            </div>
+                                        </div>*@
+
+                                <div class="text-right col-sm-12  mt-3">
+                                    <button type="submit" class="btn btn-primary">Lưu</button>
+                                    <a class="btn cur-p btn-light" href="/DmDonVi/Index">Hủy bỏ</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

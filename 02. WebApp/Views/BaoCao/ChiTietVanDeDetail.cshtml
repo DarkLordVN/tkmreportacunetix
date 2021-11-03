@@ -1,0 +1,63 @@
+﻿@using PagedList.Mvc;
+
+@model TKM.BLL.BaoCaoTongHopListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.LstResultDataProblemDetail != null && Model.LstResultDataProblemDetail.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.LstResultDataProblemDetail)
+    {
+        index++;
+        <tr>
+            <td>@index</td>
+            <td class="tal">@item.groupname</td>
+            <td class="tal">@item.name</td>
+            <td class="tal">@item.ip</td>
+            <td class="tal">@item.problemname</td>
+            <td class="tal">@item.thoigiantao</td>
+            <td class="tal">@item.thoigiantontai</td>
+            <td class="tal @(item.severity == 0 ? "bg-white" : item.severity == 1 ? "bg-success text-white" : item.severity == 2 ? "bg-info text-white" : item.severity == 3 ? "bg-warning" : item.severity == 4 ? "bg-danger text-white" : "bg-dark text-white")" style="text-align: center !important;">@*@(item.severity == 0 ? "Chưa biết" : item.severity == 1 ? "Thông tin" : item.severity == 2 ? "Cảnh báo" : item.severity == 3 ? "Trung bình" : item.severity == 4 ? "Cao" : "Nghiêm trọng")*@ @item.capDo</td>
+            <td class="tal" style="text-align: center !important;"><a style='@(item.trangThai == 0 ? "color: red;" : "color: green;")'>@*@(item.trangThai == 0 ? "Chưa xử lý": "Đã hoàn thành")*@ @item.trangThaiStr</a></td>
+        </tr>
+    }
+    
+}
+@if (Model != null && Model.LstResultDataProblemDetail == null || Model.LstResultDataProblemDetail.Count == 0)
+{
+    <tr>
+        <td colspan="11" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="13">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("ChiTietVanDeDetail", "BaoCao", new
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem bản ghi
+                </div>
+            </div>
+        </td>
+    </tr>
+}

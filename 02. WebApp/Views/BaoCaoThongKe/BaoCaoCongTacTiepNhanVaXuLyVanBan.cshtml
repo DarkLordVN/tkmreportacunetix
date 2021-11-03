@@ -1,0 +1,179 @@
+﻿@using PagedList.Mvc;
+@using TKM.BLL;
+@model TKM.BLL.v_BaoCaoCTTNListView
+@{
+    //ViewBag.Title = "Báo cáo kết quả thực hiện nhiệm vụ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var TuNgay = ViewBag.TuNgayNVB;
+    var DenNgay = ViewBag.DenNgayNVB;
+}
+@section Css {
+    <style>
+        .p-2 {
+            padding-top: 20px;
+        }
+    </style>
+}
+<div class="row">
+    <div class="col right-content">
+
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @{Html.RenderAction("SelectLoaiBaoCao", "BaoCaoThongKe", new { LoaiBaoCao = 2 });}
+
+                            <div class="row mt-3">
+                                <div class="col-md-9 fwb">
+                                    Tìm kiếm văn bản
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <button class="btn btn-sm btn-warning text-white ml-3 rounded-pill" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="collapse" id="collapseExample">
+                                <div class="row bg-white mx-0">
+                                    @*<input type="hidden" name="dvID" id="dvID" value="@SessionInfo.CurrentUser.DonViID" />*@
+
+                                    <div class="col-12 col-lg-12 row p-2">
+                                        <label for="txtTuNgayStr" class="col-lg-2 col-form-label">Từ ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.TuNgay, new { @class = "form-control keyenter", @id = "txtTuNgayNVB" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label for="txtDenNgayStr" class="col-lg-2 col-form-label">Đến ngày</label>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="input-group date datepicker">
+                                                    @Html.TextBoxFor(model => model.DenNgay, new { @class = "form-control keyenter", @id = "txtDenNgayNVB" })
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-100"></div>
+                                    <div class="col-12 col-lg-12">
+                                        <div class="col text-center text-lg-right">
+                                            <button id="btnSearch" class="btn text-white f-bg1" type="button">Tìm kiếm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="javascript://" onclick="InBrowserVanBanDen()" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="In Browser" data-original-title="In Browser"><i class="fal fa-print"></i></a>
+                                    <a href="/BaoCaoThongKe/ExportWordBaoCaoCongTacTiepNhanVaXuLyVanBan" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" data-original-title="Xuất Word" title="Xuất Word"><i class="fal fa-file-word"></i></a>
+                                    <a href="/BaoCaoThongKe/ExportExcelBaoCaoCongTacTiepNhanVaXuLyVanBan" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Xuất Excel" data-original-title="Xuất Excel"><i class="fal fa-file-excel"></i></a>
+                                    <a href="javascript://" onclick="XuatPDF();" class="btn-floating btn-sm btn-warning mx-1" data-toggle="tooltip" data-original-title="Xuất PDF" title="Xuất PDF"><i class="fal fa-file-pdf"></i></a>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+
+                            <div class="row" id="table-print">
+                                <div class="col-12">
+                                    <div style="padding-bottom: 20px" class="table-responsive-sm">
+                                        <div style="width: 100%; padding-bottom: 20px" id="tbKetQua">
+                                            @{ Html.RenderAction("BaoCaoCongTacTiepNhanVaXuLyVanBanData", "BaoCaoThongKe"); }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<form action="/BaoCaoThongKe/ExportPDFBaoCaoKetQua" method="post" id="ExportPDF" style="display: none">
+    <input type="hidden" name="tenFilePDF" id="tenFilePDF" value="ExportPDFBaoCaoKetQua" />
+    <input type="hidden" name="widthTable" id="widthTable" value="" />
+    <textarea name="GridHtml" id="GridHtml"></textarea>
+    <input type="submit" />
+</form>
+<style>
+    .select2 {
+        padding-top: 5px !important;
+    }
+</style>
+<style>
+
+</style>
+<link href="~/Assets/css/print.css" rel="stylesheet" />
+@section Script {
+    <script src="~/Assets/js/print.js"></script>
+
+}
+<script>
+    setInterval(function () { $(".pagination-ys").show(); }, 1000);
+    $(document).ready(function () {
+        InitClickCheckAllInTable("chkall", function (res) {
+            $("#hdfID").val(res);
+        });
+        $('.select2').select2();
+
+    });
+    function XuatPDF() {
+        var widthtable = 1080;
+        if (widthtable < 800) widthtable = 1080;
+        $('#widthTable').val(parseInt(widthtable));
+        $('#tenFilePDF').val("Bao_Cao_Cong_Tac_Tiep_Nhan_Va_Xu_Ly_Van_Ban_Den");
+        $(".pagination-ys").hide();
+        var style = '<style>.table_pdf th,.table_pdf td { border: none !important;border-left: 1px solid #000 !important;border-top: 1px solid #000 !important;padding: 5px;min-width:1024px!important}.table_pdf tr:nth-child(2) th {font-weight: normal;}.table_pdf {border-bottom: 1px solid #000;border-right: 1px solid #000;border-spacing: 0;}            table th,table td{ vertical-align: middle; }table thead tr{ background: #f1f1f1 !important; }.table_pdf>tbody>tr>td, .table_pdf>tbody>tr>th, .table_pdf>tfoot>tr>td, .table_pdf>tfoot>tr>th, .table_pdf>thead>tr>td, .table_pdf>thead>tr>th {border: 1px solid #ddd;}.text-center,.tac{text-align:center !important}</style>';
+        var GridHtml = $("#table-print").html() + style;
+        $("#GridHtml").val(GridHtml);
+        $("#ExportPDF").submit();
+        return false;
+    }
+
+    $(".keyenter").on("keypress", function (e) {
+        if (e.which == 13) {
+            $("#btnSearch").click();
+        }
+    });
+
+    //Thêm event xử lý load ajax
+    $("#btnSearch").click(function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("BaoCaoCongTacTiepNhanVaXuLyVanBanData", "BaoCaoThongKe")',
+            data: { TuNgay: $("#txtTuNgayNVB").val(), DenNgay: $("#txtDenNgayNVB").val() },
+            dataType: "html",
+            success: function (response) {
+                $("#tbKetQua").html(response);
+                loadPaging();
+            },
+            error: function (response) {
+                swal("Đã có lỗi xảy ra", { icon: "error", });
+            }
+        });
+    });
+
+    function loadPaging() {
+        var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+        var pnum = $("#txtPageNumber").val();
+        $(".PagedList-pageCountAndLocation").removeClass("disabled");
+        $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+    }
+
+</script>
+
+
+
+

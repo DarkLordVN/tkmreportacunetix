@@ -1,0 +1,309 @@
+﻿@using TKM.BLL
+@model VanBanDenViewModel
+@{
+    Layout = null;
+    var typeUser = (string)ViewBag.typeUser;
+    var capBac = (string)ViewBag.capBac;
+    var lstLanhDaoButPhe = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstLanhDaoButPhe;
+    var lstDonVi = (List<TKM.BLL.DmDonViViewModel>)ViewBag.lstDonVi;
+    var lstNhomDonVi = (List<TKM.BLL.NhomDonViViewModel>)ViewBag.lstNhomDonVi;
+    var lstNhomNguoiDung = (List<TKM.BLL.NhomNguoiDungViewModel>)ViewBag.lstNhomNguoiDung;
+    var lstNguoiDung = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiDung;
+    var lstLanhDaoCuc = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstLanhDaoCuc;
+    var act = (string)ViewBag.act;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+
+@using (Ajax.BeginForm("DuaYKienXuLy", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onDuaYKienXuLySuccess"
+}, new { @id = "fFormDYK" , enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+    <input type="hidden" name="typeUser" id="typeUser" value="@typeUser" />
+    @Html.HiddenFor(model => model.FileVanBan, new { @id = "ModelFileVanBan" })
+    <input type="hidden" id="act" name="act" value="@act" />
+    <input type="hidden" name="PhanThemXuLy" value="@(((typeUser.Equals("vtc") || typeUser.Equals("ldc")) && Model.LanhDaoButPheCucID > 0) || ((typeUser.Equals("vtdv") || typeUser.Equals("lddv")) && Model.LanhDaoButPheDonViID > 0) ?"1":"0")" />
+    @*<div class="row">
+        <div class="col-sm-6 row">
+            <label class="col-sm-4 col-form-label" for="@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoButPheCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoButPheDonViID":"")">
+                Lãnh đạo bút phê <span class="c-red-500">(*)</span>
+            </label>
+            <select class="mdb-select mdb-select-csx md-form col-sm-8 md-outline colorful-select dropdown-primary m-0 p-0" @(capBac.Equals("pho") ? "disabled='true'" : "") name="@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoButPheCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoButPheDonViID":"")" id="@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoButPheCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoButPheDonViID":"")" searchable="Nhập từ khóa..">
+                <option value="">-- Chọn cán bộ --</option>
+                @if (lstLanhDaoButPhe != null && lstLanhDaoButPhe.Count > 0)
+                {
+                    foreach (var item in lstLanhDaoButPhe)
+                    {
+                        <option value="@item.ID" @(typeUser.Equals("lddv") && capBac.Equals("truong") && item.ID == SessionInfo.CurrentUser.ID && Model.LanhDaoButPheDonViID == 0 ? "selected" : "") @(typeUser.Equals("ldc") && capBac.Equals("truong") && item.ID == SessionInfo.CurrentUser.ID && Model.LanhDaoButPheCucID == 0 ? "selected" : "") @(typeUser.Equals("ldc") && capBac.Equals("pho") && Model.LanhDaoButPheCucID == item.ID ? "selected" : "") @(typeUser.Equals("lddv") && capBac.Equals("pho") && Model.LanhDaoButPheDonViID == item.ID ? "selected" : "")>@item.HoVaTen</option>
+                    }
+                }
+
+            </select>
+
+        </div>
+    </div>*@
+    //if (!capBac.Equals("pho"))
+    //{
+
+    //}
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" for="@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoButPheCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoButPheDonViID":"")">Lãnh đạo bút phê <span class="c-red-500">(*)</span></label>
+        <div class="col-sm-4">
+            <select class="mdb-select mdb-select-csx md-form col-sm-8 md-outline colorful-select dropdown-primary m-0 p-0" @(((typeUser.Equals("vtc") || typeUser.Equals("ldc")) && Model.LanhDaoButPheCucID > 0) || ((typeUser.Equals("vtdv") || typeUser.Equals("lddv")) && Model.LanhDaoButPheDonViID > 0) ?"disabled":"") name="@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoButPheCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoButPheDonViID":"")" id="@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoButPheCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoButPheDonViID":"")" searchable="Nhập từ khóa..">
+                <option value="">-- Chọn cán bộ --</option>
+                @if (lstLanhDaoButPhe != null && lstLanhDaoButPhe.Count > 0)
+                {
+                    foreach (var item in lstLanhDaoButPhe)
+                    {
+                        <option value="@item.ID" @(typeUser.Equals("lddv") && capBac.Equals("truong") && item.ID == SessionInfo.CurrentUser.ID && Model.LanhDaoButPheDonViID == 0 ? "selected" : "") @(typeUser.Equals("ldc") && capBac.Equals("truong") && item.ID == SessionInfo.CurrentUser.ID && Model.LanhDaoButPheCucID == 0 ? "selected" : "") @(Model.LanhDaoButPheCucID > 0 && Model.LanhDaoButPheCucID == item.ID ? "selected" : "") @(Model.LanhDaoButPheDonViID > 0 && Model.LanhDaoButPheDonViID == item.ID ? "selected" : "")>@item.HoVaTen</option>
+                    }
+                }
+
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <div class="form-check form-check-inline" style="margin-right:75px">
+                <input type="radio" class="form-check-input" id="vbcanxuly" name="typevb" value="vbcanxuly" @(((typeUser.Equals("vtc") || typeUser.Equals("ldc")) && Model.LanhDaoButPheCucID > 0) || ((typeUser.Equals("vtdv") || typeUser.Equals("lddv")) && Model.LanhDaoButPheDonViID > 0) ?"disabled":"") @((typeUser.Equals("vtc") || typeUser.Equals("ldc")) && Model.LanhDaoButPheCucID > 0 && Model.IsVanBanCanXuLyCuc == true ? "checked" : "") @((typeUser.Equals("vtdv") || typeUser.Equals("lddv")) && Model.LanhDaoButPheDonViID > 0 && Model.IsVanBanCanXuLyDonVi == true ? "checked" : "")>
+                <label class="form-check-label" for="vbcanxuly">Văn bản cần xử lý</label>
+            </div>
+            @*<div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="vbnhandebiet" name="typevb" value="vbnhandebiet" @(((typeUser.Equals("vtc") || typeUser.Equals("ldc")) && Model.LanhDaoButPheCucID > 0) || ((typeUser.Equals("vtdv") || typeUser.Equals("lddv")) && Model.LanhDaoButPheDonViID > 0) ?"disabled":"") @((typeUser.Equals("vtc") || typeUser.Equals("ldc")) && Model.LanhDaoButPheCucID > 0 && Model.IsVanBanCanXuLyCuc == false ? "checked" : "") @((typeUser.Equals("vtdv") || typeUser.Equals("lddv")) && Model.LanhDaoButPheDonViID > 0 && Model.IsVanBanCanXuLyDonVi == false ? "checked" : "")>
+                <label class="form-check-label" for="vbnhandebiet">Văn bản nhận để biết</label>
+            </div>*@
+        </div>
+    </div>
+    <div id="loadForm">
+        <div id="loadvbcanxuly" class="">
+            @if (typeUser == "vtc" || typeUser == "ldc")
+            {
+                Html.RenderAction("LoadVanBanCanXuLyCuc", "VanBanDen", new { vbid = Model.ID ,typeUser = typeUser, capBac = capBac });
+            }
+            else
+            {
+                Html.RenderAction("LoadVanBanCanXuLyDonVi", "VanBanDen", new { vbid = Model.ID, typeUser = typeUser, capBac = capBac });
+            }
+        </div>
+        <div id="loadvbnhandebiet" class="dn">
+            <div class="row">
+                <label for="DonViNhanID" class="col-sm-2 col-form-label">Đơn vị nhận</label>
+                <div class="col-sm-4">
+                    <select class="mdb-select md-form md-outline col-sm-8 colorful-select dropdown-primary m-0 p-0" name="ListDonViNhanID" id="ListDonViNhanID" multiple searchable="Chọn đơn vị...">
+                        <option value="" disabled selected>-- Chọn đơn vị --</option>
+                        @if (lstDonVi != null && lstDonVi.Count > 0)
+                {
+                    foreach (var item in lstDonVi)
+                    {
+                                <option value="@item.ID">@item.TenDonVi</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <label for="ListNguoiNhanID" class="col-sm-2 col-form-label"> Người nhận <span class="c-red-500">(*)</span></label>
+                <div id="reloadListNguoiNhan" class="col-sm-4">
+                    <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListNguoiNhanID" id="ListNguoiNhanID" multiple searchable="Chọn người nhận...">
+                        <option value="" disabled selected>-- Chọn người nhận --</option>
+                        @if (lstLanhDaoCuc != null && lstLanhDaoCuc.Count > 0)
+                        {
+                            foreach (var item in lstLanhDaoCuc)
+                            {
+                                <option value="@item.ID">@item.ChucVuVaTen</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                </div>
+            <div class="row">
+                <label for="NhomDonViNhanID" class="col-sm-2 col-form-label">Nhóm đơn vị nhận</label>
+                <div class="col-sm-4">
+                    <select class="mdb-select mdb-select-csc md-form col-sm-8 md-outline colorful-select dropdown-primary m-0 p-0" id="NhomDonViNhanID" name="NhomDonViNhanID" searchable="Nhập từ khóa..">
+                        <option value="">-- Chọn nhóm đơn vị --</option>
+                        @if (lstNhomDonVi != null && lstNhomDonVi.Count > 0)
+                        {
+                            foreach (var item in lstNhomDonVi)
+                            {
+                                <option value="@item.ID">@item.TenNhom</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <label for="NhomNguoiNhanID" class="col-sm-2 col-form-label">Nhóm người nhận</label>
+                <div class="col-sm-4">
+                    <select class="mdb-select mdb-select-csd md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NhomNguoiNhanID" name="NhomNguoiNhanID" searchable="Nhập từ khóa..">
+                        <option value="">-- Chọn nhóm người nhận --</option>
+                        @if (lstNhomNguoiDung != null && lstNhomNguoiDung.Count > 0)
+                        {
+                            foreach (var item in lstNhomNguoiDung)
+                            {
+                                <option value="@item.ID">@item.TenNhom</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row text-left">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="form-check form-check-inline px-3 my-3">
+                            <input type="checkbox" name="IsGuiSMS" class="form-check-input" id="GuiSms" value="true">
+                            <label class="form-check-label" for="GuiSms">Gửi SMS</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" name="IsGuiEmail" class="form-check-input" id="GuiEmail" value="true">
+                            <label class="form-check-label" for="GuiEmail">Gửi Email</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary">Lưu và gửi</button>
+           @if (act.Equals("add"))
+           {
+            <button type="button" class="btn btn-light" onclick="DongForm();">Đóng</button>
+           }
+           else
+           {
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+           }
+        </div>
+    </div>
+
+
+}
+<style>
+    span.select2 {
+        padding-top: 2px;
+    }
+     .modal-lg, .modal-xl {
+        max-width: 1300px !important;
+    }
+</style>
+@if (act == "add")
+{
+    <script>
+        function DongForm() {
+            window.location.href = '/VanBanDen';
+        }
+        $(document).ready(function () {
+            
+            var thongbaoid = '@TempData["ThongBao"]';
+            if (thongbaoid != '') {
+                $('#lstidThongBao').val(thongbaoid);
+                $('.addNotificationRight').click();
+                $('.addNotification').click();
+            }
+            $('#close-redirect').addClass('closeredirect');
+            $('.closeredirect').on('click', function () {
+                window.location.href = '/VanBanDen';
+            })
+        });
+
+    </script>
+}
+<script>
+    $('#ListDonViNhanID').on('change', function () {
+        var value = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: '/VanBanDen/ReloadListNguoiNhan',
+            data: { lstdonvinhanid: ',' + value + ',', lstdonvinhanidselected: ',' + $('#ListNguoiNhanID').val().toString() + ',' },
+            dataType: "html",
+            success: function (res) {
+                $('#reloadListNguoiNhan').html(res);
+            },
+            error: function (response) {
+                toastr.error("Đã có lỗi xảy ra");
+            }
+        });
+
+    })
+    $('input[type=radio][name=typevb]').on('change', function (e) {
+        var getElementID = e.target.id;
+        if (getElementID == 'vbcanxuly') {
+            
+            //Văn bản cần xử lý
+            var checkHasClass = $('#loadvbcanxuly').hasClass('dn');
+            if (checkHasClass) {
+                $('#loadvbcanxuly').removeClass('dn');
+                $('#loadvbnhandebiet').addClass('dn');
+            }
+        } else {
+            //văn bản nhận để biết
+            var checkHasClass = $('#loadvbnhandebiet').hasClass('dn');
+            if (checkHasClass) {
+                $('#loadvbnhandebiet').removeClass('dn');
+                $('#loadvbcanxuly').addClass('dn');
+            }
+        }
+    });
+    $(document).ready(function () {
+        debugger;
+        if ((("@typeUser"== "vtc" || "@typeUser" =="ldc") && @Model.LanhDaoButPheCucID == 0) || (("@typeUser" == "vtdv" || "@typeUser" == "lddv") && @Model.LanhDaoButPheDonViID == 0)) {
+            $('input[type=radio][name=typevb][value=vbcanxuly]').prop('checked',true);
+        }
+        $('.select2').select2();
+        $('.mdb-select,.mdb-select-csa,.mdb-select-csb,.mdb-select-csc,.mdb-select-csd,.mdb-select-cse,.mdb-select-csf,.mdb-select-csx,.mdb-select-csy').materialSelect();
+    });
+    $('#fFormDYK').on('submit', function () {
+        $("#loading").show();
+        var nguoinhanid = $('#NguoiNhanID').val();
+        var donvinhanid = $('#DonViNhanID').val();
+        var lanhdaobutpheid = $('#@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoButPheCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoButPheDonViID":"")').val();
+        if ('@(capBac.Equals("pho"))' != 'pho') {
+            if (lanhdaobutpheid == '') {
+                toastr.error('Bạn chưa chọn lãnh đạo bút phê!');
+                $("#loading").hide();
+                return false;
+            }
+        }
+        var checkcanxuly = $('input[type=radio][name=typevb][value=vbcanxuly]').prop('checked');
+        var checknhandebiet = $('input[type=radio][name=typevb][value=vbnhandebiet]').prop('checked');
+        if (checkcanxuly == false && checknhandebiet == false) {
+            toastr.error('Bạn chưa chọn loại hình xử lý!');
+            $("#loading").hide();
+            return false;
+        }
+        if (checkcanxuly) {
+            if (nguoinhanid == '') {
+                toastr.error('Bạn chưa chọn cán bộ xử lý chính!');
+                $("#loading").hide();
+                return false;
+            }
+            if (donvinhanid == '') {
+                toastr.error('Bạn chưa chọn đơn vị xử lý chính!');
+                $("#loading").hide();
+                return false;
+            }
+            @*var checkChiDao = $(':radio[name="@(typeUser.Equals("vtc") || typeUser.Equals("ldc") ? "LanhDaoChiDaoCucID" : typeUser.Equals("vtdv") || typeUser.Equals("lddv") ? "LanhDaoChiDaoDonViID" : "")"]:checked, :radio[name="rdFruit"]:checked').length;
+            if (checkChiDao == 0) {
+                toastr.error('Bạn chưa chọn lãnh đạo chỉ đạo!');
+                return false;
+            }*@
+        }
+        if (checknhandebiet) {
+            //var valueOfDonViNhan = $('#ListDonViNhanID').val().filter(v => v != '').length;
+            //if (valueOfDonViNhan == 0) {
+            //    toastr.error('Bạn phải chọn ít nhất 1 đơn vị nhận!');
+            //    return false;
+            //}
+            var valueOfNguoiNhan = $('#ListNguoiNhanID').val().filter(v => v != '').length;
+            if (valueOfNguoiNhan == 0) {
+                toastr.error('Bạn phải chọn ít nhất 1 người nhận!');
+                $("#loading").hide();
+                return false;
+            }
+        }
+        //$('#btn-luu').attr("disabled", true);
+    })
+</script>

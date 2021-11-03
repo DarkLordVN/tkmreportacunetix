@@ -1,0 +1,292 @@
+﻿@using PagedList.Mvc;
+@using TKM.DAO.EntityFramework
+
+@model TKM.BLL.NguoiDungListView
+@{
+    ViewBag.Title = "Danh sách thiết bị quản lý";
+    //var lstChucVu = (List<TKM.BLL.DmChucVuViewModel>)ViewBag.lstChucVu;
+}
+@section Css {
+    <style></style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/NguoiDung/Index">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row lighten-4">
+                                <div class="col p-3">
+                                    @*<div class="form-group row">
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   value=""
+                                                   id="chkBieuDo" checked />
+                                            <label class="form-check-label" for="chkBieuDo">
+                                                Biểu đồ
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   value=""
+                                                   id="chkChiTiet" checked />
+                                            <label class="form-check-label" for="chkChiTiet">
+                                                Danh sách chi tiết
+                                            </label>
+                                        </div>
+                                    </div>*@
+                                    <div class="form-group row mb-0">
+                                        <label for="TrangThai" class="col-sm-2 col-form-label">Nhóm thiết bị</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="trangthai" searchable="Nhập từ khóa..">
+                                                @*<option value="">--- Chọn nhóm ---</option>*@
+                                                <option value="1">G-ADMIN</option>
+                                                <option value="0">G-ADTN</option>
+                                                <option value="0">G-AV_BKAV</option>
+                                                <option value="0">G-BITRIX</option>
+                                                <option value="0">G-CCHC</option>
+                                                <option value="0">G-COMMVAULT</option>
+                                                <option value="0">G-CONG</option>
+                                                <option value="0">G-CONGDANGBOTINH</option>
+                                                <option value="0">G-DNS</option>
+                                                <option value="0">G-EGOV</option>
+                                                <option value="0">G-iLIS</option>
+                                                <option value="0">G-KGIS</option>
+                                                <option value="0">G-MAIL</option>
+                                                <option value="0">G-MOTCUA</option>
+                                                <option value="0">G-PAHT</option>
+                                                <option value="0">G-QLDC</option>
+                                                <option value="0">G-SBN</option>
+                                                <option value="0">G-TVDT</option>
+                                                <option value="0">TN-HYPERVISOR</option>
+                                                <option value="0">TN-NETWORK</option>
+                                                <option value="0">TN-SERVER</option>
+                                            </select>
+                                        </div>
+                                        <label for="txtHoVaTen" class="col-sm-2 col-form-label" style="padding-left:33px">Tên thiết bị</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control keyenter" />
+                                        </div>
+                                    </div>
+                                    <div class="col text-center text-lg-right">
+                                        <button id="btnSearch" class="btn text-white f-bg1" type="button">Tìm kiếm</button>
+                                    </div>
+                                    <!-- / Collapsible element -->
+                                </div>
+                            </div>
+                            <hr class="my-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a href="javascript://" onclick="InBrowserNguoiDung()" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="In Browser" data-original-title="In Browser"><i class="fal fa-print"></i></a>
+                                    <a href="/NguoiDung/ExportWord" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" data-original-title="Xuất Word" title="Xuất Word"><i class="fal fa-file-word"></i></a>
+                                    <a href="/NguoiDung/ExportExcel" class="btn-floating btn-sm btn-success mx-1" data-toggle="tooltip" title="Xuất Excel" data-original-title="Xuất Excel"><i class="fal fa-file-excel"></i></a>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        @*<h2 class="mb-4 font-weight-bold">Tổng số lượng thiết bị theo nhóm</h2>*@
+                                        <table id="dt-vblt-den" class="table table-hover table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                                            <thead class="indigo text-white lighten-1">
+                                                <tr>
+                                                    <th style="text-align:center; width: 50px">STT</th>
+                                                    <th class="pointer" data-colname="TenNhom" data-orderby="asc">Nhóm thiết bị<span><i class="fas fa-sort"></i></span></th>
+                                                    <th class="pointer" data-colname="TenNhom" data-orderby="asc">Tên thiết bị<span><i class="fas fa-sort"></i></span></th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:150px">IP</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:350px">Số lượng thành phần quản lý</th>
+                                                    <th style="text-align:center">Số lượng item thiết bị</th>
+                                                    <th style="text-align:center">Số lượng triggers</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                <tr role="row">
+                                                    <td class="text-center">1</td>
+                                                    <td class="tal">G-ADMIN</td>
+                                                    <td class="text-center">ADMIN-PC-10.184.254.167</td>
+                                                    <td class="text-center">10.184.254.167</td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">52</td>
+                                                    <td class="text-center">13</td>
+                                                </tr>
+                                                <tr role="row">
+                                                    <td class="text-center">2</td>
+                                                    <td class="tal">G-ADMIN</td>
+                                                    <td class="text-center">AV_BKAV-10.184.254.198</td>
+                                                    <td class="text-center">10.184.254.198</td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">31</td>
+                                                    <td class="text-center">11</td>
+                                                </tr>
+                                                <tr role="row">
+                                                    <td class="text-center">3</td>
+                                                    <td class="tal">G-ADTN</td>
+                                                    <td class="text-center">ADTN2_2016-10.184.254.156</td>
+                                                    <td class="text-center">10.184.254.156</td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">32</td>
+                                                    <td class="text-center">11</td>
+                                                </tr>
+                                                <tr role="row">
+                                                    <td class="text-center">4</td>
+                                                    <td class="tal">TN-SERVER</td>
+                                                    <td class="text-center">eGov-Data-10.184.254.187</td>
+                                                    <td class="text-center">10.184.254.187</td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">35</td>
+                                                    <td class="text-center">16</td>
+                                                </tr>
+                                                <tr role="row">
+                                                    <td class="text-center">5</td>
+                                                    <td class="tal">TN-SERVER</td>
+                                                    <td class="text-center">eGov-Chat-10.184.254.215</td>
+                                                    <td class="text-center">10.184.254.200</td>
+                                                    <td class="text-center">1</td>
+                                                    <td class="text-center">29</td>
+                                                    <td class="text-center">10</td>
+                                                </tr>
+                                                <tr class="pagination-ys" align="left">
+                                                    <td colspan="10">
+                                                        <div class="row col-md-12 p-0 m-0">
+                                                            <div class="col-md-6">
+                                                                <div class="pagination-container"><ul class="pagination"><li class="disabled PagedList-skipToPrevious"><a rel="prev">«</a></li><li class="PagedList-pageCountAndLocation"><a style="padding: 5px"> Trang <input type="text" id="pageNumber" name="PageNunber" value="1" min="0" style="width: 40px;" onchange="onChangePageNunber($(this).val(),1)"> / 4</a></li><li class="disabled PagedList-skipToNext"><a rel="next">»</a></li></ul></div>
+                                                            </div>
+                                                            <div class="col-md-6 text-right pt-2">
+                                                                Hiển thị: <select class="custext w-60" data-val="true" data-val-number="The field PageSize must be a number." id="changePageSize" name="PageSize" onchange="loadData('', '');">
+                                                                    <option selected="selected" value="10">5</option>
+                                                                    <option value="20">20</option>
+                                                                    <option value="50">50</option>
+                                                                    <option value="100">100</option>
+                                                                </select> kết quả trên 1 trang / 21 bản ghi
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Script {
+    <script src="~/Assets/js/print.js"></script>
+    <script>
+        //var options = {
+        //    series: [{
+        //        name: 'Tổng số lượng thiết bị',
+        //        type: 'column',
+        //        data: [440, 505, 414, 671, 227, 413, 201, 352, 752, 320, 257, 160]
+        //    }, {
+        //        name: 'Tổng thiết bị gặp vấn đề',
+        //        type: 'line',
+        //        data: [23, 42, 35, 27, 43, 22, 17, 31, 22, 22, 12, 16]
+        //    }],
+        //    chart: {
+        //        height: 350,
+        //        type: 'line',
+        //    },
+        //    stroke: {
+        //        width: [0, 4]
+        //    },
+        //    //title: {
+        //    //    text: 'Traffic Sources'
+        //    //},
+        //    dataLabels: {
+        //        enabled: true,
+        //        enabledOnSeries: [1]
+        //    },
+        //    labels: ['G-ADMIN', 'G-ADTN', 'G-AV_BKAV', 'G-BITRIX', 'G-CCHC', 'G-COMMVAULT', 'G-CONG', 'TN-NETWORK', 'TN-HYPERVISOR', 'TN-SERVER'],
+        //    xaxis: {
+        //        type: 'text'
+        //    },
+        //    yaxis: [{
+        //        title: {
+        //            text: 'Website Blog',
+        //        },
+
+        //    }, {
+        //        opposite: true,
+        //        title: {
+        //            text: 'Social Media'
+        //        }
+        //    }]
+        //};
+
+        //var chart = new ApexCharts(document.querySelector("#chart"), options);
+        //chart.render();
+        var options = {
+            series: [{
+                name: 'Tổng số lượng thiết bị',
+                type: 'column',
+                data: [5,1,5,3,19,23,10,33,48,198]
+            }, {
+                name: 'Thiết bị gặp vấn đề',
+                type: 'line',
+                data: [2,0,0,3,9,20,9,5,8,13]
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+            },
+            stroke: {
+                width: [0, 4]
+            },
+            //title: {
+            //    text: 'Traffic Sources'
+            //},
+            dataLabels: {
+                enabled: true,
+                //enabledOnSeries: [1]
+            },
+            labels: ['G-ADMIN', 'G-ADTN', 'G-AV_BKAV', 'G-BITRIX', 'G-CCHC', 'G-COMMVAULT', 'G-CONG', 'TN-NETWORK', 'TN-HYPERVISOR', 'TN-SERVER'],
+            //xaxis: {
+            //    type: 'datetime'
+            //},
+            //yaxis: [{
+            //    title: {
+            //        text: 'Website Blog',
+            //    },
+
+            //}, {
+            //    opposite: true,
+            //    title: {
+            //        text: 'Social Media'
+            //    }
+            //}]
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+
+    </script>
+}

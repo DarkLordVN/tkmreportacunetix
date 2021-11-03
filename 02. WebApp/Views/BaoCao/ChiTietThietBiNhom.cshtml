@@ -1,0 +1,223 @@
+﻿@using PagedList.Mvc;
+
+@model TKM.BLL.BaoCaoTongHopListView
+@{
+    ViewBag.Title = "Chi tiết thông tin thiết bị";
+}
+@section Css {
+    <style></style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/BaoCao/ChiTietThietBiNhom">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row lighten-4">
+                                <div class="col p-3">
+                                    <div class="form-group row mb-0">
+                                        <label for="TrangThai" class="col-sm-2 col-form-label">Nhóm thiết bị</label>
+                                        <div class="col-sm-4">
+                                            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="ddlGroupName" searchable="Nhập từ khóa..">
+                                                @{
+                                                    <option value="" disabled>--- Tất cả ---</option>
+                                                    if (Model.LstGroupData != null && Model.LstGroupData.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.LstGroupData)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <label for="txtHoVaTen" class="col-sm-2 col-form-label" style="padding-left:33px">Tên thiết bị</label>
+                                        <div class="col-sm-4">
+                                            @Html.TextBoxFor(model => model.TenThietBi, new { @class = "form-control keyenter", @id = "txtTenThietBi" })
+                                        </div>
+                                    </div>
+                                    <div class="col text-center text-lg-right">
+                                        <button id="btnSearch" class="btn text-white f-bg1" type="button">Tổng hợp</button>
+                                    </div>
+                                    <!-- / Collapsible element -->
+                                </div>
+                            </div>
+                            <hr class="my-1 chartflag">
+                            <div class="row chartflag">
+                                <div class="col-md-12">
+                                    @*<a href="javascript://" onclick="saveChart();" class="btn-floating btn-sm btn-info mx-1" data-toggle="tooltip" title="In Browser" data-original-title="In Browser"><i class="fal fa-print"></i></a>*@
+                                    <a href="javascript://" onclick="exportWord();" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" data-original-title="Xuất Word" title="Xuất Word"><i class="fal fa-file-word"></i></a>
+                                    <a href="javascript://" onclick="exportPDF();" class="btn-floating btn-sm btn-warning mx-1" data-toggle="tooltip" title="Xuất PDF" data-original-title="Xuất PDF"><i class="fal fa-file-pdf"></i></a>
+                                </div>
+                            </div>
+                            @*<hr class="my-1">*@
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table id="dt-vblt-den" class="table table-hover table-bordered dataTable no-footer" cellspacing="0" width="100%">
+                                            <thead class="indigo text-white lighten-1">
+                                                <tr>
+                                                    <th style="text-align:center; width: 50px">STT</th>
+                                                    <th class="pointer" data-colname="TenNhom" data-orderby="asc">Nhóm thiết bị</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:250px">Tên thiết bị</th>
+                                                    <th class="pointer" data-colname="KyHieu" data-orderby="asc" style="width:150px">IP</th>
+                                                    <th style="text-align:center">Số lượng thành phần quản lý</th>
+                                                    <th style="text-align:center">Số lượng item thiết bị</th>
+                                                    <th style="text-align:center">Số lượng triggers giám sát</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("ChiTietThietBiNhomDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Script {
+    <script>
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+
+        //Thêm event xử lý load ajax
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        //, SoKyHieu: $("#txtSoKyHieu").val(), LoaiVanBanID: $("#LoaiVanBanID").val(), TrichYeu: $("#txtTrichYeu").val()
+        function loadData(col, order, pnum, psize) {
+            $("#loading").show();
+            var params = getParams(col, order, pnum, psize);
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ChiTietThietBiNhomDetail", "BaoCao")',
+                data: params,
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                    $("#loading").hide();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                    $("#loading").hide();
+                }
+            });
+        }
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        function getParams(col, order, pnum, psize) {
+            return { LstGroup: $("#ddlGroupName").val().toString(), TenThietBi: $("#txtTenThietBi").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() };
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+
+        function exportWord() {
+            var params = getParams(null, null, 0, 0);
+            $.ajax({
+                type: "POST",
+                url: '/BaoCao/ExportWordChiTietThietBiNhom',
+                data: params,
+                success: function (response, status, xhr) {
+                    var dt = new Date();
+                    var a = document.createElement('a');
+                    a.href = response;
+                    a.download = 'ChiTietThietBi_' + dt.getFullYear() + "" + (dt.getMonth() + 1) + dt.getDate() + dt.getHours() + dt.getMinutes() + dt.getSeconds() +'.docx';
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                },
+                error: function (response) {
+                    console.log('error - ' + response);
+                    //swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+
+        function exportPDF() {
+            var params = getParams(null, null, 0, 0);
+            $.ajax({
+                type: "POST",
+                url: '/BaoCao/ExportPDFChiTietThietBiNhom',
+                data: params,
+                success: function (response, status, xhr) {
+                    var dt = new Date();
+                    var a = document.createElement('a');
+                    a.href = response;
+                    a.download = 'ChiTietThietBi_' + dt.getFullYear() + "" + (dt.getMonth() + 1) + dt.getDate() + dt.getHours() + dt.getMinutes() + dt.getSeconds() +'.pdf';
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                },
+                error: function (response) {
+                    console.log('error - ' + response);
+                    //swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,198 @@
+--------- 00:35:03 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /Authentication/Login
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Find(Object[] keyValues)
+   at System.Data.Entity.DbSet`1.Find(Object[] keyValues)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 108
+   at TKM.DAO.EntityFramework.NguoiDungRepository.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\NguoiDungRepository.Generated.cs:line 87
+--------- 00:35:03 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /Authentication/Login
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Find(Object[] keyValues)
+   at System.Data.Entity.DbSet`1.Find(Object[] keyValues)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 108
+   at TKM.DAO.EntityFramework.DmDonViRepository.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\DmDonViRepository.Generated.cs:line 87
+--------- 00:35:04 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /Authentication/Login
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.ActOnSet(Action action, EntityState newState, Object entity, String methodName)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Add(Object entity)
+   at System.Data.Entity.DbSet`1.Add(TEntity entity)
+   at TKM.DAO.EntityFramework.EFRepository`1.Add(T entity) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 60
+   at TKM.DAO.EntityFramework.NhatKyHeThongRepository.Add(NhatKyHeThong entity) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\NhatKyHeThongRepository.Generated.cs:line 131
+--------- 00:35:04 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   at System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetMany(Expression`1 where) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 104
+   at TKM.DAO.EntityFramework.ThongBaoRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\ThongBaoRepository.Generated.cs:line 57
+--------- 00:35:07 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   at System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetMany(Expression`1 where) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 104
+   at TKM.DAO.EntityFramework.ThongBaoRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\ThongBaoRepository.Generated.cs:line 57
+--------- 00:35:07 ---------
+Ref URL: http://localhost:3939/Authentication/Login?RedirectUrl=%2f
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   at System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetMany(Expression`1 where) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 104
+   at TKM.DAO.EntityFramework.ThongBaoRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\ThongBaoRepository.Generated.cs:line 57
+--------- 00:35:16 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /Authentication/DoLogout
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.ActOnSet(Action action, EntityState newState, Object entity, String methodName)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Add(Object entity)
+   at System.Data.Entity.DbSet`1.Add(TEntity entity)
+   at TKM.DAO.EntityFramework.EFRepository`1.Add(T entity) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 60
+   at TKM.DAO.EntityFramework.NhatKyHeThongRepository.Add(NhatKyHeThong entity) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\NhatKyHeThongRepository.Generated.cs:line 131
+--------- 00:35:19 ---------
+Ref URL: http://localhost:3939/Authentication/Login
+Host: localhost:3939
+URL: /Authentication/Login
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Find(Object[] keyValues)
+   at System.Data.Entity.DbSet`1.Find(Object[] keyValues)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 108
+   at TKM.DAO.EntityFramework.NguoiDungRepository.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\NguoiDungRepository.Generated.cs:line 87
+--------- 00:35:19 ---------
+Ref URL: http://localhost:3939/Authentication/Login
+Host: localhost:3939
+URL: /Authentication/Login
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Find(Object[] keyValues)
+   at System.Data.Entity.DbSet`1.Find(Object[] keyValues)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 108
+   at TKM.DAO.EntityFramework.DmDonViRepository.GetById(Int32 id) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\DmDonViRepository.Generated.cs:line 87
+--------- 00:35:19 ---------
+Ref URL: http://localhost:3939/Authentication/Login
+Host: localhost:3939
+URL: /Authentication/Login
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.ActOnSet(Action action, EntityState newState, Object entity, String methodName)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Add(Object entity)
+   at System.Data.Entity.DbSet`1.Add(TEntity entity)
+   at TKM.DAO.EntityFramework.EFRepository`1.Add(T entity) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 60
+   at TKM.DAO.EntityFramework.NhatKyHeThongRepository.Add(NhatKyHeThong entity) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\NhatKyHeThongRepository.Generated.cs:line 131
+--------- 00:35:19 ---------
+Ref URL: http://localhost:3939/Authentication/Login
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   at System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetMany(Expression`1 where) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 104
+   at TKM.DAO.EntityFramework.ThongBaoRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\ThongBaoRepository.Generated.cs:line 57
+--------- 00:35:19 ---------
+Ref URL: http://localhost:3939/Authentication/Login
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   at System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetMany(Expression`1 where) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 104
+   at TKM.DAO.EntityFramework.ThongBaoRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\ThongBaoRepository.Generated.cs:line 57
+--------- 00:35:19 ---------
+Ref URL: http://localhost:3939/Authentication/Login
+Host: localhost:3939
+URL: /
+IP: ::1
+Text: System.InvalidOperationException: No connection string named 'TKMReportsEntities' could be found in the application config file.
+   at System.Data.Entity.Internal.LazyInternalConnection.get_ConnectionHasModel()
+   at System.Data.Entity.Internal.LazyInternalContext.InitializeContext()
+   at System.Data.Entity.Internal.InternalContext.GetEntitySetAndBaseTypeForType(Type entityType)
+   at System.Data.Entity.Internal.Linq.InternalSet`1.Initialize()
+   at System.Data.Entity.Internal.Linq.InternalSet`1.get_InternalContext()
+   at System.Data.Entity.Infrastructure.DbQuery`1.System.Linq.IQueryable.get_Provider()
+   at System.Linq.Queryable.Where[TSource](IQueryable`1 source, Expression`1 predicate)
+   at TKM.DAO.EntityFramework.EFRepository`1.GetMany(Expression`1 where) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\EFRepository.cs:line 104
+   at TKM.DAO.EntityFramework.ThongBaoRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\TKM_Sysman_Reports\05. DAO\EntityFramework\ThongBaoRepository.Generated.cs:line 57

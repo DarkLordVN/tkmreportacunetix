@@ -1,0 +1,339 @@
+﻿@model TKM.WebApp.LoginModel
+@using CaptchaMvc.HtmlHelpers
+
+@{
+    Layout = null;
+    ViewBag.Title = "Đăng nhập";
+    var focusCaptcha = (int?)ViewBag.focusCaptcha ?? 0;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/Assets/css/all.css" rel="stylesheet">
+    <link href="/Assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Assets/css/mdb.min.css" rel="stylesheet" />
+    <link href="/Assets/css/style-index.css" rel="stylesheet">
+    <!-- JQuery -->
+    <script type="text/javascript" src="/Assets/js/jquery-3.4.0.min.js"></script>
+</head>
+
+<body class="fixed-sn">
+    @*<script type="text/javascript">
+        </script>
+        <div class="peers ai-s fxw-nw h-100vh">
+            <div class="d-n@sm- peer peer-greed h-100 pos-r bgr-n bgpX-c bgpY-c bgsz-cv" style="background-image:url(/Assets/images/bg.jpg)">
+            </div>
+            <div class="col-12 col-md-4 peer pX-40 pY-80 h-100 bgc-white scrollable pos-r" style="min-width:320px">
+                <h4 class="fw-300 c-grey-900 mB-40">Truy cập ứng dụng</h4>
+                <form action="/Authentication/Login" id="login-form" class="smart-form client-form" method="POST">
+                    @if (Model != null)
+                    {
+                        if (Model.ErrMess != null)
+                        {
+                            @Html.Raw(Model.ErrMess)
+                        }
+                    }
+
+                    @if (string.IsNullOrEmpty(ViewBag.ReturnUrl))
+                    {
+                        <input type="hidden" name="returnUrl">
+                    }
+                    else
+                    {
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl">
+                    }
+                    <div class="form-group">
+                        <label class="text-normal text-dark">Tài khoản</label>
+
+                        <input type="text" name="TenDangNhap" class="form-control" placeholder="Nhập tên đăng nhập">
+                        @Html.ValidationMessageFor(model => model.TenDangNhap)
+                    </div>
+                    <div class="form-group">
+                        <label class="text-normal text-dark">Mật khẩu</label>
+                        <input type="password" name="MatKhau" class="form-control" placeholder="Nhập mật khẩu">
+                        @Html.ValidationMessageFor(model => model.MatKhau)
+                    </div>
+                    <div class="form-group">
+                        <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                                <div class="checkbox checkbox-circle checkbox-info peers ai-c">
+                                    <input type="checkbox" id="inputCall1" name="inputCheckboxesCall" class="peer">
+                                    <label for="inputCall1" class="peers peer-greed js-sb ai-c"><span class="peer peer-greed">Ghi nhớ tài khoản</span></label>
+                                </div>
+                            </div>
+                            <div class="peer">
+                                <a href="Authentication/">Đăng ký</a> | <a href="resetpw.html">Quên mật khẩu</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="peers ai-c jc-sb fxw-nw">
+                            <div class="peer">
+                            </div>
+                            <div class="peer">
+                                <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>*@
+
+    @*<div class="limiter">
+            <div class="container-login100" style="background-image: url('/Assets/images/logo/bg01.jpg');">
+                <div class="wrap-login100">
+
+                    <form action="/Authentication/Login" id="login-form" class="smart-form client-form" method="POST">
+                        <span class="login100-form-logo">
+                            <span style="background-image: url('/Assets/images/logo/logo.png'); background-size: cover; background-repeat: no-repeat; width: 80px; height: 75px;"></span>
+                        </span>
+
+                        <span class="login100-form-title p-b-34 p-t-27">
+                            TKM CỤC ĐĂNG KIỂM
+                        </span>
+
+                        <div class="wrap-input100 validate-input" data-validate="Enter username">
+                            <input type="text" name="TenDangNhap" class="input100" placeholder="Tên đăng nhập">
+                            <span class="focus-input100"><i class="fa fa-user"></i></span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.TenDangNhap)
+
+                        <div class="wrap-input100 validate-input" data-validate="Enter password">
+                            <input type="password" name="MatKhau" class="input100" placeholder="Mật khẩu">
+                            <span class="focus-input100"><i class="fa fa-lock"></i></span>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.MatKhau)
+
+                        <div class="contact100-form-checkbox">
+                            <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+                            <label class="label-checkbox100" for="ckb1">
+                                Nhớ tài khoản
+                            </label>
+                        </div>
+
+                        <div class="container-login100-form-btn">
+                            <button class="login100-form-btn">
+                                Đăng nhập
+                            </button>
+                        </div>
+
+                        <div class="text-center p-t-90">
+                            <a class="txt1" href="#">
+                                Quên mật khẩu?
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+    <header>
+        <!-- Full Page Intro -->
+
+        <div class="view" style="background-image: url('/Assets/images/logo/bg-index.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+            <!-- Mask & flexbox options-->
+            <div class="mask rgba-indigo-strong d-flex justify-content-center align-items-center" style="background-color: rgb(84, 79, 144, .4);">
+                <!-- Content -->
+                <div class="container">
+                    <!--Grid row-->
+                    <div class="row pt-lg-5 mt-lg-5">
+                        <!--Grid column-->
+                        <div class="d-none d-md-block col-md-6 mb-5 mt-md-0 mt-5 white-text text-center text-md-left wow fadeInLeft" data-wow-delay="0.3s">
+                            <h1 class="display-4 font-weight-bold">TKM</h1>
+                            <hr class="hr-light">
+                            <h6 class="mb-3">
+                                HỆ THỐNG BÁO CÁO TỔNG HỢP SYSMAN
+                            </h6>
+                        </div>
+                        <!--Grid column-->
+                        <!--Grid column-->
+                        <div class="col-md-6 col-xl-5 mb-4 wow fadeInUp" data-wow-delay="0.5s">
+
+                            <!--Form-->
+                            <div class="card">
+
+                                <div class="card-body mx-4">
+
+
+                                    <!--Header-->
+                                    <div class="form-header f-bg2">
+                                        <h6 class="text-uppercase text-dark mb-0"><i class="fal fa-sign-in mr-3"></i>Đăng nhập hệ thống</h6>
+                                    </div>
+                                    <form action="/Authentication/Login" id="login-form" class="smart-form client-form" method="POST">
+                                        <!--Body-->
+                                        <div class="row form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextBoxFor(model => model.TenDangNhap, new { @class = "form-control ", @id = "username-f", @placeholder = "Tài khoản" , @tabindex ="1"})
+                                                @Html.ValidationMessageFor(model => model.TenDangNhap, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextBoxFor(model => model.MatKhau, new { @class = "form-control ", @id = "Form-pass1", @placeholder = "Mật khẩu", @type = "password", @tabindex = "2" })
+                                                @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>
+                                        @*<div class="row">
+                                            <div class="col-sm-12 rmBR">
+                                              @Html.Captcha("Refresh", "Nhập mã captcha", 4)
+                                            @Html.ValidationMessageFor(model => model.ErrMess, "", new { @class = "alert-danger" })
+                                            </div>
+                                        </div>*@
+                                        @*<div class="md-form">
+                                            @Html.TextBoxFor(model => model.TenDangNhap, new { @class = "form-control ", @id = "username-f", @placeholder = "Tài khoản" })
+                                            @Html.ValidationMessageFor(model => model.TenDangNhap, "", new { @class = "alert-danger" })
+                                        </div>
+
+                                        <div class="md-form mb-0 pb-0">
+                                            @Html.TextBoxFor(model => model.MatKhau, new { @class = "form-control ", @id = "Form-pass1", @placeholder = "Mật khẩu", @type = "password" })
+                                            @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "alert-danger" })
+
+                                        </div>
+                                        <div class="md-form mb-0 pb-0 mt-0">
+                                            @Html.Captcha("Refresh", "Nhập mã captcha", 4)
+                                            @Html.ValidationMessageFor(model => model.ErrMess, "", new { @class = "alert-danger" })
+                                        </div>*@
+
+                                        <div class="text-center mb-3 mt-3">
+                                            <button type="submit" tabindex="4" class="btn text-white f-bg1 btn-block btn-rounded z-depth-1a waves-effect waves-light">Đăng nhập</button>
+                                        </div>
+                                        <!--/.Form-->
+                                    </form>
+                                    @*<p class="font-small d-flex justify-content-end f-cl1 mb-0">
+                                        Quên
+                                        <a href="/Home/ForgetPassword" class="f-cl1 ml-1"> Mật khẩu?</a>
+                                    </p>*@
+                                </div>
+
+                                <!--Footer-->
+                                <div class="modal-footer mx-5 pt-3 mb-1">
+                                    <p class="font-small w-100 mb-0 d-flex justify-content-center">Bạn có thắc mắc? Vui lòng liên hệ ban quản trị</p>
+                                    @*<p class="font-small w-100 mb-0 d-flex justify-content-center">Bạn có thắc mắc? Vui lòng gọi: <strong class="f-cl1 ml-2">(024).37684715</strong></p>*@
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!--Grid column-->
+                    </div>
+                    <!--Grid row-->
+                </div>
+                <!-- Content -->
+            </div>
+            <!-- Mask & flexbox options-->
+        </div>
+        <!-- Full Page Intro -->
+        </form>
+    </header>
+    @*<header>
+            <!-- Full Page Intro -->
+
+            <div class="view" style="background-image: url('/Assets/images/logo/bg-index.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+                <!-- Mask & flexbox options-->
+                <div class="mask rgba-indigo-strong d-flex justify-content-center align-items-center">
+                    <!-- Content -->
+                    <div class="container">
+                        <!--Grid row-->
+                        <div class="row pt-lg-5 mt-lg-5">
+                            <!--Grid column-->
+                            <div class="d-none d-md-block col-md-6 mb-5 mt-md-0 mt-5 white-text text-center text-md-left wow fadeInLeft" data-wow-delay="0.3s">
+                                <h1 class="display-4 font-weight-bold">TKM</h1>
+                                <hr class="hr-light">
+                                <h6 class="mb-3">
+                                    HỆ THỐNG QUẢN LÝ VĂN BẢN VÀ ĐIỀU HÀNH
+                                </h6>
+                            </div>
+                            <!--Grid column-->
+                            <!--Grid column-->
+                            <div class="col-md-6 col-xl-5 mb-4 wow fadeInUp" data-wow-delay="0.5s">
+                                @using (Html.BeginForm("Login", "Authentication"))
+                                {
+                                    <!--Form-->
+                                    <div class="card">
+
+                                        <div class="card-body mx-4">
+
+                                            <!--Header-->
+                                            <div class="form-header f-bg2">
+                                                <h6 class="text-uppercase text-dark mb-0"><i class="fal fa-sign-in mr-3"></i>Đăng nhập hệ thống</h6>
+                                            </div>
+
+                                            <!--Body-->
+                                            <div class="md-form">
+                                                <input type="text" name="TenDangNhap" id="username-f" class="form-control" placeholder="Tài khoản">
+                                            </div>
+
+                                            <div class="md-form pb-3">
+                                                <input type="password" id="Form-pass1" class="form-control" name="MatKhau" placeholder="Mật khẩu">
+                                                <p class="font-small d-flex justify-content-end f-cl1">
+                                                    Quên
+                                                    <a href="#" class="f-cl1 ml-1"> Mật khẩu?</a>
+                                                </p>
+                                            </div>
+
+                                            <div class="md-form pb-3">
+                                                @Html.Captcha(2) <br /> <p> @ViewBag.ErrorMessage </p>
+                                            </div>
+
+                                            <div class="text-center mb-3">
+                                                <button type="submit" class="btn text-white f-bg1 btn-block btn-rounded z-depth-1a waves-effect waves-light">Đăng nhập</button>
+                                            </div>
+
+                                        </div>
+
+                                        <!--Footer-->
+                                        <div class="modal-footer mx-5 pt-3 mb-1">
+                                            <p class="font-small w-100 mb-0 d-flex justify-content-center">Bạn có thắc mắc? Vui lòng gọi: <strong class="f-cl1 ml-2">(024).37684715</strong></p>
+                                        </div>
+
+                                    </div>
+                                    <!--/.Form-->
+                                }
+                            </div>
+                            <!--Grid column-->
+                        </div>
+                        <!--Grid row-->
+                    </div>
+                    <!-- Content -->
+                </div>
+                <!-- Mask & flexbox options-->
+            </div>
+            <!-- Full Page Intro -->
+        </header>*@
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="/Assets/js/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="/Assets/js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="/Assets/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="/Assets/js/mdb.min.js"></script>
+    <!-- Custom core JavaScript -->
+    <script type="text/javascript" src="/Assets/js/custom2.js"></script>
+    <script>
+        @*if ('@focusCaptcha' == '1') {
+            $(document).ready(function () {
+                $('input[type="text"][name="CaptchaInputText"]').focus();
+            })
+        }*@
+        $(document).ready(function () {
+            $('#CaptchaImage').css('display', 'inline-block');
+            $(".rmBR").find("br").remove();
+            $(".rmBR a").after("<br />");
+            $('input[type="text"][name="CaptchaInputText"]').addClass('form-control');
+            $('input[type="text"][name="CaptchaInputText"]').attr("tabindex", "3");
+            if ('@focusCaptcha' == '1') {
+                $('input[type="text"][name="CaptchaInputText"]').focus();
+            }
+        })
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+﻿@{ 
+    Layout = null;
+    var lstNguoiDung = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiDung;
+}
+@if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+{
+    <select class="mdb-select-cusvb mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NguoiDungId" name="NguoiDungId" searchable="Nhập từ khóa..">
+        <option value="0">-- Chọn người xử lý --</option>
+        @foreach (var item in lstNguoiDung)
+        {
+            <option value="@item.ID">@item.HoVaTen</option>
+        }
+    </select>
+}
+else
+{
+    <select class="mdb-select-cusvbx mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NguoiDungId" name="NguoiDungId" searchable="Nhập từ khóa..">
+        <option value="0">-- Chọn người xử lý --</option>
+    </select>
+}
+<script>
+    $('.mdb-select-cusvb,.mdb-select-cusvbx').materialSelect();
+</script>

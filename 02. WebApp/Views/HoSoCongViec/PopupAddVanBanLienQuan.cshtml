@@ -1,0 +1,113 @@
+﻿@using TKM.BLL
+@model List<VanBanDenViewModel>
+@{ 
+    Layout = null;
+}
+<div class="row form-group">
+    <div class="col-12">
+        <div class="table-responsive-sm">
+            <table id="dt-vblienquan" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                <thead class="bg-primary text-white lighten-3">
+                    <tr>
+                        <th class="th-sm">
+                           Số ký hiệu
+                        </th>
+                        <th class="th-sm">
+                            Trích yếu nội dung
+                        </th>
+                        <th class="th-sm" style="width:50px">
+                           
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                 @if (Model != null && Model.Count > 0)
+                 {
+                     foreach (var item in Model)
+                     {
+                        <tr class="validCheck">
+                            <td class="tal">@item.SoKyHieu</td>
+                            <td class="tal">@item.TrichYeu</td>
+                            <td>
+                                <input type="hidden" name="VanBan" value="@item.ID" />
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="checkbox" value="@item.ID" id="chk'@item.ID'">
+                                    <label class="form-check-label" for="chk'@item.ID'"></label>
+                                </div>
+                            </td>
+                        </tr>
+                     }
+                 }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="lstIDVBChecked" name="lstIDVBChecked" value="" />
+<div class="form-group row">
+    <div class="text-right col-sm-12">
+        <button type="button" id="chonvanbanlq" class="btn btn-primary">Chọn</button>
+        <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#dt-vblienquan').dataTable(
+       {
+           "oLanguage": {
+               "sUrl": "/Content/Vietnamese.json"
+           }
+       });
+        $('.dataTables_length').addClass('bs-select');
+        $('input[type=hidden][name=VanBan]').each(function () {
+            arrVanBan.push($(this).val());
+        })
+        $('#lstIDVBChecked').val('');
+        
+    });
+    $('input[type="checkbox"]').change(function () {
+        if ($(this).is(':checked')) {
+            $('#lstIDVBChecked').val($('#lstIDVBChecked').val() + ',' + $(this).val() + ',');
+        }
+        else {
+            var strRemove = ',' + $(this).val() + ',';
+            var str = $('#lstIDVBChecked').val().toString().replace(strRemove, '');
+            $('#lstIDVBChecked').val(str);
+        }
+    })
+    $('#chonvanbanlq').on('click', function () {
+        
+        var countCheck = $('tr.validCheck td input:checkbox:checked').length;
+        if (countCheck == 0) {
+            toastr.error('Vui lòng chọn ít nhất 1 văn bản liên quan!');
+            return false;
+        }
+        var lstChecked = [];
+        $('.validCheck .form-check-input').each(function () {
+            if ($(this).prop('checked'))
+                lstChecked.push($(this).val());
+        })
+        $.ajax({
+            type: "GET",
+            url: '/HoSoCongViec/ReloadTableLienQuan',
+            data: { lstid: $('#lstIDVBChecked').val() },
+            dataType: "html",
+            success: function (res) {
+                $('#reloadTableLienQuan').append(res);
+            },
+            error: function (response) {
+                swal("Đã có lỗi xảy ra", { icon: "error", });
+            }
+        });
+        modal.hide();
+    });
+</script>
+<style>
+    .modal-lg, .modal-xl {
+    max-width: 1000px !important;
+}
+    #dt-vblienquan.table td, #dt-vblienquan.table th{
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+</style>

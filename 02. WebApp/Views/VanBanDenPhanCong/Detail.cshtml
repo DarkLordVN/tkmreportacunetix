@@ -1,0 +1,55 @@
+﻿@using TKM.BLL
+@model VanBanDenPhanCongViewModel
+@{
+    Layout = null;
+}
+
+@*<div class="form-group">
+        <div class="row">
+            <div class="col-md-3">
+                <label>Danh mục blog: </label>
+            </div>
+            <div class="col-md-9">
+                @(objBlog?.TenDanhMucCha)
+            </div>
+        </div>
+    </div>*@
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Tên đơn vị: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.DonVi : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Người xử lý: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.NguoiXuLy : "")
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Chức vụ: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.ChucVu : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+</div>

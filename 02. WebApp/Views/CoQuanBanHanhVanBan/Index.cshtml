@@ -1,0 +1,173 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.CoQuanBanHanhVanBanListView
+@{
+    ViewBag.Title = "Danh sách cơ quan ban hành văn bản";
+}
+@section Css {
+    <style></style>
+}
+<div class="container-fluid bgc-white pl-3 pr-3 pt-1">
+    <div class="row">
+        <div class="col-md-12 p-0">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bgc-white p-0">
+                    <li class="breadcrumb-item"><a href="/Home/Index"><span class="icon-holder"><i class="fa fa-home"></i></span></a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="/CoQuanBanHanhVanBan/Index"><span class="icon-holder"><i class=""></i></span>@ViewBag.Title</a></li>
+                </ol>
+            </nav>
+            <h4 class="title c-grey-900 mB-20 pB-10">@ViewBag.Title <a href="/CoQuanBanHanhVanBan/Add" title="Thêm mới" class="float-right btn-add btn cur-p btn-outline-success"><span class="icon-holder"><i class="fa fa-plus"></i> </span><span class="text-button">Thêm mới</span></a></h4>
+
+            <!-- ./Information of page info success warning danger-->
+            @* //Todo: Load lại TempData *@
+            @if (TempData["AlertData"] != null)
+            {
+                <div class="alert @TempData["AlertType"]">
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>@Html.Raw(TempData["AlertData"])</strong>
+                    <a id="lblMessage"></a>
+                </div>
+            }
+            <!-- ./Information of page for Search -->
+            <div class="masonry-item">
+                <div class="bgc-white p-10 bd">
+                    <h6 class="c-grey-900 font-weight-bold">Tìm kiếm</h6>
+                    <div class="mT-20" id="search">
+                        <div class="form-group row">
+                            <label for="inputSearch" class="col-sm-2 col-form-label text-right">Tên cơ quan <span class="c-red-500">(*)</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.TenCoQuanBanHanhVanBan, new { @placeholder = "Tên cơ quan ban hành văn bản", @class = "form-control", @id = "txtKeyWord" })
+                            </div>
+                            @*<label for="inputSearch" class="col-sm-2 col-form-label text-right">Mã cơ quan <span class="c-red-500">(*)</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.MaCoQuan, new { @placeholder = "Mã cơ quan ban hành văn bản", @class = "form-control", @id = "txtCodeKeyWord" })
+                            </div>*@
+                        </div>
+                        <div class="form-group row">
+                            @* //Todo: Xóa form action *@
+
+                            <label for="inputPassword3" class="col-sm-2 col-form-label text-right">Trạng thái</label>
+                            <div class="col-sm-3">
+                                @Html.DropDownListFor(model => model.TrangThai, new List<SelectListItem>
+                                                {
+                                                    new SelectListItem{Text="--- Tất cả ---", Value=""},
+                                                    new SelectListItem{Text="Không sử dụng", Value="0"},
+                                                    new SelectListItem{Text="Có Sử dụng", Value="1"}
+                                                }, new { @class = "form-control", @id = "trangthai" })
+                            </div>
+                            <div class="text-left col-sm-2">
+                                <button type="submit" id="btnSearch" class="btn btn-primary"><span class="icon-holder"><i class="ti-search"></i> </span>Tìm kiếm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ./Information of page for Results -->
+            <div class="masonry-item mT-10">
+                <div class="bgc-white">
+                    <h6 class="c-grey-900 font-weight-bold">Kết quả</h6>
+                    <table id="tbl" class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                @*<th data-colname="MaCoQuanBanHanh" data-orderby="asc">Mã cơ quan</th>*@
+                                <th data-colname="TenCoQuanBanHanh" data-orderby="asc">Tên cơ quan</th>
+                                <th>Ngày cập nhật</th>
+                                <th>Người cập nhật</th>
+                                <th>Thứ tự</th>
+                                <th class="t_action">Sửa</th>
+                                <th class="t_action">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbKetQua">
+                            @{ Html.RenderAction("IndexDetail", Model); }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xác nhận xóa?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">Bạn có chắc chắn xóa chức vụ này không?</div>
+            <div class="modal-footer">
+                <input type="hidden" id="delModalId" />
+                <button id="btnDel" type="button" class="btn btn-primary">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        $("#btnDel").on("click", function () {
+            $.ajax({
+                url: '/CoQuanBanHanhVanBan/DeleteCoQuanBanHanhVanBan',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: $("#delModalId").val() }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    if (data != '') alert(data);
+
+                    location.reload();
+                },
+                error: function (xhr) {
+                    swal("Đã có lỗi xảy ra", {icon: "error",});
+                }
+            });
+        });
+
+        //Thêm event xử lý load ajax
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        function loadData(col, order) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "CoQuanBanHanhVanBan")',
+                data: {
+                    TenCoQuanBanHanhVanBan: $("#txtKeyWord").val(),
+                    MaCoQuan: $("#txtCodeKeyword").val(),
+                    TrangThai: ($("#trangthai").val().length > 0 ? ($("#trangthai").val() == 0 ? false : true) : ""),
+                    ColumnName: col,
+                    OrderBy: order
+                },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response)
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", {icon: "error",});
+                }
+            });
+        }
+    </script>
+}

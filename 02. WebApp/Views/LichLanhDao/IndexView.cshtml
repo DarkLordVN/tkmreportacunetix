@@ -1,0 +1,193 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.LichLanhDaoListView
+@{
+    ViewBag.Title = "Danh sách lịch lãnh đạo";
+}
+@section Css {
+    <style>
+        table.table-hover tbody tr:hover {
+            background-color: #fff;
+        }
+        table.table-hover tbody tr td:hover {
+            background-color: rgba(0,0,0,.075);
+        }
+    </style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/LichLanhDao/IndexView">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+
+                            <div class="form-group row mb-0 mt-4">
+                                <label for="ddlNguoiDung" class="col-sm-2 col-form-label">Lãnh đạo <span class="c-red-500">(*)</span></label>
+                                <div class="col-sm-4">
+                                    @Html.DropDownListFor(model => model.NguoiDungID, new SelectList(Model.LstNguoiDung, "ID", "ChucVuVaTen"), "--- Chọn lãnh đạo ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlNguoiDung", @searchable = "Nhập từ khóa.." })
+                                </div>
+                                <label for="ThoiGian" class="col-sm-2 col-form-label">Thời gian <span class="c-red-500">(*)</span></label>
+                                <div class="col-sm-4">
+                                    @Html.DropDownListFor(model => model.ThoiGian, new SelectList(Model.LstThoiGian.Where(x => x.Value != 0), "Value", "Text"), "--- Chọn thời gian ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ThoiGian", @searchable = "Nhập từ khóa.." })
+                                </div>
+
+                            </div>
+                            <div class="form-group row mb-0">
+                                <label class="col-form-label col-sm-2">Thời gian từ </label>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="input-group date datepicker">
+                                            @Html.TextBoxFor(model => model.ThoiGianBatDauStr, new { @class = "form-control keyenter", @id = "ThoiGianBatDauStr" })
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-clock"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-form-label col-sm-2"> đến </label>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="input-group date datepicker">
+                                            @Html.TextBoxFor(model => model.ThoiGianKetThucStr, new { @class = "form-control keyenter", @id = "ThoiGianKetThucStr" })
+                                            <span class="input-group-addon">
+                                                <span class="fa fa-clock"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table id="lld" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+
+                                                    <th class="t_action th-sm" style="width:120px">Thứ/Ngày</th>
+                                                    <th class="th-sm pointer" style="width:250px">Lãnh đạo cục</th>
+                                                    <th class="th-sm pointer" style="width:150px">Thời gian</th>
+                                                    <th class="th-sm pointer" style="width:360px">Nội dung</th>
+                                                    <th class="th-sm" style="width:180px">Địa điểm</th>
+                                                    @*<th class="th-sm" style="width:180px">Chuẩn bị</th>*@
+                                                    <th class="th-sm" style="width:180px">Thành phần</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("IndexViewDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        function loadfrmView(id) {
+            modal.Render("/LichLanhDao/Detail/" + id, "Thông tin lịch lãnh đạo", "modal-lg");
+        }
+
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        $("#btnDel").on("click", function () {
+            $.ajax({
+                url: '/LichLanhDao/DeleteLichLanhDao',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: $("#delModalId").val() }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            $(window).scrollTop(0);
+        });
+
+        //Thêm event xử lý load ajax
+        $("#ThoiGianKetThucStr").focusout(function () {
+            loadData("", "");
+        });
+        $("#ThoiGianBatDauStr").focusout(function () {
+            loadData("", "");
+        });
+        $("#ddlNguoiDung").change(function () {
+           loadData("", "");
+        });
+        $("#ThoiGian").change(function () {
+            loadData("", "");
+        })
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        //$("table th").click(function () {
+        //    var col = $(this).data("colname");
+        //    var orderby = $(this).data("orderby");
+        //    if (col != "" && orderby != null) {
+        //        loadData(col, orderby);
+        //        if (orderby == "desc") orderby = "asc";
+        //        else orderby = "desc";
+        //        $(this).data("orderby", orderby);
+        //    }
+        //});
+
+        function loadData(col, order, pnum, psize) {
+            $("#loading").show();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexViewDetail", "LichLanhDao")',
+                data: { NguoiDungID: $("#ddlNguoiDung").val(), ThoiGian: $("#ThoiGian").val(), ThoiGianBatDauStr: $("#ThoiGianBatDauStr").val(), ThoiGianKetThucStr: $("#ThoiGianKetThucStr").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    $("#loading").hide();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                    $("#loading").hide();
+                }
+            });
+        }
+        function loadPaging() {
+            //var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            //var pnum = $("#txtPageNumber").val();
+            //$(".PagedList-pageCountAndLocation").removeClass("disabled");
+            //$(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        
+    </script>
+}

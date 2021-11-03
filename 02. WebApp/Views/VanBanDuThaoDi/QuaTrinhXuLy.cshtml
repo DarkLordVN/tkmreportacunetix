@@ -1,0 +1,318 @@
+﻿@model TKM.BLL.TongHopQuaTrinhXuLyDuThaoViewModel
+
+@{
+    ViewBag.Title = "Gửi ý kiến";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col right-content">
+
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent px-0">
+                        <li class="breadcrumb-item"><a href="#"><i class="fal fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDuThaoDi/Detail/@Model.VanBanID">Chi tiết văn bản dự thảo</a></li>
+                        <li class="breadcrumb-item active">Quá trình xử lý văn bản</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row box-content bg-white z-depth-1 mx-0">
+            <div class="col-12 px-3">
+                <blockquote class="blockquote my-4">
+                    <h4 class="font-weight-bold">Luồng xử lý văn bản</h4>
+                </blockquote>
+
+                <div class="row qtxlvb">
+                    @if (Model != null && Model.LstNguoiSoan != null && Model.LstNguoiSoan.Count > 0)
+                    {
+                        <div class="col-12 col-md-3">
+                            <!-- Card -->
+                            <div class="card card-cascade narrower mb-4">
+                                <span class="badge badge-secondary p-3 arrow-xlvb"><i class="fal fa-arrow-right"></i></span>
+
+                                <!-- Card image -->
+                                <div class="view view-cascade gradient-card-header indigo lighten-1 py-3">
+
+                                    <!-- Title -->
+                                    <h5 class="card-header-title">Người soạn thảo</h5>
+
+                                </div>
+
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade text-center">
+
+                                    <!-- Text -->
+                                    @*<p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Anh Tuấn</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>
+                                        <hr>
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Tuấn Anh</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>*@
+                                    @foreach (var item in Model.LstNguoiSoan)
+                                    {
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">@item.HoVaTen</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>@(item.TenChucVu + " " + item.TenDonVi.ToLower())</small>
+                                        </p>
+                                        <hr>
+                                    }
+                                </div>
+
+                            </div>
+                            <!-- Card -->
+                        </div>
+                    }
+                    @if (Model != null && Model.LstNguoiGopY != null && Model.LstNguoiGopY.Count > 0)
+                    {
+                        <div class="col-12 col-md-3">
+                            <!-- Card -->
+                            <div class="card card-cascade narrower mb-4">
+                                <span class="badge badge-secondary p-3 arrow-xlvb"><i class="fal fa-arrow-right"></i></span>
+
+                                <!-- Card image -->
+                                <div class="view view-cascade gradient-card-header indigo lighten-1 py-3">
+
+                                    <!-- Title -->
+                                    <h5 class="card-header-title">Người góp ý</h5>
+
+                                </div>
+
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade text-center">
+
+                                    <!-- Text -->
+                                    @foreach (var item in Model.LstNguoiGopY)
+                                    {
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">@item.HoVaTen</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>@(item.TenChucVu + " " + item.TenDonVi.ToLower())</small>
+                                        </p>
+                                        <hr>
+                                    }
+                                    @*<p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Anh Tuấn</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>
+                                        <hr>
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Tuấn Anh</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>
+                                        <hr>
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Anh Tuấn</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>
+                                        <hr>
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Tuấn Anh</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>*@
+
+                                </div>
+
+                            </div>
+                            <!-- Card -->
+                        </div>
+                    }
+                    @if (Model != null && Model.LstNguoiKiemDuyet != null && Model.LstNguoiKiemDuyet.Count > 0)
+                    {
+                        <div class="col-12 col-md-3">
+                            <!-- Card -->
+                            <div class="card card-cascade narrower mb-4">
+                                <span class="badge badge-secondary p-3 arrow-xlvb"><i class="fal fa-arrow-right"></i></span>
+
+                                <!-- Card image -->
+                                <div class="view view-cascade gradient-card-header indigo lighten-1 py-3">
+
+                                    <!-- Title -->
+                                    <h5 class="card-header-title">Người kiểm duyệt</h5>
+
+                                </div>
+
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade text-center">
+
+                                    <!-- Text -->
+                                    @*<p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Anh Tuấn</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>
+                                        <hr>
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Tuấn Anh</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>
+                                        <hr>
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Anh Tuấn</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>*@
+                                    @foreach (var item in Model.LstNguoiKiemDuyet)
+                                    {
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">@item.HoVaTen</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>@(item.TenChucVu + " " + item.TenDonVi.ToLower())</small>
+                                        </p>
+                                        <hr>
+                                    }
+                                </div>
+
+                            </div>
+                            <!-- Card -->
+                        </div>
+                    }
+                    @if (Model != null && Model.LstNguoiDuyet != null && Model.LstNguoiDuyet.Count > 0)
+                    {
+                        <div class="col-12 col-md-3">
+                            <!-- Card -->
+                            <div class="card card-cascade narrower mb-4">
+
+                                <!-- Card image -->
+                                <div class="view view-cascade gradient-card-header indigo lighten-1 py-3">
+
+                                    <!-- Title -->
+                                    <h5 class="card-header-title">Người ký duyệt</h5>
+
+                                </div>
+
+                                <!-- Card content -->
+                                <div class="card-body card-body-cascade text-center">
+
+                                    <!-- Text -->
+                                    @*<p class="card-text">
+                                            <strong class="form-control-lg">Nguyễn Anh Tuấn</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>Cán bộ phòng đường sắt</small>
+                                        </p>*@
+                                    @foreach (var item in Model.LstNguoiDuyet)
+                                    {
+                                        <p class="card-text">
+                                            <strong class="form-control-lg">@item.HoVaTen</strong> <br>
+                                            <small class="font-italic"><i class="fal fa-user-tag mr-2"></i>@(item.TenChucVu + " " + item.TenDonVi.ToLower())</small>
+                                        </p>
+                                        <hr>
+                                    }
+                                </div>
+
+                            </div>
+                            <!-- Card -->
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="col-12 table-responsive-sm mb-4 my-lg-0 px-3">
+                <blockquote class="blockquote my-4">
+                    <h4 class="font-weight-bold">Thông tin gửi, nhận văn bản</h4>
+                </blockquote>
+
+                <table class="table table-hover table-bordered table-sm mb-0" cellspacing="0" width="100%">
+                    <thead class="bg-primary text-white lighten-3">
+                        <tr>
+                            <th class="th-sm">
+                                Người gửi
+                            </th>
+                            <th class="th-sm">
+                                Thời gian gửi
+                            </th>
+                            <th class="th-sm">
+                                Người nhận
+                            </th>
+                            <th class="th-sm">
+                                Đơn vị nhận
+                            </th>
+                            <th class="th-sm">
+                                Thời gian nhận
+                            </th>
+                            <th class="th-sm">
+                                Trạng thái
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.LstGuiNhan != null && Model.LstGuiNhan.Count > 0)
+                        {
+                            foreach (var item in Model.LstGuiNhan)
+                            {
+                                <tr>
+                                    <td>
+                                        <p class="mt-0 mb-0"><a href="#">@item.HoTenNguoiGui</a></p>
+                                        <small class="font-italic text-truncate d-block w-100"><i class="fal fa-user-tag mr-1"></i>@item.ChucVuNguoiGui</small>
+                                    </td>
+                                    <td>@item.ThoiGianGui</td>
+                                    <td>
+                                        <p class="mt-0 mb-0"><a href="#">@item.HoTenNguoiNhan</a></p>
+                                        <small class="font-italic text-truncate d-block w-100"><i class="fal fa-user-tag mr-1"></i>@item.ChucVuNguoiNhan</small>
+                                    </td>
+                                    <td>@item.DonViNhan</td>
+                                    <td>@item.ThoiGianNhan</td>
+                                    <td class="@(item.IsNhanDuoc ? "default-color" : "warning-color")">@(item.IsNhanDuoc ? "Đã đọc" : "Chưa đọc")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="10" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="w-100">
+                <!--Accordion wrapper-->
+                <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+                    <!-- Accordion card -->
+                    <div class="card mb-4 border-0">
+
+                        <!-- Card header -->
+                        <div class="card-header py-0 pl-3" role="tab" id="headingOne1">
+                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="true"
+                               aria-controls="collapseOne1">
+                                <blockquote class="blockquote mt-4 mb-0">
+                                    <h4 class="font-weight-bolder">Lịch sử xử lý văn bản <i class="fal fa-angle-down rotate-icon"></i></h4>
+                                </blockquote>
+                            </a>
+                        </div>
+
+                        <!-- Card body -->
+                        <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1"
+                             data-parent="#accordionEx">
+                            <div class="card-body">
+                                <div class="timeline-main">
+                                    <ul class="timeline-light">
+                                        @if (Model != null && Model.LstLichSu != null && Model.LstLichSu.Count > 0)
+                                        {
+                                            foreach (var item in Model.LstLichSu.AsEnumerable().Reverse())
+                                            {
+                                                <li class="timeline-light-item">
+                                                    <small class="border py-1 px-2 text-muted mr-lg-3 rounded"><i class="fal fa-clock mr-2"></i>@item.ThoiGian</small>
+                                                    <strong>@(item.HoVaTen + " - " + item.TenChucVu + ": " + item.NoiDung)</strong>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Accordion card -->
+
+                </div>
+                <!-- Accordion wrapper -->
+                <div class="col-12 text-right">
+                    <a class="btn btn-primary" href="/VanBanDuThaoDi/Detail/@Model.VanBanID">Đóng</a>
+                </div>
+                <br />
+            </div>
+
+        </div>
+
+    </div>
+</div>

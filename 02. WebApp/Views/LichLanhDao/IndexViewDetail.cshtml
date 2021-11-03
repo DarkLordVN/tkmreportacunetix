@@ -1,0 +1,93 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.LichLanhDaoListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+}
+<input type="hidden" id="txtTotal" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumber" value="@Model.PageNumber" />
+@if (Model != null && Model.LstChiTiet != null && Model.LstChiTiet.Count() > 0)
+{
+    foreach (var itemGroupByDate in Model.LstChiTiet.OrderBy(x => x.NgayThucHien.ToString("yyyyMMdd")).GroupBy(x => x.NgayThucHienStr))
+    {
+        var checkHeaderNgay = true;
+        foreach (var itemGroup in itemGroupByDate.GroupBy(x => x.TenLanhDao))
+        {
+            var checkHeaderTen = true;
+            foreach (var item in itemGroup)
+            {
+                <tr>
+                    @if (checkHeaderNgay)
+                    {
+                        <td rowspan="@itemGroupByDate.Count()" align="center">@item.NgayThucHienStr</td>
+                        checkHeaderNgay = false;
+                    }
+                    @if (checkHeaderTen)
+                    {
+                        <td rowspan="@itemGroup.Count()"  class="tal">
+                            @item.TenLanhDao
+                        </td>
+                        checkHeaderTen = false;
+                    }
+                    <td>
+                        <a href="javascript://" title="Xem chi tiết" onclick="loadfrmView(@item.ID)" class="h-tdu text-primary"><div class="ffm-rob text-primary dib">@(item.ThoiGianStr)</div></a>
+                    </td>
+                    <td class="tal">
+                        <a href="javascript://" title="Xem chi tiết" onclick="loadfrmView(@item.ID)" class="h-tdu text-primary"><div class="ffm-rob text-primary dib">@Html.Raw(item.NoiDung)</div></a>
+                    </td>
+                    <td class="tal">
+                        @item.DiaDiem
+                    </td>
+                    @*<td class="tal">
+                        @item.ChuanBi
+                    </td>*@
+                    <td class="tal">
+                        @item.ThanhPhanThamGia
+                    </td>
+                </tr>
+            }
+            checkHeaderTen = false;
+        }
+        checkHeaderNgay = false;
+    }
+}
+@*@if (Model != null && Model.LstChiTiet == null || Model.LstChiTiet.Count == 0)
+{
+    <tr>
+        <td colspan="9" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="10">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexViewDetail", "LichLanhDao", new
+               {
+                   ColumnName = Model.ColumnName,
+                   OrderBy = Model.OrderBy,
+                   PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   NguoiDungID = Model.NguoiDungID,
+                   ThoiGianBatDauStr = Model.ThoiGianBatDauStr,
+                   ThoiGianKetThucStr = Model.ThoiGianKetThucStr
+
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20", Selected=true},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSize", @class = "custext w-60", @onchange = "loadData('', '');" }) kết quả trên 1 trang / @Model.TotalItem bản ghi
+                </div>
+            </div>
+        </td>
+    </tr>
+}*@

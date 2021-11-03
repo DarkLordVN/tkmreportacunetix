@@ -1,0 +1,64 @@
+﻿@model TKM.BLL.CoQuanBanHanhVanBanViewModel
+
+@{
+    ViewBag.Title = "Thêm mới cơ quan ban hành văn bản";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bgc-white p-0">
+        <li class="breadcrumb-item"><a href="/Home/Index"><span class="icon-holder"><i class="fa fa-home"></i></span></a></li>
+        <li class="breadcrumb-item"><a href="/CoQuanBanHanhVanBan/Index"><span class="icon-holder"><i class=""></i></span>Quản lý đối tượng văn bản đi</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
+<h4 class="title c-grey-900 mB-20 pB-10">@ViewBag.Title</h4>
+<div class="masonry-item col-md-12">
+    <!-- ./Information of page info success warning danger-->
+    @if (TempData["AlertData"] != null)
+    {
+        <div class="alert @TempData["AlertType"]">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <div>@Html.Raw(@TempData["AlertData"])</div>
+            <a id="lblMessage"></a>
+        </div>
+    }
+    <div class="mT-30 bd">
+        @using (Html.BeginForm("Add", "CoQuanBanHanhVanBan", null, FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", id = "frmMain" }))
+            {
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <label for="inputHoTen" class="col-sm-2 col-form-label text-right">Tên Cơ quan<span class="c-red-500">(*)</span></label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(model => model.TenCoQuanBanHanh, new { @id = "txtTenCoQuan", @class = "form-control", @placeholder = "Nhập tên tên cơ quan" })
+                    @Html.ValidationMessageFor(model => model.TenCoQuanBanHanh, "", new { @class = "alert-danger" })
+                </div>
+                <label for="txtGhiChu" class="col-sm-2 col-form-label text-right">Số thứ tự</label>
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(model => model.ThuTuStr, new { @id = "txtMaCoQuan", @class = "form-control", @placeholder = "Nhập số thứ tự" })
+                    @Html.ValidationMessageFor(model => model.ThuTuStr, "", new { @class = "alert-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="text-right col-sm-12">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <a class="btn cur-p btn-light" href="/CoQuanBanHanhVanBan/Index">Hủy bỏ</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Script {
+    <script>
+        $(function () {
+            $("#frmMain").submit(function (event) {
+                if (!check_AlphaNumber(this.MaPhongBan) || !check_AlphaNumber(this.TenPhongBan) || !check_AlphaNumber(this.GhiChu)) {
+                    event.preventDefault();
+                    return
+                }
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,134 @@
+﻿@using TKM.BLL
+@model HoSoCongViecTrangThaiViewModel
+@{
+    Layout = null;
+    //var lstTrangThaiVanBan = (Dictionary<int, string>)ViewBag.lstTrangThaiVanBan;
+    var act = (string)ViewBag.act;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@using (Ajax.BeginForm("PopupUpdateStatusCV", "HoSoCongViec", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onUpdateStatusCVSuccess"
+}, new { @id = "fForm", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ID" value="@Model.ID" />
+    <input type="hidden" name="HoSoCongViecID" value="@Model.HoSoCongViecID" />
+    <div class="form-group row">
+        <label for="MoTaCongViec" class="col-sm-2 col-form-label">Trạng thái xử lý <span class="c-red-500">(*)</span></label>
+        <div class="col-md-4">
+            <select class="mdb-select mdb-select-csa md-form md-outline colorful-select dropdown-primary m-0 p-0" id="TrangThaiXuLy" name="TrangThaiXuLy" searchable="Nhập từ khóa..">
+                <option value="0"> -- Chọn --</option>
+                @*<option value="2" @(Model.TrangThaiXuLy == 2 ? "selected" : "")>Phân công</option>*@
+                <option value="3" @(Model.ID == 0 || Model.TrangThaiXuLy == 3 ? "selected" : "")>Đang xử lý</option>
+                <option value="4" @(Model.TrangThaiXuLy == 4 ? "selected" : "")>Hoàn thành</option>
+            </select>
+        </div>
+        <label for="NgayXuLyStr" class="col-sm-2 col-form-label">Ngày xử lý</label>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="input-group date datepicker">
+                    @Html.TextBoxFor(model => model.NgayXuLyStr, new { @class = "form-control ", @id = "NgayXuLyStr", @Value = DateTime.Now.ToString("dd/MM/yyyy") })
+                    <span class="input-group-addon">
+                        <span class="fa fa-clock"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="active" for="CoQuanBanHanhID">
+                Kết quả xử lý <span class="c-red-500">(*)</span>
+            </label>
+        </div>
+        <div class="col-sm-10">
+            @Html.TextAreaFor(model => model.KetQuaXuLy, new { @class = "form-control rounded-0", @id = "KetQuaXuLy", @placeholder = "Kết quả xử lý...", @rows = "3" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            File đính kèm
+        </div>
+        <div class="col-sm-10">
+            @if (act == "add")
+            {
+                @Html.Partial("~/Views/Shared/_JqueryUpload.cshtml", new { changeName = true, auto = true, Name = "Attachment", Multiple = false, Value = "", type = "document", setname = "AttachmentName", valueName = "", setSize = "Size", valueSize = "", intFolder = 0 })
+            }
+            @if (act == "update")
+            {
+                @Html.Partial("~/Views/Shared/_JqueryUpload.cshtml", new { changeName = true, auto = true, Name = "Attachment", Multiple = false, Value = Model.FileDinhKem, type = "document", setname = "", valueName = Model.FileDinhKem, setSize = "Size", valueSize = "", intFolder = 0 })
+            }
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+
+}
+<style>
+    .picker__box .picker__table .picker__day--infocus{text-align:center !important;}
+      .modal-lg, .modal-xl {
+        max-width: 1300px !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-csa').materialSelect();
+        $('.datepicker').pickadate({
+            monthsFull: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10',
+            'Tháng 11', 'Tháng 12'],
+            monthsShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            weekdaysFull: ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
+            weekdaysShort: ['CN', '2', '3', '4', '5', '6', '7'],
+            showMonthsShort: undefined,
+            showWeekdaysFull: undefined,
+
+            // Buttons
+            today: 'Hôm nay',
+            clear: 'Xóa',
+            close: 'Đóng',
+
+            // Accessibility labels
+            labelMonthNext: 'Tháng sau',
+            labelMonthPrev: 'Tháng trước',
+            labelMonthSelect: 'Chọn tháng',
+            labelYearSelect: 'Chọn năm',
+
+            // Formats
+            format: 'dd/mm/yyyy',
+            formatSubmit: undefined,
+            hiddenPrefix: undefined,
+            hiddenSuffix: '_submit',
+            hiddenName: undefined,
+
+        });
+    });
+    $("#fForm").validate({
+        rules: {
+            KetQuaXuLy: {
+                required: true,
+            }
+        },
+        messages: {
+            KetQuaXuLy: {
+                required: "Vui lòng nhập kết quả xử lý!",
+            }
+        }
+    });
+    $('#fForm').on('submit', function () {
+        $("#fForm").valid();
+        var TrangThaiXuLy = $('#TrangThaiXuLy').val();
+        if (TrangThaiXuLy == '' || TrangThaiXuLy == '0') {
+            toastr.error('Bạn chưa chọn trạng thái văn bản!');
+            return false;
+        };
+    })
+   
+</script>

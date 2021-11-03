@@ -1,0 +1,237 @@
+﻿@using TKM.BLL
+@{
+    Layout = null;
+    var lstLanhDaoChiDao = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstLanhDaoChiDao;
+    var lstNguoiDung = (List<TKM.BLL.NguoiDungViewModel>)ViewBag.lstNguoiDung;
+    var objVanBanDen = (VanBanDenViewModel)ViewBag.objVanBanDen;
+    var typeUser = (string)ViewBag.typeUser;
+    var capBac = (string)ViewBag.capBac;
+}
+<div class="form-group row">
+    <label for="NguoiNhanID" class="col-sm-2 col-form-label">Cán bộ xử lý chính <span class="c-red-500">(*)</span></label>
+    <div class="col-sm-4">
+        <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="NguoiNhanID" name="NguoiNhanID" searchable="Nhập từ khóa.." @(objVanBanDen.LanhDaoButPheDonViID > 0 ? "disabled='true'" : "")>
+            <option value="">-- Chọn cán bộ --</option>
+            @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+            {
+                foreach (var item in lstNguoiDung)
+                {
+                    <option value="@item.ID" @(objVanBanDen.LanhDaoButPheDonViID > 0 && objVanBanDen.NguoiNhanID == item.ID ? "selected" : "")>@item.ChucVuVaTen</option>
+                }
+            }
+        </select>
+
+    </div>
+    <label for="ListCanBoPhoiHopXuLyID" class="col-sm-2 col-form-label">Cán bộ phối hợp xử lý</label>
+    <div class="col-sm-4">
+        <div id="reloadListCanBoPhoiHopXuLy">
+            <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListCanBoPhoiHopXuLyID" id="ListCanBoPhoiHopXuLyID" multiple searchable="Chọn cán bộ...">
+                <option value="" disabled selected>-- Chọn cán bộ --</option>
+                @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+            {
+                foreach (var item in lstNguoiDung.Where(x => x.ID != objVanBanDen.NguoiNhanID))
+                {
+                        <option value="@item.ID" @(objVanBanDen != null && !string.IsNullOrEmpty(objVanBanDen.ListCanBoPhoiHopXuLyID) && objVanBanDen.ListCanBoPhoiHopXuLyID.Contains("," + item.ID + ",") ? "selected" : "")>@item.ChucVuVaTen</option>
+                    }
+                }
+            </select>
+            </div>
+        </div>
+</div>
+@*<div class="row">
+        <div class="col-sm-6 row">
+            <label class="col-sm-4 col-form-label" for="NguoiNhanID">
+                Cán bộ xử lý chinh<span class="c-red-500">(*)</span>
+            </label>
+            <select class="mdb-select mdb-select-csa md-form col-sm-8 md-outline colorful-select dropdown-primary m-0 p-0" id="NguoiNhanID" name="NguoiNhanID" searchable="Nhập từ khóa.." @(capBac.Equals("pho") ? "disabled='true'" : "")>
+                <option value="">-- Chọn cán bộ --</option>
+                @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                {
+                    foreach (var item in lstNguoiDung)
+                    {
+                        <option value="@item.ID" @(capBac.Equals("pho") && objVanBanDen.NguoiNhanID == item.ID ? "selected" : "")>@item.ChucVuVaTen</option>
+                    }
+                }
+            </select>
+
+        </div>
+        <div class="col-sm-6 row">
+            <label class="col-sm-4 col-form-label" for="ListCanBoPhoiHopXuLyID">
+                Cán bộ phối hợp xử lý
+            </label>
+            <div id="reloadListCanBoPhoiHopXuLy" class="col-sm-8 pl-0 pr-0">
+                <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListCanBoPhoiHopXuLyID" id="ListCanBoPhoiHopXuLyID" multiple searchable="Chọn cán bộ...">
+                    <option value="" disabled selected>-- Chọn cán bộ --</option>
+                    @if (lstNguoiDung != null && lstNguoiDung.Count > 0)
+                    {
+                        foreach (var item in lstNguoiDung.Where(x => x.ID != objVanBanDen.NguoiNhanID))
+                        {
+                            <option value="@item.ID" @(objVanBanDen != null && !string.IsNullOrEmpty(objVanBanDen.ListCanBoPhoiHopXuLyID) && objVanBanDen.ListCanBoPhoiHopXuLyID.Contains("," + item.ID + ",") ? "selected" : "")>@item.ChucVuVaTen</option>
+                        }
+                    }
+                </select>
+                @*<button class="btn-save btn btn-primary btn-sm">Chọn</button>
+            </div>
+
+        </div>
+    </div>*@
+@*<div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="LanhDaoChiDaoDonViID">
+        Lãnh đạo chỉ đạo <span class="c-red-500">(*)</span>
+    </label>
+    <div class="col-sm-10">
+        @if (lstLanhDaoChiDao != null && lstLanhDaoChiDao.Count > 0)
+        {
+            foreach (var item in lstLanhDaoChiDao)
+            {
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" id="LanhDaoChiDao_@item.ID" name="LanhDaoChiDaoDonViID" value="@item.ID" @(capBac.Equals("pho") ? "disabled" : "") @(capBac.Equals("pho") && objVanBanDen.LanhDaoChiDaoDonViID == item.ID ? "checked" : "")>
+                    <label class="form-check-label" for="LanhDaoChiDao_@item.ID">@item.ChucVuVaTen</label>
+                </div>
+            }
+        }
+    </div>
+</div>*@
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="LanhDaoChiDaoDonViID">
+        Lãnh đạo đơn vị @*<span class="c-red-500">(*)</span>*@
+    </label>
+    <div class="col-sm-10">
+        <table>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td class="fwb">Chỉ đạo</td>
+                    <td class="fwb">Theo dõi</td>
+                </tr>
+            </thead>
+            @if (lstLanhDaoChiDao != null && lstLanhDaoChiDao.Count > 0)
+            {
+                <tbody>
+                    @foreach (var item in lstLanhDaoChiDao)
+                {
+                        <tr>
+                            <td class="fwb">@item.ChucVuVaTen</td>
+                            <td>
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="LanhDaoChiDao_@item.ID" name="LanhDaoChiDaoDonViID" value="@item.ID" @(objVanBanDen.LanhDaoButPheDonViID > 0 ? "disabled" : "") @(objVanBanDen.LanhDaoButPheDonViID > 0 && objVanBanDen.LanhDaoChiDaoDonViID == item.ID ? "checked" : "")>
+                                    <label class="form-check-label" for="LanhDaoChiDao_@item.ID"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check form-check-inline px-3">
+                                    <input type="checkbox" name="LstLanhDaoTheoDoiDonViID" class="form-check-input" id="LanhDaoTheoDoi_@item.ID" @(objVanBanDen.LanhDaoButPheDonViID > 0 ? "disabled" : "") @(objVanBanDen.LanhDaoButPheDonViID > 0 && !string.IsNullOrEmpty(objVanBanDen.LstLanhDaoTheoDoiDonViID) && objVanBanDen.LstLanhDaoTheoDoiDonViID.Contains(item.ID.ToString()) ? "checked" : "") value="@item.ID">
+                                    <label class="form-check-label" for="LanhDaoTheoDoi_@item.ID"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            }
+        </table>
+        @*@if (lstLanhDaoChiDao != null && lstLanhDaoChiDao.Count > 0)
+            {
+                foreach (var item in lstLanhDaoChiDao)
+                {
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="LanhDaoChiDao_@item.ID" name="LanhDaoChiDaoCucID" value="@item.ID" @(capBac.Equals("pho") ? "disabled" : "") @(capBac.Equals("pho") && objVanBanDen.LanhDaoChiDaoCucID == item.ID ? "checked" : "")>
+                        <label class="form-check-label" for="LanhDaoChiDao_@item.ID">@item.ChucVuVaTen</label>
+                    </div>
+                }
+            }*@
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label" for="YKienXuLy">
+        Ý kiến xử lý
+    </label>
+    <div class="col-sm-10">
+        @Html.TextArea("NoiDungYKien", null, new { @class = "form-control rounded-0", @id = "NoiDungYKien", @placeholder = "Ý kiến xử lý...", @rows = "3" })
+    </div>
+</div>
+@*@if (capBac != "pho")
+{
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <div class="md-form">
+                @Html.TextBox("HanXuLyStr", null, new { @class = "form-control datepicker", @id = "HanXuLyStr", @placeholder = "Chọn ngày" })
+                <label for="HanXuLyStr" class="active">Hạn xử lý</label>
+            </div>
+        </div>
+    </div>
+}*@
+
+<div class="row">
+    <label class="col-sm-2 col-form-label">
+        File đính kèm
+    </label>
+    <div class="col-sm-10">
+        @*@Html.TextBoxFor(m=> objVanBanDen.Files, new { @id = "txtFile", @type = "file", @multiple = "multiple", @onclick = "IsSubmit();" })*@
+        @Html.Partial("~/Views/Shared/_JqueryUpload.cshtml", new { changeName = true, auto = true, Name = "Attachment", Multiple = true, Value = "", type = "document", setname = "AttachmentName", valueName = "", setSize = "Size", valueSize = "", intFolder = 0 })
+    </div>
+</div>
+
+<div class="row text-left">
+    <div class="col-sm-12">
+        <div class="form-check form-check-inline px-3 my-3">
+            <input type="checkbox" name="IsGuiSMS" class="form-check-input" id="GuiSms" value="true">
+            <label class="form-check-label" for="GuiSms">Gửi SMS</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="IsGuiEmail" class="form-check-input" id="GuiEmail" value="true">
+            <label class="form-check-label" for="GuiEmail">Gửi Email</label>
+        </div>
+    </div>
+</div>
+<script>
+    $('#NguoiNhanID').on('change', function () {
+        var value = $(this).val();
+        if (value == '' || value == '0') {
+            toastr.error("Bạn chưa chọn cán bộ xử lý chính!");
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '/VanBanDen/ReloadListCanBoPhoiHopXuLy',
+                data: { id: value,donviid : @SessionInfo.CurrentUser.DonViID,lstcanbophid : ','+$('#ListCanBoPhoiHopXuLyID').val().toString()+','},
+                dataType: "html",
+                success: function (res) {
+                    $('#reloadListCanBoPhoiHopXuLy').html(res);
+                },
+                error: function (response) {
+                    toastr.error("Đã có lỗi xảy ra");
+                }
+            });
+        }
+
+    })
+    $(document).ready(function () {
+        $('.datepicker').pickadate({
+            monthsFull: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10',
+            'Tháng 11', 'Tháng 12'],
+            monthsShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            weekdaysFull: ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
+            weekdaysShort: ['CN', '2', '3', '4', '5', '6', '7'],
+            showMonthsShort: undefined,
+            showWeekdaysFull: undefined,
+
+            // Buttons
+            today: 'Hôm nay',
+            clear: 'Xóa',
+            close: 'Đóng',
+
+            // Accessibility labels
+            labelMonthNext: 'Tháng sau',
+            labelMonthPrev: 'Tháng trước',
+            labelMonthSelect: 'Chọn tháng',
+            labelYearSelect: 'Chọn năm',
+
+            // Formats
+            format: 'dd/mm/yyyy',
+            formatSubmit: undefined,
+            hiddenPrefix: undefined,
+            hiddenSuffix: '_submit',
+            hiddenName: undefined,
+
+        });
+    });
+</script>

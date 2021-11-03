@@ -1,0 +1,21 @@
+SELECT * FROM(
+SELECT ROW_NUMBER() OVER (ORDER BY clock DESC) rnum, *, (SELECT TOP 1 value FROM history WHERE itemid = t1.itemid AND clock < t1.clock ORDER BY clock desc) lastval, CAST(dateadd(s, convert(bigint, clock), convert(datetime, '1-1-1970 7:00:00')) AS DATE) clockConvert FROM history t1 WHERE itemid = 30955
+) sub ORDER BY rnum 
+
+
+--SELECT *, CAST(dateadd(s, convert(bigint, clock), convert(datetime, '1-1-1970 7:00:00')) AS DATE) clockConvert, (SELECT TOP 1 value FROM history WHERE itemid = t1.itemid AND clock < t1.clock ORDER BY clock desc) lastval FROM history t1 WHERE itemid = 30955 ORDER BY clock desc
+
+
+--SELECT itemid, min(value) minval, min(lastval) minlast, avg(value) avgval, max(value) maxval, clockConvert, max(clock) maxclock, min(clock) minclock, avg(lastval) avglast, max(lastval) maxlast FROM (
+--SELECT * FROM(
+--SELECT ROW_NUMBER() OVER (ORDER BY clock DESC) rnum, *, (SELECT TOP 1 value FROM history WHERE itemid = t1.itemid AND clock < t1.clock ORDER BY clock desc) lastval, CAST(dateadd(s, convert(bigint, clock), convert(datetime, '1-1-1970 7:00:00')) AS DATE) clockConvert FROM history t1 WHERE itemid = 30955
+--) sub
+
+--) tblAll GROUP BY itemid, clockConvert ORDER BY clockConvert desc
+
+
+----WHERE clock > (SELECT CASE WHEN max(maxclock) IS NULL THEN 0 ELSE avg(maxclock) END FROM HistoryCustomReport)) tblAll GROUP BY itemid, clockConvert
+
+
+----SELECT * FROM history WHERE clock > 1520089883
+----SELECT CASE WHEN max(maxclock) IS NULL THEN 0 ELSE max(maxclock) END FROM HistoryCustomReport

@@ -1,0 +1,442 @@
+﻿@using TKM.Utils
+@model TKM.BLL.HoSoCongViecViewModel
+@{
+    ViewBag.Title = "Thông tin hồ sơ công việc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lstQuanHeLienKet = (Dictionary<int, string>)ViewBag.lstQuanHeLienKet;
+    var typeUser = (string)ViewBag.typeUser;
+    var tab = (string)ViewBag.tab ?? "";
+    var capBac = (string)ViewBag.capBac;
+    var isCanBoDuocPhanXuLyTaiDonVi = (bool)ViewBag.isCanBoDuocPhanXuLyTaiDonVi;
+}
+
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/HoSoCongViec">Danh sách hồ sơ công việc</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+        {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <h3 class="titleInfo fwb">Thông tin công việc</h3>
+                            <div class="thr-line"></div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="table-detail" class="table table-hover table-bordered table-infomation" cellspacing="0" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>Tên công việc</td>
+                                                <td colspan="3">@Model.TenCongViec</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mô tả công việc</td>
+                                                <td colspan="3">@Model.MoTaCongViec</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ngày tạo</td>
+                                                <td>@ConvertDateTime.ConvertDateTimeToString(Model.NgayTaoForm)</td>
+                                                <td>Người tạo</td>
+                                                <td>@Model.NguoiTao</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Độ quan trọng</td>
+                                                <td>@Model.DoQuanTrong</td>
+                                                <td>Độ ưu tiên</td>
+                                                <td>@Model.DoUuTien</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Hạn xử lý</td>
+                                                <td>@ConvertDateTime.ConvertDateTimeToString(Model.HanXuLy)</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>File đính kèm</td>
+                                                <td colspan="3">
+                                                    @{
+                                                        var group_link = (string)TempData["group_link"];
+                                                        var group_name = (string)TempData["group_name"];
+                                                        var group_size = (string)TempData["group_size"];
+                                                        var group_replacename = (string)TempData["group_replacename"];
+                                                        var replaceName = group_replacename.Split('|');
+                                                        var name = group_name.Split('|');
+                                                    }
+                                                    @if (!String.IsNullOrEmpty(group_link))
+                                                    {
+                                                        var arrLink = group_link.Split(',');
+                                                        if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                                                        {
+                                                            for (int i = 0; i < arrLink.Length; i++)
+                                                            {
+                                                                <a href="javascript://" data-link="@arrLink[i]" class="alert-link viewFile text-primary"><i class="fal fa-file-pdf mr-2" data-toggle="tooltip" title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")" data-original-title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")"></i>@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")</a>
+                                                                if (i != (arrLink.Length - 1))
+                                                                {
+                                                                    @Html.Raw("</br>")
+                                                                }
+                                                            }
+
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ghi chú</td>
+                                                <td colspan="3">@Model.GhiChu</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trạng thái công việc</td>
+                                                <td>@Model.TrangThaiCongViecStr</td>
+                                                <td>Trạng thái người dùng</td>
+                                                <td>
+                                                    @{
+                                                        var trangThaiNguoiDung = "";
+                                                        switch (Model.TrangThaiNguoiDung)
+                                                        {
+                                                            case (int)TKM.Utils.Enums.TrangThaiNguoiDung.ChuaXuLy:
+                                                                trangThaiNguoiDung = "Chưa xử lý";
+                                                                break;
+                                                            case (int)TKM.Utils.Enums.TrangThaiNguoiDung.DangXuLy:
+                                                                trangThaiNguoiDung = "Đang xử lý";
+                                                                break;
+                                                            case (int)TKM.Utils.Enums.TrangThaiNguoiDung.HoanThanh:
+                                                                trangThaiNguoiDung = "Hoàn thành";
+                                                                break;
+                                                            default:
+                                                                trangThaiNguoiDung = "";
+                                                                break;
+                                                        }
+                                                    }
+                                                    @trangThaiNguoiDung
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kết quả xử lý</td>
+                                                <td>@Model.KetQuaXuLy</td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 fwb">
+                                    Văn bản liên quan
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:150px">Số ký hiệu</th>
+                                                <th>Trích yếu</th>
+                                                <th style="width:85px">File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.lstVanBanLienQuan != null && Model.lstVanBanLienQuan.Count > 0)
+                                            {
+                                                foreach (var itemVBLQ in Model.lstVanBanLienQuan)
+                                                {
+                                                    <tr>
+                                                        <td class="tal">
+                                                            @(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.SoKyHieu : "")
+                                                        </td>
+                                                        <td class="tal">@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.TrichYeu : "")</td>
+                                                        <td class="tac">
+                                                            <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.FileVanBan : "")"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File đính kèm" data-original-title=""></i></span></a>
+
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 fwb">
+                                    Phân công xử lý
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Cán bộ/ Đơn vị xử lý chính</th>
+                                                <th>Vai trò</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{Html.RenderAction("QuaTrinhXuLyThongTinGuiNhan", "HoSoCongViec", new { cvid = Model.ID, view = "detail" });}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="accordion md-accordion" id="accordionExyk" role="tablist" aria-multiselectable="true">
+                                <div role="tab" id="headingOne1yk">
+                                    <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        <h3 class="titleInfo fwb mb-0">Ý kiến trao đổi <i class="fal fa-angle-down rotate-icon fr fs20"></i></h3>
+                                    </a>
+                                    <div class="thr-line"></div>
+                                </div>
+                                @*<h3 class="titleInfo fwb">Ý kiến trao đổi</h3>*@
+                                <div class="collapse" id="collapseExample">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:150px">Người gửi</th>
+                                                        <th>Thời gian gửi</th>
+                                                        <th>Người nhận</th>
+                                                        <th style="width:200px">Nội dung ý kiến</th>
+                                                        <th style="width:85px">File</th>
+                                                        <th>Thao tác</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{Html.RenderAction("QuaTrinhXuLyYKien", "HoSoCongViec", new { cvid = Model.ID });}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12 text-right">
+                                    @if (typeUser != "ldc" || (typeUser.Equals("ldc") && capBac.Equals("pho")))
+                                    {
+                                        if (capBac != "pho")
+                                        {
+                                            <a class="btn btn-primary" title="Giao việc tiếp" href="/HoSoCongViec/Add?pID=@Model.ID">Giao việc tiếp</a>
+                                        }
+                                        <a class="btn btn-primary" title="Cập nhật trạng thái người dùng" href="javascript://" onclick="onUpdateStatusUser(@Model.ID)">Cập nhật trạng thái người dùng</a>
+                                    }
+                                    @*@if (typeUser.Equals("lddv") && capBac.Equals("truong") && isCanBoDuocPhanXuLyTaiDonVi || Model.CanBoXuLyChinhID == SessionInfo.CurrentUser.ID)*@
+                                    @if (Model.NguoiTaoID == SessionInfo.CurrentUser.ID)
+                                    {
+                                        <a class="btn btn-primary" title="Cập nhật trạng thái công việc" href="javascript://" onclick="onUpdateStatusCV(@Model.ID)">Cập nhật trạng thái công việc</a>
+                                    }
+                                    @if (capBac.Equals("pho") && (Model.LanhDaoChiDaoCucID == SessionInfo.CurrentUser.ID || Model.LanhDaoChiDaoDonViID == SessionInfo.CurrentUser.ID) && Model.TrangThaiCongViecID != (int)TKM.Utils.Enums.TrangThaiVanBan.HoanThanh)
+                                    {
+                                        <a class="btn btn-primary" title="Giao phối hợp xử lý" href="javascript://" onclick="onGiaoPhoiHopXuLy(@Model.ID)">Giao phối hợp xử lý</a>
+                                    }
+                                    <a class="btn btn-primary" title="Đưa ý kiến" href="javascript://" onclick="onTraoDoiYKien(@Model.ID,0)">Đưa ý kiến</a>
+                                    @if (Model.NguoiTaoID == SessionInfo.CurrentUser.ID && Model.IsGiao == false)
+                                    {
+                                        <a class="btn btn-primary" title="Giao việc" href="javascript://" onclick="onGiaoViec(@Model.ID)">Giao việc</a>
+                                        <a class="btn btn-primary" title="Cập nhật" href="/HoSoCongViec/Update/@Model.ID">Cập nhật</a>
+                                        <a class="btn btn-primary" onclick="onDelete(@Model.ID)" title="Xóa" href="javascript://">Xóa</a>
+                                    }
+                                    <button type="button" id="quatrinhxuly" data-cvid="@Model.ID" data-rootid="@Model.RootID" class="btn btn-primary">Quá trình xử lý</button>
+                                    <a class="btn btn-primary" href="/HoSoCongViec">Đóng</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    table#table-detail td, table th {
+        font-size: 100% !important;
+    }
+
+    table#table-detail td {
+        text-align: left !important;
+    }
+
+    .titleInfo {
+        font-size: 17px;
+        padding-bottom: 3px;
+    }
+
+    .thr-line {
+        background-color: #808080;
+        width: 20%;
+        height: 3px;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .table-infomation td:nth-child(2n+1) {
+        font-weight: bold !important;
+    }
+
+    .table-infomation td:nth-child(2n) {
+        width: 30% !important;
+    }
+
+    .table-infomation td:nth-child(3n) {
+        width: 20% !important;
+    }
+</style>
+<script>
+    $('#quatrinhxuly').on('click', function (e) {
+        var cvid = e.target.dataset.cvid;
+        var rootid = e.target.dataset.rootid;
+        modal.Render('/HoSoCongViec/QuaTrinhXuLyCongViec?cvid=' + cvid + '&rootid=' + rootid, 'Quá trình xử lý hồ sơ công việc', 'modal-lg');
+    })
+    function onTraoDoiYKien(cvid, nguoiguiid) {
+        modal.Render('/HoSoCongViec/TraoDoiYKien?cvid=' + cvid + '&nguoiguiid=' + nguoiguiid, 'Đưa ý kiến trao đổi', 'modal-lg');
+    }
+    function onTraoDoiYKienSuccess(res) {
+        if (res.isSuccess == true) {
+            toastr.success('Gửi ý kiến trao đổi công việc thành công.');
+            $("#loading").show();
+        } else {
+            toastr.error(res.message);
+        }
+        modal.hide();
+        setInterval(function () { window.location.reload(); }, 2000);
+    }
+    function onGiaoPhoiHopXuLy(cvid) {
+        modal.Render('/HoSoCongViec/GiaoPhoiHopXuLy?cvid=' + cvid, 'Giao phối hợp xử lý', 'modal-lg');
+    }
+    function onGiaoPhoiHopXuLySuccess(res) {
+        if (res.isSuccess == true) {
+            toastr.success('Giao phối hợp xử lý công việc thành công.');
+            $("#loading").show();
+            modal.hide();
+            window.location.reload();
+        } else {
+            toastr.error(res.message);
+        }
+
+    }
+    function onGiaoViec(id) {
+        swal({
+            title: "Giao việc?",
+            text: "Bạn có chắc chăn muốn giao công việc này?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+          .then((willDelete) => {
+              if (willDelete) {
+                  $("#loading").show();
+                  $.ajax({
+                      type: "POST",
+                      url: '/HoSoCongViec/GiaoViec',
+                      data: { id: id },
+                      dataType: "html",
+                      success: function (res) {
+                          $("#loading").hide();
+                          res = JSON.parse(res);
+                          if (res.isSuccess == 1) {
+                              swal(res.message, {
+                                  icon: "success",
+                              });
+                              setInterval(function () { window.location.href = '/HoSoCongViec'; }, 2000);
+                          }
+                          else if (res.isSuccess == 0) {
+                              swal(res.message, { icon: "error", });
+                          }
+                          else if (res.isSuccess == -1) {
+                              swal(res.message, { icon: "error", });
+                          }
+                          setInterval(function () { window.location.reload(); }, 2000);
+                      },
+                      error: function (response) {
+                          $("#loading").hide();
+                          swal("Đã có lỗi xảy ra", { icon: "error", });
+                      }
+                  });
+
+              }
+          });
+    }
+    function onUpdateStatusCV(id) {
+        modal.Render('/HoSoCongViec/PopupUpdateStatusCV?id=' + id, 'Cập nhật trạng thái hồ sơ công việc', 'modal-lg');
+    }
+    function onUpdateStatusCVSuccess(res) {
+        if (res.isSuccess == true) {
+            toastr.success('Cập nhật trạng thái hồ sơ công việc thành công.');
+            modal.hide();
+            window.location.reload();
+        } else {
+            toastr.error('Có lỗi khi cập nhạt trạng thái hồ sơ công việc.');
+        }
+    }
+    function onUpdateStatusUser(id) {
+        modal.Render('/HoSoCongViec/PopupUpdateStatusUser?id=' + id, 'Cập nhật trạng thái người dùng', 'modal-lg');
+    }
+    function onUpdateStatusUserSuccess(res) {
+        if (res.isSuccess == true) {
+            toastr.success('Cập nhật trạng thái người dùng thành công.');
+            modal.hide();
+            window.location.reload();
+        } else {
+            toastr.error('Có lỗi khi cập nhạt trạng thái người dùng.');
+        }
+    }
+
+    function onDelete(id) {
+        swal({
+            title: "Xóa?",
+            text: "Bạn có chắc chăn muốn xóa hồ sơ công việc này?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+          .then((willDelete) => {
+              if (willDelete) {
+                  $("#loading").show();
+                  $.ajax({
+                      type: "POST",
+                      url: '/HoSoCongViec/Delete',
+                      data: { id: id },
+                      dataType: "html",
+                      success: function (res) {
+                          $("#loading").hide();
+                          res = JSON.parse(res);
+                          if (res.isSuccess == 1) {
+                              swal("Xóa hồ sơ công việc thành công!", {
+                                  icon: "success",
+                              });
+                              setInterval(function () { window.location.href = '/HoSoCongViec'; }, 2000);
+                          }
+                          else if (res.isSuccess == 0) {
+                              swal("Bản ghi không tồn tại trên hệ thống!", { icon: "error", });
+                          }
+                          else if (res.isSuccess == -1) {
+                              swal("Đã có lỗi xảy ra", { icon: "error", });
+
+                          }
+                      },
+                      error: function (response) {
+                          $("#loading").hide();
+                          swal("Đã có lỗi xảy ra", { icon: "error", });
+                      }
+                  });
+
+              }
+          });
+    }
+</script>

@@ -1,0 +1,354 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.DmChucVuListView
+@{
+    ViewBag.Title = "Danh sách chức vụ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            <div class="row lighten-4 border border-primary border-top-0 border-right-0 border-left-0">
+                                <div class="col p-3">
+
+                                    <div class="d-none d-lg-inline-flex form-inline my-0 px-lg-3 border-right">
+                                        @Html.TextBoxFor(model => model.TuKhoa, new { @class = "form-control keyenterTuKhoa", @id = "txtTuKhoa", @placeholder = "Nhập từ khóa cần tìm ...", @style = "min-width: 31rem" })
+                                        <button id="btnSearchTuKhoa" class="btn text-white default-color rounded-pill px-3 btn-sm my-0 waves-effect waves-light" type="button">Tìm</button>
+                                    </div>
+
+                                    <button class="btn btn-sm btn-warning text-white ml-3 rounded-pill" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        Tìm kiếm nâng cao
+                                    </button>
+                                    <!-- Chức năng thêm và xóa -->
+                                    <div class="float-right">
+                                        <a href="/DmChucVu/Add" class="btn-floating btn-sm btn-primary mx-1" data-toggle="tooltip" title="Thêm mới" data-original-title="Thêm mới"><i class="fal fa-plus"></i></a>
+                                          @*<a href="javascript://" onclick="onDeleteMul();" class="btn-floating btn-sm btn-danger mx-1" data-toggle="tooltip" data-original-title="Xóa nhiều" title="Xóa nhiều"><i class="fal fa-trash"></i></a>*@
+                                    </div>
+                                    <div style="clear:both;"></div>
+
+                                    <div class="collapse" id="collapseExample">
+                                        <div class="row bg-white mx-0 p-3">
+                                            <div class="col-12 col-lg-12 row">
+                                                <label for="txtTenChucVu" class="col-lg-2 col-form-label">Tên chức vụ</label>
+                                                <div class="col-lg-4">
+                                                    @Html.TextBoxFor(model => model.TenChucVu, new { @class = "form-control keyenter", @id = "txtTenChucVu" })
+                                                </div>
+                                                <label for="txtKyHieu" class="col-lg-2 col-form-label">Ký hiệu</label>
+                                                <div class="col-lg-4">
+                                                    @Html.TextBoxFor(model => model.KyHieu, new { @class = "form-control keyenter", @id = "txtKyHieu" })
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-12 col-lg-12 row mt-3">
+                                                <label for="srTrangThai" class="col-lg-2 col-form-label">Trạng thái</label>
+                                                <div class="col-lg-4">
+                                                    <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="srTrangThai" searchable="Nhập từ khóa..">
+                                                        <option value="">-- Trạng thái --</option>
+                                                        <option value="1">Có sử dụng</option>
+                                                        <option value="2">Không sử dụng</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+
+                                            <div class="col text-center text-lg-right">
+                                                <button id="btnSearch" class="btn text-white f-bg1" type="button">Tìm kiếm</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- / Collapsible element -->
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="table-responsive-sm">
+                                        <table id="dt-vblt-den" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead class="bg-primary text-white lighten-3">
+                                                <tr>
+
+                                                    <th class="t_action th-sm">STT</th>
+                                                    @* //Todo: Thêm colname + order by *@
+                                                    <th class="th-sm pointer" data-colname="TenChucVu" data-orderby="asc" style="min-width:430px">Tên chức vụ <span><i class="fas fa-sort"></i></span></th>
+                                                    <th class="th-sm pointer" data-colname="KyHieu" data-orderby="asc" style="min-width:200px">Ký hiệu <span><i class="fas fa-sort"></i></span></th>
+                                                    <th class="th-sm" style="min-width:80px">Thứ tự</th>
+                                                    <th class="th-sm" style="min-width:100px">Trạng thái</th>
+                                                    <th class="th-sm t_action" style="width:140px">Chức năng</th>
+                                                    <th class="th-sm" style="width:50px">
+                                                        <input type="hidden" id="hdfID" />
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="chkall" name="checkbox">
+                                                            <label class="form-check-label" for="chkall"></label>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbKetQua">
+                                                @{ Html.RenderAction("IndexDetail", Model); }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        $(document).ready(function () {
+            InitClickCheckAllInTable("chkall", function (res) {
+                $("#hdfID").val(res);
+            });
+        });
+        function onChangeStatus(id) {
+            swal({
+                title: "Thay đổi trạng thái?",
+                text: "Trạng thái sẽ được thay đổi, hãy nhấn OK!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/DmChucVu/onChangeStatus',
+                        data: { id: id },
+                        dataType: "html",
+                        success: function (res) {
+                            res = JSON.parse(res);
+                            if (res.isSuccess)
+                                swal("Thay đổi trạng thái thành công!", {
+                                    icon: "success",
+                                });
+                            else
+                                swal("Có lỗi xảy ra", {
+                                    icon: "error",
+                                });
+                            loadData("", "");
+                        },
+                        error: function (response) {
+                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                        }
+                    });
+
+                }
+            });
+        }
+        function loadfrmView(id) {
+            modal.Render("/DmChucVu/Detail/" + id, "Thông tin chức vụ", "modal-lg");
+        }
+        function onDelete(id) {
+            swal({
+                title: "Xóa?",
+                text: "Bạn có chắc chăn muốn xóa chức vụ này?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+              .then((willDelete) => {
+                  if (willDelete) {
+                      $.ajax({
+                          type: "POST",
+                          url: '/DmChucVu/Delete',
+                          data: { id: id },
+                          dataType: "html",
+                          success: function (res) {
+                              res = JSON.parse(res);
+                              if (res.isSuccess == 1)
+                                  swal("Xóa chức vụ thành công!", {
+                                      icon: "success",
+                                  });
+                              else
+                                  swal("Đã có lỗi xảy ra", { icon: "error", });
+                              loadData("", "");
+                          },
+                          error: function (response) {
+                              swal("Đã có lỗi xảy ra", { icon: "error", });
+                          }
+                      });
+
+                  }
+              });
+        }
+        function onDeleteMul() {
+
+
+            if ($("table tbody").find("input[type=checkbox]:checked").length == 0) {
+                swal("Bạn cần chọn ít nhất 1 danh mục cần xóa", { icon: "error", });
+            } else {
+                swal({
+                    title: "Xóa?",
+                    text: "Bạn có chắc chăn muốn xóa những chức vụ này?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+             .then((willDelete) => {
+                 if (willDelete) {
+                     $.ajax({
+                         type: "POST",
+                         url: '/DmChucVu/DeleteMul',
+                         data: { lstid: $("#hdfID").val() },
+                         dataType: "html",
+                         success: function (res) {
+                             res = JSON.parse(res);
+                             if (res.isSuccess)
+                                 swal("Xóa thành công!", {
+                                     icon: "success",
+                                 });
+                             else
+                                 swal("Có lỗi xảy ra", {
+                                     icon: "error",
+                                 });
+                             loadData("", "");
+                         },
+                         error: function (response) {
+                             swal("Đã có lỗi xảy ra", { icon: "error", });
+                         }
+                     });
+
+                 }
+             });
+            }
+        }
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+        $(".keyenterTuKhoa").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearchTuKhoa").click();
+            }
+        });
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        $("#btnDel").on("click", function () {
+            $.ajax({
+                url: '/DmChucVu/DeleteDmChucVu',
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: $("#delModalId").val() }),
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+            $(window).scrollTop(0);
+        });
+
+        //Thêm event xử lý load ajax
+        $("#btnSearchTuKhoa").click(function () {
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "DmChucVu")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), KyHieu: $("#txtKyHieu").val(), TenChucVu: $("#txtTenChucVu").val(), srTrangThai: $("#srTrangThai").val(), ColumnName: "", OrderBy: "", PageNumber: 1, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        });
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        function loadData(col, order, pnum, psize) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "DmChucVu")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), KyHieu: $("#txtKyHieu").val(), TenChucVu: $("#txtTenChucVu").val(), srTrangThai: $("#srTrangThai").val(), ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+    </script>
+}

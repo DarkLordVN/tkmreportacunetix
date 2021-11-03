@@ -1,0 +1,48 @@
+﻿@using TKM.Utils.Enums
+@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstVanBanLienQuan = (List<VanBanDenViewModel>)ViewBag.lstVanBanLienQuan;
+    var lstDescription = (Dictionary<int,string>)ViewBag.lstDescription;
+}
+@if (lstVanBanLienQuan != null && lstVanBanLienQuan.Count > 0)
+{
+    foreach (var item in lstVanBanLienQuan)
+    {
+        <tr class="removed_@item.ID">
+            <td align="center">
+                <input type="hidden" class="VanBanLienQuan" name="VanBanLienQuanID" value="@item.ID" />
+                <input type="hidden" name="LoaiHinhVanBanLienKet" value="" />
+                @item.SoKyHieu
+            </td>
+            <td class="tal">@item.TrichYeu</td>
+            <td align="center">
+                <a href="javascript://" title="File đính kèm" class="viewFile text-primary" data-link="@(!string.IsNullOrEmpty(item.FileVanBan) ? item.FileVanBan : "")"><span><i class="fal fa-file-pdf fs20" data-toggle="tooltip" title="File văn bản" data-original-title=""></i></span></a>
+            </td>
+            <td align="center">
+                <select class="mdb-select mdb-select-cs-@item.ID" id="LoaiLienKet" name="LoaiLienKet" searchable="Nhập từ khóa..">
+                    <option value="0"> -- Chọn --</option>
+                    @if (lstDescription != null && lstDescription.Count > 0)
+                    {
+                        foreach (var itemLK in lstDescription.Keys)
+                        {
+                            <option value="@itemLK">@lstDescription[itemLK]</option>
+                        }
+                    }
+                    @*<option value="1">Bị thay thế</option>
+                    <option value="2">Bị thu hồi</option>
+                    <option value="3">Được trả lời</option>
+                    <option value="4">Là văn bản trả lời</option>*@
+                    </select>
+                    </td>
+                    <td>
+                        <a href="javascript://" title="Xóa" onclick="RemoveItem(@item.ID)" class="btn btn-sm btn-danger br-50pt"><span><i class="fal fa-times"></i></span></a>
+                    </td>
+                    <script>
+                        $(document).ready(function () {
+                            $('.mdb-select-cs-' +@item.ID).materialSelect();
+                        });
+                    </script>
+                </tr>
+    }
+}

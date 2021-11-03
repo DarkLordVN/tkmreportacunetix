@@ -1,0 +1,465 @@
+﻿@model TKM.BLL.VanBanDiViewModel
+@{
+    ViewBag.Title = "Thông tin văn bản đi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lstQuanHeLienKet = (Dictionary<int, string>
+    )ViewBag.lstQuanHeLienKet;
+    var q = (string)ViewBag.q;
+    }
+    <script src="~/Scripts/vgca/base64.js"></script>
+    <script src="~/Scripts/vgca/vgcaplugin.js"></script>
+    <div class="row">
+        <div class="col right-content">
+            <div class="row">
+                <div class="col">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent mb-0 fwb">
+                            <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="/VanBanDi">Danh sách văn bản đi</a></li>
+                            <li class="breadcrumb-item">@ViewBag.Title</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData[" AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+            }
+            <input id="ID" type="hidden" value="@Model.ID" />
+            <div class="row">
+                <div class="col">
+                    <!-- Classic tabs -->
+                    <div class="classic-tabs tabs-f-cl mx-2">
+                        <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                            <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                                <h3 class="titleInfo fwb">Thông tin văn bản đi</h3>
+                                <div class="thr-line"></div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-bordered table-infomation" cellspacing="0" width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Sổ văn bản</td>
+                                                    <td>@Model.SoVanBanDi</td>
+                                                    <td>Cơ quan ban hành</td>
+                                                    <td>@Model.CoQuanBanHanh</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Loại văn bản</td>
+                                                    <td>@Model.LoaiVanBan</td>
+                                                    <td>Số phụ </td>
+                                                    <td>@Model.SoPhu</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sổ ký hiệu</td>
+                                                    <td>@Model.SoKyHieu</td>
+                                                    <td>Ngày ban hành</td>
+                                                    <td>@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(Model.NgayBanHanh)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trích yếu nội dung</td>
+                                                    <td colspan="3"> @Model.TrichYeu  </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Người ký</td>
+                                                    <td>@Model.NguoiKy</td>
+                                                    <td>Chức vụ người ký</td>
+                                                    <td>@Model.ChucVuNguoiKy</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Đơn vị nhận</td>
+                                                    <td>@Html.Raw(Model.DonviNhanNoiBo)</td>
+                                                    <td>Đơn vị nhận liên thông</td>
+                                                    <td>@Html.Raw(Model.DonviNhanLT)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nhóm đơn vị nhận</td>
+                                                    <td>@Html.Raw(Model.NhomDonViNhan)</td>
+                                                    <td>Nhóm người nhận</td>
+                                                    <td>@Html.Raw(Model.NhomNguoiNhan)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Người nhận</td>
+                                                    <td>@Html.Raw(Model.NguoiNhan)</td>
+                                                    <td>Nơi nhận ngoài ngành</td>
+                                                    <td colspan="1">@Model.NoiNhanNgoaiNganh</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Đơn vị nhận bản lưu</td>
+                                                    <td>@Html.Raw(Model.DonViNhanBanLuu)</td>
+                                                    <td>Đối tượng gửi văn bản đi</td>
+                                                    <td>@Model.DoiTuongGuiVanBanDi</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Đơn vị soạn thảo</td>
+                                                    <td>@Model.DonViSoanThao</td>
+                                                    <td>Độ khẩn</td>
+                                                    <td>@Model.DoKhan</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ghi chú</td>
+                                                    <td colspan="3"> @Model.GhiChu  </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Lĩnh vực</td>
+                                                    <td>@Model.LinhVuc</td>
+                                                    <td>Ngôn ngữ</td>
+                                                    <td>@Model.NgonNgu</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Thời hạn giải quyết</td>
+                                                    <td>@TKM.Utils.ConvertDateTime.ConvertDateTimeToString(Model.ThoiHanGiaiQuyet)</td>
+                                                    <td>Số trang</td>
+                                                    <td>@Model.SoTrang</td>
+                                                </tr>
+                                                @if (!string.IsNullOrEmpty(Model.NguoiGuiVanBan))
+                                                {
+                                                    <tr>
+                                                        <td>Người gửi văn bản</td>
+                                                        <td>@Model.NguoiGuiVanBan</td>
+                                                    </tr>
+                                                }
+                                               
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2 fwb">
+                                        File văn bản
+                                    </div>
+                                    <div class="col-sm-10">
+                                        @{
+                                        var group_signed = (string)TempData["group_signed"];
+                                        var group_id = (string)TempData["group_id"];
+                                        var group_link = (string)TempData["group_link"];
+                                        var group_name = (string)TempData["group_name"];
+                                        var group_size = (string)TempData["group_size"];
+                                        var group_replacename = (string)TempData["group_replacename"];
+                                        var replaceName = group_replacename.Split('|');
+                                        var name = group_name.Split('|');
+                                        }
+                                        @if (!String.IsNullOrEmpty(group_link))
+                                        {
+                                        var arrID = group_id.Split(',');
+                                        var arrSigned = group_signed.Split(',');
+                                        var arrLink = group_link.Split(',');
+                                        if (!string.IsNullOrEmpty(arrLink[0]) && arrLink.Length > 0)
+                                        {
+                                        for (int i = 0; i < arrLink.Length; i++)
+                                        {
+                                        <a href="javascript://" data-link="@arrLink[i]" class="alert-link viewFile text-primary"><i class="fal fa-file-pdf mr-2" data-toggle="tooltip" title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i])? name[i] : "")" data-original-title="@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i])? name[i] : "")"></i>@(!string.IsNullOrEmpty(replaceName[i]) ? replaceName[i] : !string.IsNullOrEmpty(name[i]) ? name[i] : "")</a>
+                                                    if (Model.IsKySo)
+                                                    {
+                                                        if (!string.IsNullOrEmpty(arrSigned[i]))
+                                                        {
+                                                            <a href="javascript://" title="File đã ký" class="viewFile text-primary" data-link="@arrSigned[i]"><span><i class="fas fa-check-circle fs20" data-toggle="tooltip" title="File đã ký" data-original-title=""></i></span></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="javascript://" onclick="KySo(@arrID[i])" class="xemfilecks_dialog mx-1 text-warning" data-toggle="modal" data-target="#kysomodal" @*data-id="@arrID[i]" data-vbid="@Model.ID" *@ title="Ký"><i class="fa fa-edit"></i></a>
+                                                        }
+                                                    }
+
+                                                    if (i != (arrLink.Length - 1))
+                                                    {
+                                        @Html.Raw("</br>")
+                                        }
+                                        }
+
+                                        }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 fwb">
+                                        Văn bản liên quan
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Số ký hiệu</th>
+                                                    <th>Trích yếu</th>
+                                                    <th>File</th>
+                                                    <th>Quan hệ liên kết</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.lstVanBanLienQuan != null && Model.lstVanBanLienQuan.Count > 0)
+                                                {
+                                                foreach (var itemVBLQ in Model.lstVanBanLienQuan)
+                                                {
+                                                <tr>
+                                                    <td align="center">
+                                                        @(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.SoKyHieu : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.SoKyHieu : "")
+                                                    </td>
+                                                    <td align="left">@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.TrichYeu : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.TrichYeu : "")</td>
+                                                    <td class="tac">
+                                                        @*<a href="@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.FileVanBan : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.FileVanBan : " javascript//")" target="_blank" class="h-tdu" style="color:#0b51c5;" title="File đính kèm"><span><i class="fal fa-file"></i></span></a>*@
+                                                        <a href="javascript://" title="File văn bản" class="viewFile text-primary" data-link="@(itemVBLQ.VanBanDen != null ? itemVBLQ.VanBanDen.FileVanBan : itemVBLQ.VanBanDi != null ? itemVBLQ.VanBanDi.FileVanBan : " ")"><span><i class="fal fa-file"></i></span></a>
+                                                    </td>
+                                                    <td align="center">
+                                                        @if (lstQuanHeLienKet != null && lstQuanHeLienKet.Count > 0)
+                                                        {
+                                                        foreach (var itemLK in lstQuanHeLienKet.Keys)
+                                                        {
+                                                        if (itemLK == itemVBLQ.LoaiLienKet)
+                                                        {
+                                                        @Html.Raw(lstQuanHeLienKet[itemLK])
+                                                        }
+                                                        }
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                @if (Model.LstDonViNhanLT != null && !Model.LstDonViNhanLT.IsEmpty())
+                                {
+                                <div class="row">
+                                    <div class="col-sm-12 fwb">
+                                        Trạng thái văn bản liên thông
+                                    </div>
+                                </div>
+                                if (Model.lstStatusLt != null && Model.lstStatusLt.Count > 0)
+                               {var index = 1;
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th>Đơn vị phản hồi</th>
+                                                    <th>Ngày phản hồi</th>
+                                                    <th>Mã trạng thái</th>
+                                                    <th>Mô tả phản hồi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    @foreach (var itemStatus in Model.lstStatusLt)
+                                                    {
+                                                        
+                                                        <tr>
+                                                            <td align="center">@index</td>
+                                                            <td align="center">@(itemStatus.CoQuanPhanHoi != null ? itemStatus.CoQuanPhanHoi : "")</td>
+                                                            <td align="center">@(itemStatus.NgayDuocPhanHoi != null ? @TKM.Utils.ConvertDateTime.ConvertDateTimeToString(itemStatus.NgayDuocPhanHoi) : "")</td>
+                                                            <td align="center">@(itemStatus.MaTrangThai != null ? itemStatus.MaTrangThai : "")</td>
+                                                            <td align="center">@(itemStatus.MoTaTrangThai != null ? itemStatus.MoTaTrangThai : "")</td>
+                                                        </tr>
+                                                        index++;
+                                                    }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: red; font-weight:bold">Chưa có phản hồi từ đơn vị nhận văn bản</span>
+                                    }
+                                }
+                                <div class="form-group row">
+                                    <div class="text-right col-sm-12">
+                                        @if (!string.IsNullOrEmpty(q) && q.Equals("chovaoso"))
+                                        {
+                                        <a class="btn btn-primary" href="/VanBanDi/VaoSo/@Model.ID">Vào sổ</a>
+                                        }
+                                        @if (Model.HinhThucGuiVanBan != 0 && string.IsNullOrEmpty(q))
+                                        {
+                                        <button type="button" onclick="onBoSungDonViNhan(@Model.ID)" class="btn btn-primary">Bổ sung đơn vị nhận</button>
+                                        }
+                                        @if (Model.HinhThucGuiVanBan == 0 && string.IsNullOrEmpty(q))
+                                        {
+                                        <button type="button" onclick="onGuiVanBan(@Model.ID)" class="btn btn-primary">Gửi văn bản</button>
+                                        @*<button type="button" onclick="onHinhThucGuiVanBan(@Model.ID,'lt')" class="btn btn-primary">Gửi liên thông</button>*@
+                                        <a class="btn btn-primary" href="/VanBanDi/Update/@Model.ID">Cập nhật</a>
+                                        <button type="button" onclick="onDelete();" class="btn btn-primary">Xóa</button>
+                                        }
+                                        <a class="btn btn-primary" href="@(!string.IsNullOrEmpty(q) && q.Equals(" chovaoso") ? "/VanBanDi/ChoVaoSo" :"/VanBanDi" )">Đóng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="kysomodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ký số dự thảo văn bản</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="show_xemfilecks">
+
+                </div>
+                @*<div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+    <style>
+        table td {
+            text-align: left !important;
+        }
+
+        .titleInfo {
+            font-size: 17px;
+            padding-bottom: 3px;
+        }
+
+        .thr-line {
+            background-color: #808080;
+            width: 20%;
+            height: 3px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .table-infomation td:nth-child(2n+1) {
+            font-weight: bold !important;
+        }
+
+        .table-infomation td:nth-child(2n) {
+            width: 30% !important;
+        }
+
+        .table-infomation td:nth-child(3n) {
+            width: 20% !important;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+
+        })
+        //GuiVanBanNoiBo
+        function onGuiVanBan(id) {
+            swal({
+                title: "Gửi văn bản?",
+                text: "Bạn có chắc chắn muốn gửi văn bản?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $("#loading").show();
+                    $.ajax({
+                        type: "GET",
+                        url: '/VanBanDi/GuiVanBan',
+                        data: { id: id },
+                        dataType: "html",
+                        success: function (res) {
+                            debugger;
+                            res = JSON.parse(res);
+                            if (res.isSuccess == 1) {
+                                $("#loading").hide();
+                                swal(res.message, {
+                                    icon: "success",
+                                    buttons: false,
+                                });
+                                $("#loading").show();
+                                setTimeout(function () {
+                                    window.location.href = '/VanBanDi';
+                                }, 1000);
+                            }else if (res.message != ''){
+                                swal(res.message, { icon: "error", });
+                                $("#loading").hide();
+                            }
+                            else {
+                                swal("Đã có lỗi xảy ra", { icon: "error", });
+                                $("#loading").hide();
+                            }
+                        },
+                        error: function (response) {
+                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                            $("#loading").hide();
+                        }
+                    });
+                }
+            });
+        }
+        function onBoSungDonViNhan(id) {
+            modal.Render('/VanBanDi/BoSungDonViNhan?id=' + id, 'Bổ sung đơn vị nhận', 'modal-lg');
+        }
+        function onBoSungDonViNhanSuccess(res) {
+            $("#loading").show();
+            if (res.isSuccess == true) {
+                swal(res.message, {
+                    icon: "success",
+                });
+                modal.hide();
+                setTimeout(function () {
+                    window.location.href = '/VanBanDi/Detail/' + res.ID;
+                }, 2000);
+            } else {
+                swal(res.message, { icon: "error", });
+            }
+            $("#loading").hide();
+        }
+        function onDelete() {
+            var value = $('#ID').val();
+            swal({
+                title: "Xóa?",
+                text: "Bạn có chắc chăn muốn xóa văn bản đi này?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+              .then((willDelete) => {
+                  if (willDelete) {
+                      $.ajax({
+                          type: "POST",
+                          url: '/VanBanDi/Delete',
+                          data: { id: value },
+                          dataType: "html",
+                          success: function (res) {
+                              res = JSON.parse(res);
+                              if (res.isSuccess == 1) {
+                                  swal("Xóa văn bản đi thành công!", {
+                                      icon: "success",
+                                  });
+                                  setTimeout(function () {
+                                      window.location.href = '/VanBanDi';
+                                  }, 2000);
+                              }
+                              else {
+                                  swal("Đã có lỗi xảy ra", { icon: "error", });
+                              }
+                          },
+                          error: function (response) {
+                              swal("Đã có lỗi xảy ra", { icon: "error", });
+                          }
+                      });
+                  }
+              });
+        }
+        function KySo(id) {
+            $("#loading").show();
+            $.ajax({
+                type: "GET",
+                url: "/VanBanDi/ViewFileKySo?id=" + id,
+                success: function (data) {
+                    if (data)
+                        $("#show_xemfilecks").html(data);
+                    $("#loading").hide();
+                }
+            });
+        }
+    </script>

@@ -1,0 +1,27 @@
+﻿@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstDonVi = (List<TKM.BLL.DmDonViViewModel>)ViewBag.lstDonVi;
+    var objVanBanDen = (VanBanDenViewModel)ViewBag.objVanBanDen;
+    var lstdonviphid = (string)ViewBag.lstdonviphid;
+}
+
+@if (lstDonVi != null && lstDonVi.Count > 0)
+{
+    <select class="mdb-select-phdv mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" name="ListDonViPhoiHopID" id="ListDonViPhoiHopID" multiple searchable="Chọn đơn vị...">
+        <option value="" disabled selected>-- Chọn đơn vị --</option>
+        @if (lstDonVi != null && lstDonVi.Count > 0)
+        {
+            foreach (var item in lstDonVi)
+            {
+                <option value="@item.ID" @(!string.IsNullOrEmpty(lstdonviphid) && lstdonviphid.Contains(","+item.ID.ToString()+",") ?"selected":"")>@string.Format(item.TenDonVi + " (" + item.KyHieu + ")")</option>
+            }
+        }
+    </select>
+    @*<button class="btn-save btn btn-primary btn-sm">Chọn</button>*@
+}
+ <script>
+     $(document).ready(function () {
+         $('.mdb-select-phdv').materialSelect();
+     });
+ </script>

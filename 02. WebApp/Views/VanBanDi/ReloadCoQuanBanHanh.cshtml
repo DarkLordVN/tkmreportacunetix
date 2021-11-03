@@ -1,0 +1,14 @@
+﻿@using TKM.BLL
+@{ 
+    Layout = null;
+    var lstCoQuanBanHanh = (List<DmCoQuanBanHanhViewModel>)ViewBag.lstCoQuanBanHanh;
+}
+<label class="active" for="CoQuanBanHanhID">
+    Cơ quan ban hành <span class="c-red-500">(*)</span>
+</label>
+@Html.DropDownList("CoQuanBanHanhID", new SelectList(lstCoQuanBanHanh.Where(g=>g.ID != 0), "ID", "TenVaKyHieu"),"-- Chọn cơ quan ban hành --", new { @class = "mdb-select mdb-select-cuscq", @id = "CoQuanBanHanhID", @searchable = "Nhập từ khóa.." })
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-cuscq').materialSelect();
+    });
+</script>

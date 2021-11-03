@@ -1,0 +1,204 @@
+﻿@using TKM.BLL
+@model TKM.BLL.DmCoQuanBanHanhViewModel
+@{
+    ViewBag.Title = "";
+    Layout = null;
+    var lstDonVi = (List<DmCoQuanBanHanhViewModel>)ViewBag.lstDonVi;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@*<link href="~/Assets/css/mdb.min.css" rel="stylesheet">*@
+@using (Ajax.BeginForm("PopupAddCoQuanBanHanh", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onAddCoQuanBanHanhSuccess"
+}, new { @id = "fFormCQBH" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group row">
+        @*<div class="col-sm-6 row">
+            <label for="KhoaChaID" class="col-sm-4 col-form-label pr-0">Đơn vị cha</label>
+            <div class="col-sm-8">
+                @Html.DropDownListFor(model => model.KhoaChaID, new SelectList(lstDonVi.Where(g => g.ID != 0), "ID", "TenVaKyHieu"), "-- Trực thuộc đơn vị --", new { @class = "mdb-select mdb-select-cuscq md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "KhoaChaID", @searchable = "Nhập từ khóa.." })
+            </div>
+                
+            </div>*@
+        <div class="col-sm-6 row">
+            <label for="TenVaKyHieu" class="col-sm-4 col-form-label pr-0">Tên đơn vị <span class="c-red-500">(*)</span></label>
+            <div class="col-sm-8">@Html.TextBoxFor(model => model.TenDonVi, new { @class = "form-control ", @id = "TenVaKyHieu" })</div>
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6 row">
+            <label for="KyHieu" class="col-sm-4 col-form-label pr-0">Ký hiệu</label>
+            <div class="col-sm-8">@Html.TextBoxFor(model => model.KyHieu, new { @class = "form-control ", @id = "KyHieu" })</div>
+        </div>
+        <div class="col-sm-6 row">
+            <label for="MaDinhDanh" class="col-sm-4 col-form-label pr-0">Mã định danh đơn vị </label>
+            <div class="col-sm-8">
+                @Html.TextBoxFor(model => model.MaDinhDanh, new { @class = "form-control ", @id = "MaDinhDanh" ,@placeholder= "Mẫu: 000.00.20.G04" })
+            </div>
+            @*<span class="c-grey-500">Mẫu: 000.00.20.G04</span>*@
+        </div>
+    </div>
+    @*<div class="form-group row">
+            <div class="col-sm-6">
+                <div class="md-form">
+                    <div class="form-check form-check-inline px-3 my-3">
+                        <input type="checkbox" class="form-check-input" id="TrangThai" name="TrangThai" value="true" checked>
+                        <label class="form-check-label" for="TrangThai">Còn sử dụng</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>*@
+    <div class="form-group row">
+        <div class="text-right col-sm-12">
+            <button type="submit" class="btn btn-primary" id="btnluucqbh">Lưu</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Hủy bỏ</button>
+        </div>
+    </div>
+}
+<style>
+    .error.active {
+        -webkit-transform: translateY(12px) !important;
+    }
+
+    .modal-lg, .modal-xl {
+        max-width: 1300px !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.mdb-select-cuscq').materialSelect();
+        $.validator.addMethod('CheckTrungTenDonVi', function () {
+            var name = $('#TenDonVi').val();
+            var id = $('#ID').val();
+            var isSuccess = true; // không trùng
+            $.ajax({
+                type: "GET",
+                url: '/VanBanDen/CheckTrungTenDonVi',
+                data: { id: id, name: name },
+                dataType: "html",
+                success: function (res) {
+                    res = JSON.parse(res);
+                    if (res.trungTen == true) {
+                        isSuccess = false;
+                        toastr.error('Tên đơn vị đã tồn tại!');
+                        $('#btnluucqbh').prop('disabled', true);
+                    } else
+                        $('#btnluucqbh').prop('disabled', false);
+                },
+                error: function (response) {
+                    toastr.error('Đã có lỗi xảy ra');
+                }
+            });
+            return isSuccess;
+        }, "Tên đơn vị đã tồn tại!");
+        $.validator.addMethod('CheckTrungMaDinhDanh', function () {
+            var name = $('#MaDinhDanh').val();
+            var id = $('#ID').val();
+            var isSuccess = true; // không trùng
+            $.ajax({
+                type: "GET",
+                url: '/VanBanDen/CheckTrungMaDinhDanh',
+                data: { id: id, name: name },
+                dataType: "html",
+                success: function (res) {
+                    res = JSON.parse(res);
+                    if (res.trungMa == true) {
+                        isSuccess = false;
+                        toastr.error('Mã định danh đã tồn tại!');
+                        $('#btnluucqbh').prop('disabled', true);
+                    } else
+                        $('#btnluucqbh').prop('disabled', false);
+                },
+                error: function (response) {
+                    toastr.error('Đã có lỗi xảy ra');
+                }
+            });
+            return isSuccess;
+        }, "Mã định danh đã tồn tại!");
+    });
+    $('#TenDonVi').on('keyup', function () {
+        var name = $('#TenDonVi').val();
+        var id = $('#ID').val();
+        var isSuccess = true; // không trùng
+        $.ajax({
+            type: "GET",
+            url: '/VanBanDen/CheckTrungTenDonVi',
+            data: { id: id, name: name },
+            dataType: "html",
+            success: function (res) {
+                res = JSON.parse(res);
+                if (res.trungTen == true) {
+                    isSuccess = false;
+                    toastr.error('Tên đơn vị đã tồn tại!');
+                    $('#btnluucqbh').prop('disabled', true);
+                } else
+                    $('#btnluucqbh').prop('disabled', false);
+            },
+            error: function (response) {
+                toastr.error('Đã có lỗi xảy ra');
+            }
+        });
+        return isSuccess;
+    });
+    $('#MaDinhDanh').on('keyup', function () {
+        var name = $('#MaDinhDanh').val();
+        var id = $('#ID').val();
+        var isSuccess = true; // không trùng
+        $.ajax({
+            type: "GET",
+            url: '/VanBanDen/CheckTrungMaDinhDanh',
+            data: { id: id, name: name },
+            dataType: "html",
+            success: function (res) {
+                res = JSON.parse(res);
+                if (res.trungMa == true) {
+                    isSuccess = false;
+                    toastr.error('Mã định danh đã tồn tại!');
+                    $('#btnluucqbh').prop('disabled', true);
+                } else
+                    $('#btnluucqbh').prop('disabled', false);
+            },
+            error: function (response) {
+                toastr.error('Đã có lỗi xảy ra');
+            }
+        });
+        return isSuccess;
+    });
+    $("#fFormCQBH").validate({
+        rules: {
+            TenDonVi: {
+                required: true,
+                CheckTrungTenDonVi: true
+            },
+            KyHieu: {
+                maxlength: 50,
+            },
+            MaDinhDanh: {
+                maxlength: 13,
+                CheckTrungMaDinhDanh: true
+            }
+        },
+        messages: {
+            TenDonVi: {
+                required: "Vui lòng nhập tên đơn vị!",
+                CheckTrungTenDonVi: "Tên đơn vị đã tồn tại!"
+            },
+            KyHieu: {
+                maxlength: "Ký hiệu không vượt quá 50 ký tự!",
+            },
+            MaDinhDanh: {
+                maxlength: "Mã định danh không vượt quá 13 ký tự!",
+                CheckTrungMaDinhDanh: "Mã định danh đã tồn tại!"
+            }
+        }
+    });
+    $('#fFormCQBH').on('submit', function () {
+        
+        $("#fFormCQBH").valid();
+        $('#btnluucqbh').prop('disabled', true);
+    })
+</script>

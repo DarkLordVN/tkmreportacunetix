@@ -1,0 +1,226 @@
+--------- 00:17:26 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /alertgroup
+IP: ::1
+Text: System.InvalidOperationException: Nullable object must have a value.
+   at System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   at System.Nullable`1.get_Value()
+   at TKM.Services.AlertGroupService.<>c__DisplayClass5_0.<GetList>b__0(AlertGroup x) in D:\Project\TKM_Report_Acunetix\03. Services\AlertGroupService.cs:line 36
+   at System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   at System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   at System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at TKM.DAO.EntityFramework.AlertGroupRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\AlertGroupRepository.Generated.cs:line 70
+--------- 00:17:54 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /alertgroup
+IP: ::1
+Text: System.InvalidOperationException: Nullable object must have a value.
+   at System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   at System.Nullable`1.get_Value()
+   at TKM.Services.AlertGroupService.<>c__DisplayClass5_0.<GetList>b__0(AlertGroup x) in D:\Project\TKM_Report_Acunetix\03. Services\AlertGroupService.cs:line 36
+   at System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   at System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   at System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at TKM.DAO.EntityFramework.AlertGroupRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\AlertGroupRepository.Generated.cs:line 70
+--------- 00:18:15 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /alertgroup
+IP: ::1
+Text: System.InvalidOperationException: Nullable object must have a value.
+   at System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   at System.Nullable`1.get_Value()
+   at TKM.Services.AlertGroupService.<>c__DisplayClass5_0.<GetList>b__0(AlertGroup x) in D:\Project\TKM_Report_Acunetix\03. Services\AlertGroupService.cs:line 36
+   at System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   at System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   at System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at TKM.DAO.EntityFramework.AlertGroupRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\AlertGroupRepository.Generated.cs:line 70
+--------- 00:18:47 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /alertgroup
+IP: ::1
+Text: System.InvalidOperationException: Nullable object must have a value.
+   at System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   at System.Nullable`1.get_Value()
+   at TKM.Services.AlertGroupService.<>c__DisplayClass5_0.<GetList>b__0(AlertGroup x) in D:\Project\TKM_Report_Acunetix\03. Services\AlertGroupService.cs:line 36
+   at System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   at System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   at System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at TKM.DAO.EntityFramework.AlertGroupRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\AlertGroupRepository.Generated.cs:line 70
+--------- 00:22:28 ---------
+Ref URL: http://localhost:3939/AlertGroup/Index
+Host: localhost:3939
+URL: /TuDienVietHoa/Index
+IP: ::1
+Text: System.InvalidOperationException: Nullable object must have a value.
+   at System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   at System.Nullable`1.get_Value()
+   at TKM.Services.TuDienVietHoaService.<>c.<GetList>b__3_0(TuDienVietHoa x) in D:\Project\TKM_Report_Acunetix\03. Services\TuDienVietHoaService.cs:line 33
+   at System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   at System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   at System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at TKM.DAO.EntityFramework.TuDienVietHoaRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\TuDienVietHoaRepository.Generated.cs:line 70
+--------- 00:22:32 ---------
+Ref URL: 
+Host: localhost:3939
+URL: /TuDienVietHoa/Index
+IP: ::1
+Text: System.InvalidOperationException: Nullable object must have a value.
+   at System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   at System.Nullable`1.get_Value()
+   at TKM.Services.TuDienVietHoaService.<>c.<GetList>b__3_0(TuDienVietHoa x) in D:\Project\TKM_Report_Acunetix\03. Services\TuDienVietHoaService.cs:line 33
+   at System.Linq.EnumerableSorter`2.ComputeKeys(TElement[] elements, Int32 count)
+   at System.Linq.EnumerableSorter`1.Sort(TElement[] elements, Int32 count)
+   at System.Linq.OrderedEnumerable`1.<GetEnumerator>d__1.MoveNext()
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at TKM.DAO.EntityFramework.TuDienVietHoaRepository.GetList(Expression`1 where, Int32 pageIndex, Int32 pageSize, Int32& totalItem, Func`2 orderCol, Boolean isDecending) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\TuDienVietHoaRepository.Generated.cs:line 70
+--------- 18:08:57 ---------
+Ref URL: http://localhost:3939/AlertGroup/Index
+Host: localhost:3939
+URL: /AlertGroup/Detail/81
+IP: ::1
+Text: System.Web.HttpCompileException (0x80004005): d:\Project\TKM_Report_Acunetix\02. WebApp\Views\AlertGroup\Detail.cshtml(37): error CS1061: 'TKM.BLL.AlertGroupViewModel' does not contain a definition for 'vmTuDien' and no extension method 'vmTuDien' accepting a first argument of type 'TKM.BLL.AlertGroupViewModel' could be found (are you missing a using directive or an assembly reference?)
+   at System.Web.Compilation.AssemblyBuilder.Compile()
+   at System.Web.Compilation.BuildProvidersCompiler.PerformBuild()
+   at System.Web.Compilation.BuildManager.CompileWebFile(VirtualPath virtualPath)
+   at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
+   at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
+   at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
+   at System.Web.Compilation.BuildManager.GetCompiledType(VirtualPath virtualPath)
+   at System.Web.Compilation.BuildManager.GetCompiledType(String virtualPath)
+   at System.Web.Mvc.BuildManagerWrapper.System.Web.Mvc.IBuildManager.GetCompiledType(String virtualPath)
+   at System.Web.Mvc.BuildManagerCompiledView.Render(ViewContext viewContext, TextWriter writer)
+   at System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilterRecursive(IList`1 filters, Int32 filterIndex, ResultExecutingContext preContext, ControllerContext controllerContext, ActionResult actionResult)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass3_6.<BeginInvokeAction>b__4()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass3_1.<BeginInvokeAction>b__1(IAsyncResult asyncResult)
+--------- 18:18:40 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:18:43 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:18:46 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:18:49 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:10 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:12 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:15 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:18 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:39 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:41 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:44 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 18:19:47 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 19:13:15 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 19:13:42 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 19:15:10 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 19:15:35 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123
+--------- 19:15:59 ---------
+Text: System.Data.Entity.Validation.DbEntityValidationException: Validation failed for one or more entities. See 'EntityValidationErrors' property for more details.
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at TKM.DAO.EntityFramework.EFUnitOfWork.Commit() in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\EFUnitOfWork.cs:line 46
+   at TKM.DAO.EntityFramework.WebsiteScanRepository.insertData(List`1 lsEntity, Scan eScan) in D:\Project\TKM_Report_Acunetix\05. DAO\EntityFramework\WebsiteScanRepository.cs:line 123

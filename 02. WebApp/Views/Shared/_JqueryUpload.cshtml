@@ -1,0 +1,391 @@
+﻿@{
+    var obj = Model.GetType();
+    var name = obj.GetProperty("Name").GetValue(Model, null);
+    var multiple = obj.GetProperty("Multiple").GetValue(Model, null);
+    var value = obj.GetProperty("Value") == null ? "" : obj.GetProperty("Value").GetValue(Model, null);
+    var type = obj.GetProperty("type") == null ? "document" : obj.GetProperty("type").GetValue(Model, null);
+    var fileType = obj.GetProperty("filetype") == null ? "" : obj.GetProperty("filetype").GetValue(Model, null);
+
+    //var setname = false;
+    var setname = obj.GetProperty("setname") == null ? "" : obj.GetProperty("setname").GetValue(Model, null);
+    var valueName = obj.GetProperty("valueName") == null ? "" : obj.GetProperty("valueName").GetValue(Model, null);
+    var setSize = obj.GetProperty("setSize") == null ? "" : obj.GetProperty("setSize").GetValue(Model, null);
+    var valueSize = obj.GetProperty("valueSize") == null ? "" : obj.GetProperty("valueSize").GetValue(Model, null);
+    var auto = obj.GetProperty("auto") == null ? false : obj.GetProperty("auto").GetValue(Model, null);
+    var changeName = obj.GetProperty("changeName") == null ? false : obj.GetProperty("changeName").GetValue(Model, null);
+    var intFolder = obj.GetProperty("intFolder") == null ? "0" : obj.GetProperty("intFolder").GetValue(Model, null);
+}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/Assets/js/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet" />
+<link href="/Assets/js/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet" />
+
+<script src="/Assets/js/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/vendor/tmpl.min.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/vendor/load-image.min.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/vendor/canvas-to-blob.min.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.fileupload.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.fileupload-image.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.fileupload-audio.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.fileupload-video.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+<script src="/Assets/js/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+<script type="text/javascript" src="/Assets/js/jquery-file-upload/js/main.js"></script>
+<script>
+    $(document).ready(function () {
+        FormFileUpload.init("@changeName", "@type", null, null, null, "@auto", "@name", "@multiple", "@value", "@setname", "@valueName", "@setSize", "@valueSize", "@fileType", "@intFolder");
+    });
+</script>
+
+<div class="row fileupload-buttonbar">
+    <div class="col-lg-7">
+        <!-- The fileinput-button span is used to style the file input field as button -->
+        <span class="btn btn-default btn-sm fileinput-button" id="btThem" title="Thêm mới">
+            <i class="fal fa-paperclip"></i>
+            @*<span> Thêm </span>*@
+            <input type="hidden" id="@name" name="@name" value="@(value ?? "")">
+            @*<input type="hidden" id="name_@name" name="name_@name" value="">*@
+            <input type="hidden" id="@setname" data-id="@setname" name="@setname" value="@(valueName ?? "")" />
+            <input type="hidden" id="@setSize" data-id="@setSize" name="@setSize" value="@(valueSize??"")" />
+            <input type="file" data-id="@name" class="files" @(multiple ? "multiple" : "") />
+
+        </span>
+        @if (@multiple == true && auto == false)
+        {
+            <button type="submit" class="btn btn-primary start">
+                <i class="glyphicon glyphicon-upload"></i>
+                <span>Tải lên</span>
+            </button>
+            <button type="reset" class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-ban-circle"></i>
+                <span>Hủy</span>
+            </button>
+        }
+    </div>
+    <!-- The global progress state -->
+    <div class="col-lg-5 fileupload-progress fade">
+        <!-- The global progress bar -->
+        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+        </div>
+        <!-- The extended global progress state -->
+        <div class="progress-extended">&nbsp;</div>
+    </div>
+</div>
+
+<div class="result-div"></div>
+
+<table role="presentation" class="table table-striped table-uploadvx clearfix">
+    <tbody class="result-table" id="table-edit"></tbody>
+</table>
+
+<script id="document-upload" type="text/x-tmpl">
+
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <strong class="error text-danger label label-danger"></strong>
+            <input type="hidden" name="nameFile" value="" />
+            <input type="hidden" name="linkFile" value="" />
+        </td>
+        @*@if (setname != null && changeName == true)
+        {
+            <td><input class="form-control valid" type="text" id="abcd" name="abcd" value="" /></td>
+        }*@
+        <td>
+            <p class="size">Đang tải...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+            </div>
+            <input type="hidden" name="sizeFile" value="" />
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+            <button class="btn btn-primary start" disabled>
+                <i class="glyphicon glyphicon-upload"></i>
+                <span>Tải lên</span>
+            </button> {% } %} {% if (!i) { %}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-cancel"></i>
+                <span>Hủy</span>
+            </button> {% } %}
+        </td>
+    </tr> {% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="document-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <p class="name tal">
+                <a href="{%=file.url%}" class="text-primary h-tdu" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}> {%=file.name%}</a>
+                <a class="viewFile text-primary" title="Xem file" data-link="{%=file.url%}" target="_blank" style="margin-left: 5px; color: #337ab7"><i class="fa fa-search"></i> Xem </a>
+                {% if (!file.error) { %}
+                <input type="hidden" name="nameFile" value="{%=file.name%}" />
+                <input type="hidden" name="linkFile" value="{%=file.url%}" />
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+            <div><span class="error">Lỗi! File quá lớn</span> @*{%=file.error%}*@ </div>
+            {% } %}
+        </td>
+        @*@if (changeName == true)
+        {
+            <td>
+                <input class="form-control valid" type="text" id="abcd" name="abcd" value="{%=file.nameFile%}" placeholder="Nhập tên file..."/>
+            </td>
+        }*@
+
+        <td>
+            <span class="size" id="AttchmentSize">{%=o.formatFileSize(file.size)%}</span>
+            <input type="hidden" name="sizeFile" value="{%=o.formatFileSize(file.size)%}" />
+        </td>
+        <td>
+            {% if (file.error) { %}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-cancel"></i>
+                <span>Hủy</span>
+            </button>
+            
+            {% } else { %}
+            <button title="Xóa" class="btn btn-danger btn-sm delete br-50pt" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" data-delete="{%=file.url%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}><span><i class="fal fa-times"></i></span></button>
+            {% }  %}
+           
+        </td>
+    </tr>
+    {% } %}
+</script>
+
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade in">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">{%=o.formatFileSize(file.size)%}</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+            <button class="btn btn-primary start" disabled>
+                <i class="glyphicon glyphicon-upload"></i>
+                <span>Tải lên</span>
+            </button> {% } %} {% if (!i) { %}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-cancel"></i>
+                <span>Hủy</span>
+            </button> {% } %}
+        </td>
+    </tr>
+    {% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+            </p>
+            {% if (file.error) { %}
+            <div><span class="error">Lỗi</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+            <button class="delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>Xóa</button>
+        </td>
+    </tr>
+    {% } %}
+</script>
+
+
+<script id="image-upload" type="text/x-tmpl">
+
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <strong class="error text-danger label label-danger"></strong>
+            <input type="hidden" name="linkFile" value="" />
+        </td>
+        <td>
+            <p class="size">Đang tải...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+            </div>
+            <input type="hidden" name="sizeFile" value="" />
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+            <button class="btn btn-primary start" disabled>
+                <i class="glyphicon glyphicon-upload"></i>
+                <span>Tải lên</span>
+            </button> {% } %} {% if (!i) { %}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-cancel"></i>
+                <span>Hủy</span>
+            </button> {% } %}
+        </td>
+    </tr> {% } %}
+</script>
+<script id="image-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <p class="name">
+                <div id="previewthumbnail">
+                    <a id="aTag" title="Xóa ảnh" class="delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" data-delete="{%=file.url%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}><i class="fa fa-times" style="font-size: 25px;"></i></a>
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}><img src="{%=file.url%} " width="200"></a>
+                    <input type="hidden" name="linkFile" value="{%=file.url%}" />
+                </div>
+            </p>
+            {% if (file.error) { %}
+            <div><span class="error">Lỗi</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        @*<td>
+                <span class="size" id="AttchmentSize">{%=o.formatFileSize(file.size)%}</span>
+                <input type="hidden" name="sizeFile" value="{%=o.formatFileSize(file.size)%}" />
+            </td>
+            <td>
+                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" data-delete="{%=file.url%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>Xóa</button>
+            </td>*@
+    </tr>
+    {% } %}
+</script>
+
+@*<script id="image-upload" type="text/x-tmpl">
+        {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-upload fade">
+            <td colspan="3" class="tdimg">
+                <span class="preview">
+                    {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.url%}" width="200">{%=file.name%}</a>
+                    {% } %}
+                </span>
+            </td>
+            @if (setname != null && multiple == true)
+            {
+                <td><input class="form-control valid" type="text" id="nameImage" name="nameImage" value="" /></td>
+            }
+            <td>
+                <p class="size">Đang tải...</p>
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+            </td>
+            <td>
+                {% if (!i && !o.options.autoUpload) { %}
+                <button class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Tải lên</span>
+                </button> {% } %} {% if (!i) { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-cancel"></i>
+                    <span>Hủy</span>
+                </button> {% } %}
+            </td>
+        </tr>
+        {% } %}
+    </script>
+
+    <script id="image-download" type="text/x-tmpl">
+        {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-download fade">
+            <td colspan="3" class="tdimg">
+                <span class="preview">
+                    {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.url%}"></a>
+                    {% } %}
+                </span>
+            </td>
+            <td>
+                <input class="form-control valid" type="text" id="abcd" name="abcd" value="{%=file.nameFile%}" />
+            </td>
+            <td>
+                <span class="size" id="AttchmentSize">{%=o.formatFileSize(file.size)%}</span>
+                <input type="hidden" name="sizeFile" value="{%=o.formatFileSize(file.size)%}" />
+            </td>
+            <td>
+                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" data-delete="{%=file.url%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>Xóa</button>
+            </td>
+        </tr>
+        {% } %}
+    </script>*@
+<style>
+    .table-uploadvx {
+        margin-top: 10px;
+    }
+
+        .table-uploadvx > tbody > tr > td {
+            border-left: none;
+            border-top: 1px solid #ddd !important;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .table-uploadvx .name {
+            margin-bottom: 0;
+        }
+
+        .table-uploadvx .progress {
+            height: 20px !important;
+            margin-bottom: 20px !important;
+            border-radius: 4px !important;
+            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1) !important;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.1) !important;
+        }
+
+        .table-uploadvx .error {
+            color: #fff;
+        }
+
+        .table-uploadvx .btndel {
+            border: none;
+            background: none;
+        }
+
+        .table-uploadvx .tdimg {
+            background: none;
+            padding: 0 !important;
+            background-color: #fff !important;
+        }
+        .table-uploadvx .fade.in{opacity:1 !important}
+
+    #table-edit .template-download {
+        background-color: #fff;
+    }
+
+        #table-edit .template-download #previewthumbnail #aTag {
+            color: red;
+            text-decoration: none;
+            padding: 0px;
+            margin: 0px;
+            position: absolute;
+            z-index: 2;
+            right: -9px;
+            bottom: -12px;
+        }
+
+        #table-edit .template-download #previewthumbnail {
+            position: relative;
+            display: table;
+        }
+</style>

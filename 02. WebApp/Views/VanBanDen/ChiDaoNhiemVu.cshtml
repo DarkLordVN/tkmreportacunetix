@@ -1,0 +1,60 @@
+﻿@using TKM.BLL
+@model VanBanDenViewModel
+@{
+    Layout = null;
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+@using (Ajax.BeginForm("ChiDaoNhiemVu", "VanBanDen", null, new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "onChiDaoNhiemVuSuccess"
+}, new { @id = "fFormCD" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+    <div class="form-group row">
+        <div class="col-sm-2">Nội dung chỉ đạo <span class="c-red-500">(*)</span></div>
+        <div class="col-sm-10">
+            @Html.TextArea("NoiDungChiDao", null, new { @class = "form-control rounded-0", @id = "NoiDungChiDao", @placeholder = "Nội dung chỉ đạo", @rows = "3" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">Nhiệm vụ được giao <span class="c-red-500">(*)</span></div>
+        <div class="col-sm-10">
+            @Html.TextArea("NhiemVuDuocGiao", null, new { @class = "form-control rounded-0", @id = "NhiemVuDuocGiao", @placeholder = "Nhiệm vụ được giao", @rows = "3" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="text-center col-sm-12">
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+
+}
+<script>
+    $(document).ready(function () {
+    })
+    $("#fFormCD").validate({
+        rules: {
+            NoiDungChiDao: {
+                required: true,
+            },
+            NhiemVuDuocGiao: {
+                required: true,
+            }
+        },
+        messages: {
+            NoiDungChiDao: {
+                required: "Vui lòng nhập nội dung chỉ đạo!",
+            },
+            NhiemVuDuocGiao: {
+                required: "Vui lòng nhập nhiệm vụ được giao!",
+            }
+        }
+    });
+    $('#fFormCD').on('submit', function () {
+        $("#fFormCD").valid();
+    })
+</script>

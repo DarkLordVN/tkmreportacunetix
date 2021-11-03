@@ -1,0 +1,289 @@
+﻿@using PagedList.Mvc;
+@*@model Foldio.BLL.VanBanDuThaoDiListView*@
+@{
+    ViewBag.Title = "Lịch lãnh đạo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Css{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.css" integrity="sha256-nJK+Jim06EmZazdCbGddx5ixnqfXA13Wlw3JizKK1GU=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.css" integrity="sha256-saO3mkZVAcyqsfgsGMrmE7Cs/TLN1RgVykZ5dnnJKug=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.css" integrity="sha256-QG5qcyovbK2zsUkGMWTVn0PZM1P7RVx0Z05QwB9dCeg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" integrity="sha256-DOWdbe6a1VwJwFpkimY6z5tW9mmrBNre2jZsAige5PE=" crossorigin="anonymous" />
+    <style>
+        .fc-button, .fc-button:disabled {
+            background-color: #fff !important;
+            outline: 0;
+            color: #4fc3f7 !important;
+            border-color: #4fc3f7 !important;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            text-shadow: none;
+        }
+
+            .fc-button:hover, .fc-button-active {
+                color: #fff !important;
+                background-color: #4fc3f7 !important;
+                outline: none;
+            }
+
+        button:focus {
+            outline: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+        }
+
+        .fc-button:disabled {
+            opacity: .65;
+            box-shadow: none;
+        }
+        .fc-scroller.fc-day-grid-container {
+            overflow: hidden !important;
+        }
+        .fc-toolbar h2 {
+            font-size: 24px;
+        }
+    </style>
+}
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fal fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/VanBanDuThaoDi">@ViewBag.Title</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+        {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <input type="hidden" name="tab" id="tab" value="@*@Model.tab*@" />
+                    <ul class="nav f-bg1 flex-nowrap" id="myClassicTabShadow" role="tablist">
+                        <li class="nav-item">
+                            <a id="home-tab-just" data-toggle="tab" href="#lichlanhdao" role="tab" aria-controls="home-just"
+                               aria-selected="true" class="nav-link waves-light active show" title="Lịch theo tuần">Lịch theo tuần</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="home-tab-just" data-toggle="tab" href="#lichtheotuan" role="tab" aria-controls="home-just"
+                               aria-selected="true" class="nav-link waves-light" title="Lịch lãnh đạo">Lịch lãnh đạo</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade show active" id="lichlanhdao" role="tabpanel" aria-labelledby="profile-tab-just">
+                            <div class="row">
+                                <div class="col">
+                                    <div id="calendar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="lichtheotuan" role="tabpanel" aria-labelledby="home-tab-just">
+                            <div class="row justify-content-between">
+                                <div class="col px-0 pl-lg-3 pr-lg-0">
+                                    <div class="w-100 bg-white p-3 border border-bottom-0">
+                                        <div class="form-group grey lighten-4 p-3">
+                                            <label class="active" style="font-size: .8rem" for="selectLD2">Chọn lãnh đạo cần xem</label>
+                                            <select id="selectLD2" class="mdb-select md-form mt-0" searchable="Tìm lãnh đạo..">
+                                                <option value="1">Nguyễn Duy Sinh</option>
+                                                <option value="2">Phạm Văn Tiến</option>
+                                                <option value="3">Trần Văn Long</option>
+                                                <option value="4">Nguyễn Ngọc Trinh</option>
+                                                <option value="5">Hoàng Thái Bảo</option>
+                                            </select>
+                                        </div>
+
+                                        <table class="table table-bordered table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th class="font-weight-bold" scope="col">Ngày (trong tuần)</th>
+                                                    <th class="font-weight-bold" scope="col">Thời gian</th>
+                                                    <th class="font-weight-bold" scope="col">Lịch làm việc</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th rowspan="2" scope="row">Thứ 2 - 26/8/2019</th>
+                                                    <td>Sáng</td>
+                                                    <td>9 - 10 AM: họp giao ban</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiều</td>
+                                                    <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                                                </tr>
+                                                <tr>
+                                                    <th rowspan="2" scope="row">Thứ 3 - 27/8/2019</th>
+                                                    <td>Sáng</td>
+                                                    <td>9 - 10 AM: họp giao ban</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiều</td>
+                                                    <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                                                </tr>
+                                                <tr>
+                                                    <th rowspan="2" scope="row">Thứ 4 - 28/8/2019</th>
+                                                    <td>Sáng</td>
+                                                    <td>9 - 10 AM: họp giao ban</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiều</td>
+                                                    <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                                                </tr>
+                                                <tr>
+                                                    <th rowspan="2" scope="row">Thứ 5 - 29/8/2019</th>
+                                                    <td>Sáng</td>
+                                                    <td>9 - 10 AM: họp giao ban</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiều</td>
+                                                    <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                                                </tr>
+                                                <tr>
+                                                    <th rowspan="2" scope="row">Thứ 6 - 30/8/2019</th>
+                                                    <td>Sáng</td>
+                                                    <td>9 - 10 AM: họp giao ban</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiều</td>
+                                                    <td>2 - 3 PM: họp với lãnh đạo phòng VAQ</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="phathanhdvmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chuyển phát hành</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("PhatHanh", "VanBanDuThaoDi", FormMethod.Post))
+            {
+                @Html.Hidden("DuThaoId")
+                @*<input id="PhatHanhDuThaoId" name="DuThaoId" hidden />*@
+                @Html.Hidden("IsDonVi")
+                <div class="modal-body">
+                    <div class="form-group row">
+                        @*<label for="inputMaNV" class="col-sm-4 col-form-label">Đơn vị</label>*@
+                        <div class="col-sm-12">
+                            @*<textarea type="text" class="form-control" id="txtNoiDung" name="NoiDungYKien" placeholder="Nhập nội dung góp ý (nếu có)"></textarea>*@
+                            <label class="active" for="DonViChuyenPhatHanhID">Đơn vị chuyển phát hành</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnConfirm" class="btn btn-primary">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js" integrity="sha256-GBryZPfVv8G3K1Lu2QwcqQXAO4Szv4xlY4B/ftvyoMI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js" integrity="sha256-MUHmW5oHmLLsvmMWBO8gVtKYrjVwUSFau6pRXu8dtnA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js" integrity="sha256-FT1eN+60LmWX0J8P25UuTjEEE0ZYvpC07nnU6oFKFuI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/list/main.min.js" integrity="sha256-q57s73NpMCTQ4ZXqb1X5bIywrICySeB6WvYxFGfz/PA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js" integrity="sha256-L9T+qE3Ms6Rsuxl+KwLST6a3R/2o6m33zB5mR2KyPjU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/locales-all.min.js" integrity="sha256-W3h/kWvQYYadUwb7/Tcf5WkDq3q0VPleove6MyKZS8o=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/locales/vi.js" integrity="sha256-TDZwkRcrNwaAJUK4XGP2IDSf+Dfz0JamA1AJ0OVdyB4=" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var t = new Date, i = t.getDate(), a = t.getMonth(), n = t.getFullYear();
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'vi',
+                plugins: ['dayGrid', 'timeGrid', 'list', 'interaction'],
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'listWeek,dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                nowIndicator: true,
+                views: {
+                    listWeek: {
+                        buttonText: 'Lịch tuần',
+                    }
+                },
+                titleFormat: {
+                    month: 'short',
+                    year: 'numeric',
+                    day: 'numeric',
+                    weekday: 'long',
+                },
+                //defaultDate: '2019-06-12',
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                eventClick: function (calEvent, jsEvent, view) {
+                    if (calEvent.etype == "1") {
+                        $("#phathanhdvmodal").modal("toggle");
+                        $("#cMucDich").val(calEvent.title);
+                        $("#cChuTri").val(calEvent.chutri);
+                        $("#cSoLuong").val(calEvent.soluong);
+                        $("#cBatDau").val(calEvent.start);
+                        $("#cKetThuc").val(calEvent.end);
+                        $("#cGhiChu").val(calEvent.note);
+                        $("#cThanhPhan").val(calEvent.thanhphan);
+                        $("#meetingroom").val(calEvent.room);
+                    }
+                    else {
+                        $("#phathanhdvmodal").modal("toggle");
+                    }
+                },
+                events: [
+                    {
+                        title: "Họp tổng công ty", start: new Date(n, a, 1, 12, 0), end: new Date(n, a, 1, 12, 30), desc: "Họp tổng công ty HTC", bullet: "success", chutri: "Nguyễn Văn A", soluong: "20", room: "1", color: "#5cb85c", note: "+ Máy chiếu \n+ Bản in photo slide tổng kết", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Hoàng Minh Châu, Vũ Thế Hải", etype: "1"
+                    }
+            , {
+                title: "Họp tổng công ty 1", start: new Date(n, a, 1, 13, 0), end: new Date(n, a, 1, 15, 30), desc: "Họp tổng công ty HTC - Miền Nam", bullet: "success", chutri: "Lê Đức Thọ", soluong: "25", room: "2", color: "#5cb85c", textColor: "#337ab7", note: "+ Máy chiếu", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Hoàng Minh Châu", etype: "1"
+            }
+            , {
+                title: "Họp tổng kết toàn TCG", start: new Date(n, a, i - 5, 9, 0), end: new Date(n, a, i - 2, 18, 0), desc: "Họp tổng kết TCG ba miền", bullet: "success", chutri: "Nguyễn Văn B", soluong: "5", room: "2", color: "#5cb85c", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Hoàng Minh Châu", etype: "1"
+            }
+            , {
+                title: "Họp nội bộ 2", start: new Date(n, a, i - 3, 16, 0), allDay: !1, desc: "Họp nội bộ 2 - VP Tổng giám đốc", bullet: "warning", chutri: "Hoàng Minh Giám", soluong: "5", room: "1", color: "#337ab7", thanhphan: "Nguyễn Văn A, Nguyễn Văn B, Vũ Thế Kiệt", etype: "2"
+            }
+            , {
+                title: "Họp nội bộ 3", start: new Date(n, a, i + 4, 16, 0), allDay: !1, desc: "Họp nội bộ 3 - Họp đột xuất", bullet: "danger", editable: "true", chutri: "Nguyễn Văn A", soluong: "5", room: "3", color: "#337ab7", note: "+ Máy chiếu", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+            }
+            , {
+                title: "Họp nội bộ 4", start: new Date(n, a, i + 1, 17, 30), end: new Date(n, a, i + 1, 18, 0), allDay: !1, desc: "Họp nội bộ 4 - Bộ phận chăm sóc khách hàng", chutri: "Nguyễn Văn A", soluong: "5", room: "3", color: "#337ab7", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+            }
+            , {
+                title: "Họp nội bộ 5", start: new Date(n, a, 28, 1, 13, 0), end: new Date(n, a, 29), desc: "Họp nội bộ 5 - bộ phận HCNS", bullet: "success", chutri: "Hoàng Thị Hòa", soluong: "10", room: "2", color: "#5cb85c", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "1"
+            },
+             {
+                 title: "Công tác Sài Gòn", start: new Date(n, a, i + 3, 17, 30), end: new Date(n, a, i + 5, 18, 0), allDay: !1, desc: "kế hoạch công tác tháng 1", chutri: "Nguyễn Văn A", soluong: "5", room: "3", color: "#ff8000", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+             }
+            , {
+                title: "Nghỉ phép", start: new Date(n, a, i + 6, 17, 30), end: new Date(n, a, i + 7, 18, 0), allDay: !1, desc: "Nghỉ phép", chutri: "Nguyễn Văn A", soluong: "1", room: "3", color: "#666666", thanhphan: "Nguyễn Văn A, Nguyễn Văn B", etype: "2"
+            }
+                ]
+            });
+
+            calendar.render();
+        });
+    </script>
+}

@@ -1,0 +1,90 @@
+﻿@using TKM.BLL
+@model AlertGroupViewModel
+@{
+    Layout = null;
+}
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Mức độ: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.Severity : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Tên nhóm nguy cơ: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.AlertName : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Mô tả: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.AlertDescription : "")
+        </div>
+    </div>
+</div>
+@if (Model != null && !string.IsNullOrEmpty(Model.AlertDescriptionTrans))
+{
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3 text-right">
+                <label class="fwb">Việt hóa mô tả: </label>
+            </div>
+            <div class="col-md-9">
+                @(Model != null ? Model.AlertDescriptionTrans : "")
+            </div>
+        </div>
+    </div>
+}
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Khuyến nghị: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.Recommendations : "")
+        </div>
+    </div>
+</div>
+@if (Model != null && !string.IsNullOrEmpty(Model.RecommendationsTrans))
+{
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3 text-right">
+                <label class="fwb">Việt hóa khuyến nghị: </label>
+            </div>
+            <div class="col-md-9">
+                @(Model != null ? Model.RecommendationsTrans : "")
+            </div>
+        </div>
+    </div>
+}
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-3 text-right">
+            <label class="fwb">Nhóm biến thể: </label>
+        </div>
+        <div class="col-md-9">
+            @(Model != null ? Model.AlertVariants : "")
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+        </div>
+    </div>
+
+</div>

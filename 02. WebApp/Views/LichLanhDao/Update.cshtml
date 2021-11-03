@@ -1,0 +1,152 @@
+﻿@model TKM.BLL.LichLanhDaoViewModel
+@{
+    ViewBag.Title = "Cập nhật lịch lãnh đạo";
+}
+
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/LichLanhDao/Index">Quản lý lịch lãnh đạo</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            {
+            <div class="alert @TempData["AlertType"]">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>@Html.Raw(@TempData["AlertData"])</strong>
+                <a id="lblMessage"></a>
+            </div>
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @using (Html.BeginForm("Update", "LichLanhDao", null, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(m => m.ID)
+                                @*@Html.TextBoxFor(model => model.TenChucVu, new { @class = "form-control ", @id = "TenChucVu" })*@
+                                @*@Html.DropDownListFor(model => model.KhoaChaId, new SelectList(Model.LstChucNangCha, "ID", "TenChucNang"), "--- Thuộc chức năng ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlChucNang", @searchable = "Nhập từ khóa.." })*@
+                                <div class="form-group row">
+                                    <label for="val0" class="col-sm-2 col-form-label">Lãnh đạo <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.NguoiDungID, new SelectList(Model.LstNguoiDung, "ID", "ChucVuVaTen"), "--- Chọn lãnh đạo ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlNguoiDung", @searchable = "Nhập từ khóa.." })
+                                    </div>
+                                    @*<label for="val1" class="col-sm-2 col-form-label">Mã màu hiển thị</label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.MaMau, new SelectList(Model.LstMaMau, "ValueStr", "Text"), "--- Chọn mã hiển thị ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlNguoiDung", @searchable = "Nhập từ khóa.." })
+                                    </div>*@
+                                </div>
+                                <div class="form-group row">
+                                    <label for="NoiDung" class="col-sm-2 col-form-label">Nội dung <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(model => model.NoiDung, new { @class = "form-control rounded-0", @id = "NoiDung", @rows = "4" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="txtDiaDiem" class="col-sm-2 col-form-label">Địa điểm</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.DiaDiem, new { @class = "form-control", @id = "txtDiaDiem" })
+                                    </div>
+                                    <label for="txtChuanBi" class="col-sm-2 col-form-label">Chuẩn bị</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.ChuanBi, new { @class = "form-control", @id = "txtChuanBi" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="txtThanhPhanThamGia" class="col-sm-2 col-form-label">Thành phần tham gia</label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(model => model.ThanhPhanThamGia, new { @class = "form-control rounded-0", @id = "txtThanhPhanThamGia", @rows = "2" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="val0" class="col-sm-2 col-form-label">Ngày <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="input-group date datepicker">
+                                                @Html.TextBoxFor(model => model.ThoiGianBatDauStr, new { @class = "form-control ", @id = "ThoiGianBatDauStr" })
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<label for="val1" class="col-sm-2 col-form-label">Thời gian kết thúc <span class="c-red-500">(*)</span></label>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <div class="input-group date datepicker">
+                                                @Html.TextBoxFor(model => model.ThoiGianKetThucStr, new { @class = "form-control ", @id = "ThoiGianKetThucStr" })
+                                                <span class="input-group-addon">
+                                                    <span class="fa fa-clock"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                    <label for="val0" class="col-sm-2 col-form-label">Thời gian</label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.ThoiGian, new SelectList(Model.LstThoiGian.Where(x => x.Value != 0), "Value", "Text"), new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlThoiGian", @searchable = "Nhập từ khóa.." })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                   
+                                </div>
+                                    @*<div class="form-group row">
+                                        <label for="val0" class="col-sm-2 col-form-label">Tần suất</label>
+                                        <div class="col-sm-4">
+                                            @Html.DropDownListFor(model => model.KieuLap, new List<SelectListItem>() { new SelectListItem() { Text = "Hàng ngày", Value = "ngay" }, new SelectListItem() { Text = "Hàng tuần", Value = "tuan" }}, "--- Không lặp lại ---", new { @class = "mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0", @id = "ddlKieuLap" })
+                                        </div>
+                                        <div id="pnlThoiGian" class="col-sm-6 p-0 m-0 row" style="@(Model.KieuLap != null && Model.KieuLap.Equals("tuan") ? "" : "display: none;")">
+                                            <label for="val1" class="col-sm-4 col-form-label">Thời gian lặp lại<span class="c-red-500">(*)</span></label>
+                                            <div class="col-sm-8">
+                                                <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" multiple id="ddlNgayLapLai" name="NgayLapLai" searchable="Nhập từ khóa..">
+                                                    @{
+                                                        <option value="" disabled>--- Chọn ngày ---</option>
+                                                        <option value="t2" @(!string.IsNullOrEmpty(Model.NgayLapLai) && Model.NgayLapLai.Contains(",t2,") ? "selected" : "")>Thứ hai</option>
+                                                        <option value="t3" @(!string.IsNullOrEmpty(Model.NgayLapLai) && Model.NgayLapLai.Contains(",t3,") ? "selected" : "")>Thứ ba</option>
+                                                        <option value="t4" @(!string.IsNullOrEmpty(Model.NgayLapLai) && Model.NgayLapLai.Contains(",t4,") ? "selected" : "")>Thứ tư</option>
+                                                        <option value="t5" @(!string.IsNullOrEmpty(Model.NgayLapLai) && Model.NgayLapLai.Contains(",t5,") ? "selected" : "")>Thứ năm</option>
+                                                        <option value="t6" @(!string.IsNullOrEmpty(Model.NgayLapLai) && Model.NgayLapLai.Contains(",t6,") ? "selected" : "")>Thứ sáu</option>
+                                                        <option value="t7" @(!string.IsNullOrEmpty(Model.NgayLapLai) && Model.NgayLapLai.Contains(",t7,") ? "selected" : "")>Thứ bảy</option>
+                                                        <option value="cn" @(!string.IsNullOrEmpty(Model.NgayLapLai) && Model.NgayLapLai.Contains(",cn,") ? "selected" : "")>Chủ nhật</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                    <div class="form-group row">
+                                        <div class="text-right col-sm-12">
+                                            <button type="submit" class="btn btn-primary">Lưu</button>
+                                            <a class="btn cur-p btn-light" href="/LichLanhDao/Index">Hủy bỏ</a>
+                                        </div>
+                                    </div>
+                                                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Script{
+    <script>
+        $("#ddlKieuLap").change(function () {
+            if ($(this).val() == "tuan") {
+                $("#pnlThoiGian").show();
+            }
+            else {
+                $("#pnlThoiGian").hide();
+            }
+        });
+    </script>
+}

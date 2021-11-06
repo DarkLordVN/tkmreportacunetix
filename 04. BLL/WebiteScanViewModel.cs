@@ -15,7 +15,6 @@ namespace TKM.BLL
         public WebsiteScanViewModel()
         {
             vmWebsite = new WebsiteViewModel();
-            vmScan = new ScanViewModel();
             if (LsAlertGroup == null)
                 LsAlertGroup = new List<AlertGroupViewModel>();
             if (LsAffectedItem == null)
@@ -31,6 +30,17 @@ namespace TKM.BLL
         public int WebsiteID { get; set; }
         public DateTime StartTime { get; set; }
         public string ScanTime { get; set; }
+        public string ScanTimeTrans
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(ScanTime))
+                {
+                    return ScanTime.Replace("hours", "giờ").Replace("hour", "giờ").Replace("minutes","phút").Replace("minute", "phút").Replace("seconds","giây").Replace("second", "giây");
+                }
+                return "";
+            }
+        }
         public string ThreatLevel { get; set; }
         public int TotalSecond { get; set; }
         public int TotalItemScan { get; set; }
@@ -40,13 +50,13 @@ namespace TKM.BLL
         public int LowAlert { get; set; }
         public int InforAlert { get; set; }
         public string ScanProfile { get; set; }
+        public string ScanStatus { get; set; }
         public string RootReportUrl { get; set; }
         public string NewReportUrl { get; set; }
         public string ReportHTML { get; set; }
         public DateTime? DateCreated { get; set; }
         public bool Status { get; set; }
         public WebsiteViewModel vmWebsite { get; set; }
-        public ScanViewModel vmScan { get; set; }
         public List<AlertGroupViewModel> LsAlertGroup { get; set; }
         public List<AffectedItemViewModel> LsAffectedItem { get; set; }
         public List<WebsiteItemViewModel> LsWebsiteItem { get; set; }
@@ -56,8 +66,8 @@ namespace TKM.BLL
     {
         [AllowHtml]
         [StringLength(20, ErrorMessage = "Từ khóa không được quá 20 ký tự")]
+        public string WebsiteID { get; set; }
         public string TuKhoa { get; set; }
-        public string PhamViTimKiem { get; set; }
         public List<WebsiteScanViewModel> lstWebsiteScan { get; set; }
 
     }

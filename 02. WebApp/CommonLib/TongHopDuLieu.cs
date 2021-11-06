@@ -21,10 +21,10 @@ namespace TKM.WebApp
             var thamSoService = new HeThongThamSoService();
             TimeSpan alertTime = new TimeSpan(23, 59, 59);
             var timeReport = thamSoService.GetByFilter(y => y.MaThamSo.Equals("TimeReport"));
-            if(timeReport != null && !string.IsNullOrEmpty(timeReport.MoTa))
+            if (timeReport != null && !string.IsNullOrEmpty(timeReport.MoTa))
             {
                 var timeCheck = CommonUtils.TryParseInt(timeReport.MoTa);
-                if(timeCheck > 0)
+                if (timeCheck > 0)
                 {
                     alertTime = new TimeSpan(timeCheck);
                 }
@@ -90,226 +90,239 @@ namespace TKM.WebApp
             HtmlDocument document = new HtmlDocument();
             //document.Load(@"D:\Project\TKM_Report_Acunetix\Documents\FILE_REPORTS_1.html");
             document.Load(rootPath);
-            var nodesAll = document.DocumentNode.DescendantNodes(0).ToList();
-            var lsReports = new List<WebsiteScanViewModel>();
-            WebsiteScanViewModel report = null;
-            foreach (HtmlNode item in nodesAll)
+            var innerHtml = document.DocumentNode.InnerHtml;
+            string[] delimitedStr = { "<h2" };
+            var lsWebsiteHtmlSplit = innerHtml.Split(delimitedStr, StringSplitOptions.None);
+            if (lsWebsiteHtmlSplit != null && lsWebsiteHtmlSplit.Count() > 0)
             {
-                if (item.Name == "h2")
+                try
                 {
-                    if (report != null)
+                    var lsReports = new List<WebsiteScanViewModel>();
+                    WebsiteScanViewModel report = null;
+                    for (int i = 1; i < lsWebsiteHtmlSplit.Count(); i++)
                     {
-                        //xu ly khac
-                        if (report.LsScanItem != null)
-                            report.TotalItemScan = report.LsScanItem.Count();
-                        report.RootReportUrl = rootPath;
-                        report.Status = true;
-                        lsReports.Add(report);
-                    }
-                    report = new WebsiteScanViewModel();
-                }
-                if (item.Name == "h4" && !item.HasAttributes)
-                {
-                    report.ThreatLevel = item.InnerText;
-                }
-                if (item.Name == "table")
-                {
-                    //Xu ly thong tin chung
-                    if (item.HasClass("ax-scan-summary"))
-                    {
-                        var temp = new HtmlDocument();
-                        temp.LoadHtml(item.InnerHtml);
-                        if (temp != null && temp.DocumentNode != null)
+                        var websiteHtml = "<h2 " + lsWebsiteHtmlSplit[i].Replace("</body>", "").Replace("</html>", "");
+                        document.LoadHtml(websiteHtml);
+                        var nodeWebsite = document.DocumentNode.DescendantNodes(0).ToList();
+                        report = new WebsiteScanViewModel();
+                        foreach (HtmlNode item in nodeWebsite)
                         {
-                            var trNodes = temp.DocumentNode.SelectNodes("//tr");
-                            if (trNodes != null && trNodes.Count > 0)
+                            if (item.Name == "h4" && !item.HasAttributes)
                             {
-                                foreach (var trNode in trNodes)
+                                report.ThreatLevel = item.InnerText;
+                            }
+                            if (item.Name == "table")
+                            {
+                                //Xu ly thong tin chung
+                                if (item.HasClass("ax-scan-summary"))
                                 {
-                                    var tdNodes = trNode.ChildNodes.Where(x => x.Name == "td");
-                                    if (tdNodes != null && tdNodes.Count() > 1)
+                                    var temp = new HtmlDocument();
+                                    temp.LoadHtml(item.InnerHtml);
+                                    if (temp != null && temp.DocumentNode != null)
                                     {
-                                        var keyNode = tdNodes.ElementAt(0).InnerText;
-                                        var valNode = tdNodes.ElementAt(1).InnerText;
-                                        switch (keyNode.ToLower())
+                                        var trNodes = temp.DocumentNode.SelectNodes("//tr");
+                                        if (trNodes != null && trNodes.Count > 0)
                                         {
-                                            case "start url":
-                                                report.vmWebsite.StartURL = valNode; break;
-                                            case "host":
-                                                report.vmWebsite.Host = valNode; break;
-                                            case "server information":
-                                                report.vmWebsite.StartURL = valNode; break;
-                                            case "responsive":
-                                                report.vmWebsite.Responsive = valNode; break;
-                                            case "server OS":
-                                                report.vmWebsite.ServerOS = valNode; break;
-                                            case "server technologies":
-                                                report.vmWebsite.ServerTechnologies = removeHtmlEscape(valNode); break;
-                                            case "start time":
-                                                var startTime = DateTime.MinValue;
-                                                DateTime.TryParse(valNode, out startTime);
-                                                report.StartTime = startTime;
-                                                break;
-                                            case "profile":
-                                                report.ScanProfile = valNode; break;
-                                            case "scan time":
-                                                report.ScanTime = valNode;
-                                                if (!string.IsNullOrEmpty(valNode))
+                                            foreach (var trNode in trNodes)
+                                            {
+                                                var tdNodes = trNode.ChildNodes.Where(x => x.Name == "td");
+                                                if (tdNodes != null && tdNodes.Count() > 1)
                                                 {
-                                                    if (valNode.Contains(","))
+                                                    var keyNode = tdNodes.ElementAt(0).InnerText;
+                                                    var valNode = tdNodes.ElementAt(1).InnerText;
+                                                    switch (keyNode.ToLower())
                                                     {
-                                                        var valSplit = valNode.Split(',');
-                                                        if (valSplit != null && valSplit.Count() > 0)
-                                                        {
-                                                            foreach (var valSecond in valSplit)
+                                                        case "start url":
+                                                            report.vmWebsite.StartURL = valNode; break;
+                                                        case "host":
+                                                            report.vmWebsite.Host = valNode; break;
+                                                        case "server information":
+                                                            report.vmWebsite.ServerInformation = valNode; break;
+                                                        case "responsive":
+                                                            report.vmWebsite.Responsive = valNode; break;
+                                                        case "server OS":
+                                                            report.vmWebsite.ServerOS = valNode; break;
+                                                        case "server technologies":
+                                                            report.vmWebsite.ServerTechnologies = removeHtmlEscape(valNode); break;
+                                                        case "start time":
+                                                            var startTime = DateTime.MinValue;
+                                                            DateTime.TryParse(valNode, out startTime);
+                                                            report.StartTime = startTime;
+                                                            break;
+                                                        case "profile":
+                                                            report.ScanProfile = valNode; break;
+                                                        case "scan time":
+                                                            report.ScanTime = valNode;
+                                                            if (!string.IsNullOrEmpty(valNode))
                                                             {
-                                                                report.TotalSecond += getSeconds(valSecond);
+                                                                if (valNode.Contains(","))
+                                                                {
+                                                                    var valSplit = valNode.Split(',');
+                                                                    if (valSplit != null && valSplit.Count() > 0)
+                                                                    {
+                                                                        foreach (var valSecond in valSplit)
+                                                                        {
+                                                                            report.TotalSecond += getSeconds(valSecond);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    report.TotalSecond = getSeconds(valNode);
+                                                                }
+                                                            }
+                                                            break;
+                                                        case "scan status":
+                                                            report.ScanStatus = valNode; break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (item.HasClass("ax-alerts-distribution"))
+                                {
+                                    var temp = new HtmlDocument();
+                                    temp.LoadHtml(item.InnerHtml);
+                                    if (temp != null && temp.DocumentNode != null)
+                                    {
+                                        var trNodes = temp.DocumentNode.SelectNodes("//tr");
+                                        if (trNodes != null && trNodes.Count > 0)
+                                        {
+                                            foreach (var trNode in trNodes)
+                                            {
+                                                var tdNodes = trNode.ChildNodes.Where(x => x.Name == "td");
+                                                if (tdNodes != null && tdNodes.Count() > 1)
+                                                {
+                                                    var keyNode = tdNodes.ElementAt(0).InnerText;
+                                                    var valNode = tdNodes.ElementAt(1).InnerText;
+                                                    if (keyNode.ToLower().Contains("total alerts found"))
+                                                    {
+                                                        report.TotalAlertFound = CommonUtils.TryParseInt(valNode);
+                                                    }
+                                                    else if (keyNode.ToLower().Contains("high"))
+                                                    {
+                                                        report.HighAlert = CommonUtils.TryParseInt(valNode);
+                                                    }
+                                                    else if (keyNode.ToLower().Contains("medium"))
+                                                    {
+                                                        report.MediumAlert = CommonUtils.TryParseInt(valNode);
+                                                    }
+                                                    else if (keyNode.ToLower().Contains("low"))
+                                                    {
+                                                        report.LowAlert = CommonUtils.TryParseInt(valNode);
+                                                    }
+                                                    else if (keyNode.ToLower().Contains("informational"))
+                                                    {
+                                                        report.InforAlert = CommonUtils.TryParseInt(valNode);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //Xu ly luu danh sach nguy co
+                                else
+                                {
+                                    var affectedItem = new AffectedItemViewModel();
+                                    var temp = new HtmlDocument();
+                                    temp.LoadHtml(item.InnerHtml);
+                                    if (temp != null && temp.DocumentNode != null)
+                                    {
+                                        var trNodes = temp.DocumentNode.SelectNodes("//tr");
+                                        if (trNodes != null && trNodes.Count > 0)
+                                        {
+                                            foreach (var trNode in trNodes)
+                                            {
+                                                var tdNodes = trNode.ChildNodes.Where(x => x.Name == "td");
+                                                if (tdNodes != null)
+                                                {
+                                                    if (tdNodes.Count() == 1)
+                                                    {
+                                                        var tdNode = tdNodes.ElementAt(0);
+                                                        if (tdNode.HasAttributes)
+                                                        {
+                                                            affectedItem.Detail = tdNode.InnerText.Replace("<code style=\"white - space: pre - line\">", "").Replace("</code>", "");
+                                                        }
+                                                        else
+                                                        {
+                                                            if (tdNode.InnerText.ToLower().Equals("alert variants"))
+                                                            {
+
+                                                                affectedItem.vmAlertGroup.AlertVariants = tdNode.InnerText;
+                                                            }
+                                                            else
+                                                            {
+                                                                affectedItem.ScanPath = tdNode.InnerText;
                                                             }
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        report.TotalSecond = getSeconds(valNode);
+                                                        var keyNode = tdNodes.ElementAt(0).InnerText;
+                                                        var valNode = tdNodes.ElementAt(1).InnerText;
+                                                        keyNode = removeHtmlEscape(keyNode);
+                                                        valNode = removeHtmlEscape(valNode);
+                                                        switch (keyNode.ToLower())
+                                                        {
+                                                            case "alert group":
+                                                                affectedItem.vmAlertGroup.AlertName = valNode; break;
+                                                            case "severity":
+                                                                affectedItem.vmAlertGroup.Severity = valNode; break;
+                                                            case "description":
+                                                                affectedItem.vmAlertGroup.AlertDescription = valNode; break;
+                                                            case "recommendations":
+                                                                affectedItem.vmAlertGroup.Recommendations = valNode; break;
+                                                            case "alert variants":
+                                                                affectedItem.vmAlertGroup.AlertVariants = valNode; break;
+                                                            case "details":
+                                                                affectedItem.Detail = valNode; break;
+                                                        }
                                                     }
                                                 }
-                                                break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if (item.HasClass("ax-alerts-distribution"))
-                    {
-                        var temp = new HtmlDocument();
-                        temp.LoadHtml(item.InnerHtml);
-                        if (temp != null && temp.DocumentNode != null)
-                        {
-                            var trNodes = temp.DocumentNode.SelectNodes("//tr");
-                            if (trNodes != null && trNodes.Count > 0)
-                            {
-                                foreach (var trNode in trNodes)
-                                {
-                                    var tdNodes = trNode.ChildNodes.Where(x => x.Name == "td");
-                                    if (tdNodes != null && tdNodes.Count() > 1)
-                                    {
-                                        var keyNode = tdNodes.ElementAt(0).InnerText;
-                                        var valNode = tdNodes.ElementAt(1).InnerText;
-                                        if (keyNode.ToLower().Contains("total alerts found"))
-                                        {
-                                            report.TotalAlertFound = CommonUtils.TryParseInt(valNode);
-                                        }
-                                        else if (keyNode.ToLower().Contains("high"))
-                                        {
-                                            report.HighAlert = CommonUtils.TryParseInt(valNode);
-                                        }
-                                        else if (keyNode.ToLower().Contains("medium"))
-                                        {
-                                            report.MediumAlert = CommonUtils.TryParseInt(valNode);
-                                        }
-                                        else if (keyNode.ToLower().Contains("low"))
-                                        {
-                                            report.LowAlert = CommonUtils.TryParseInt(valNode);
-                                        }
-                                        else if (keyNode.ToLower().Contains("informational"))
-                                        {
-                                            report.InforAlert = CommonUtils.TryParseInt(valNode);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //Xu ly luu danh sach nguy co
-                    else
-                    {
-                        var affectedItem = new AffectedItemViewModel();
-                        var temp = new HtmlDocument();
-                        temp.LoadHtml(item.InnerHtml);
-                        if (temp != null && temp.DocumentNode != null)
-                        {
-                            var trNodes = temp.DocumentNode.SelectNodes("//tr");
-                            if (trNodes != null && trNodes.Count > 0)
-                            {
-                                foreach (var trNode in trNodes)
-                                {
-                                    var tdNodes = trNode.ChildNodes.Where(x => x.Name == "td");
-                                    if (tdNodes != null)
-                                    {
-                                        if (tdNodes.Count() == 1)
-                                        {
-                                            var tdNode = tdNodes.ElementAt(0);
-                                            if (tdNode.HasAttributes)
-                                            {
-                                                affectedItem.Detail = tdNode.InnerText.Replace("<code style=\"white - space: pre - line\">", "").Replace("</code>", "");
                                             }
-                                            else
-                                            {
-                                                if (tdNode.InnerText.ToLower().Equals("alert variants"))
-                                                {
+                                        }
+                                        report.LsAffectedItem.Add(affectedItem);
+                                    }
+                                }
+                            }
+                            //Xu ly luu danh sach item
+                            if (item.Name == "font")
+                            {
+                                report.LsScanItem.Add(new ScannedItemViewModel() { Status = (item.OuterHtml.Contains("color=\"green\"") ? true : false), FullPath = item.InnerText });
+                                report.LsWebsiteItem.Add(new WebsiteItemViewModel() { Status = true, FullPath = item.InnerText });
+                            }
+                        }
+                        //xu ly khac
+                        if (report.LsScanItem != null)
+                            report.TotalItemScan = report.LsScanItem.Count();
+                        report.RootReportUrl = rootPath;
+                        report.Status = true;
+                        report.ReportHTML = websiteHtml;
+                        lsReports.Add(report);
+                    }
 
-                                                    affectedItem.vmAlertGroup.AlertVariants = tdNode.InnerText;
-                                                }
-                                                else
-                                                {
-                                                    affectedItem.ScanPath = tdNode.InnerText;
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            var keyNode = tdNodes.ElementAt(0).InnerText;
-                                            var valNode = tdNodes.ElementAt(1).InnerText;
-                                            keyNode = removeHtmlEscape(keyNode);
-                                            valNode = removeHtmlEscape(valNode);
-                                            switch (keyNode.ToLower())
-                                            {
-                                                case "alert group":
-                                                    affectedItem.vmAlertGroup.AlertName = valNode; break;
-                                                case "severity":
-                                                    affectedItem.vmAlertGroup.Severity = valNode; break;
-                                                case "description":
-                                                    affectedItem.vmAlertGroup.AlertDescription = valNode; break;
-                                                case "recommendations":
-                                                    affectedItem.vmAlertGroup.Recommendations = valNode; break;
-                                                case "alert variants":
-                                                    affectedItem.vmAlertGroup.AlertVariants = valNode; break;
-                                                case "details":
-                                                    affectedItem.Detail = valNode; break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            report.LsAffectedItem.Add(affectedItem);
+                    ////xu ly insert bao cao cuoi
+                    //if (report.LsScanItem != null)
+                    //    report.TotalItemScan = report.LsScanItem.Count();
+                    //report.RootReportUrl = newPath;
+                    //report.Status = true;
+                    //lsReports.Add(report);
+                    var websiteScanService = new WebsiteScanService();
+                    var check = websiteScanService.Add(lsReports);
+                    if (check)
+                    {
+                        if (File.Exists(newPath))
+                        {
+                            File.Delete(newPath);
                         }
+                        File.Move(rootPath, newPath);
                     }
                 }
-                //Xu ly luu danh sach item
-                if (item.Name == "font")
+                catch (Exception ex)
                 {
-                    report.LsScanItem.Add(new ScannedItemViewModel() { Status = (item.OuterHtml.Contains("color=\"green\"") ? true : false), FullPath = item.InnerText });
-                    report.LsWebsiteItem.Add(new WebsiteItemViewModel() { Status = true, FullPath = item.InnerText });
+                    OutputLog.WriteOutputLog(ex.ToString());
                 }
-            }
-            //xu ly insert bao cao cuoi
-            if (report.LsScanItem != null)
-                report.TotalItemScan = report.LsScanItem.Count();
-            report.RootReportUrl = newPath;
-            report.Status = true;
-            lsReports.Add(report);
-            var vmScan = new ScanViewModel();
-            vmScan.RootDetailHtml = document.DocumentNode.OuterHtml;
-            vmScan.RootReportUrl = newPath;
-            var websiteScanService = new WebsiteScanService();
-            var check = websiteScanService.Add(lsReports, vmScan);
-            if (check)
-            {
-                if (File.Exists(newPath))
-                {
-                    File.Delete(newPath);
-                }
-                File.Move(rootPath, newPath);
             }
         }
 

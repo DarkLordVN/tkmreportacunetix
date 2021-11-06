@@ -22,6 +22,9 @@ namespace TKM.WebApp.Controllers
         private HeThongThamSoService _heThongThamSoService;
         private QuyenService _quyenService;
         private BaoCaoService _baoCaoService;
+        private WebsiteService _websiteService;
+        private WebsiteScanService _websiteScanService;
+        private AlertGroupService _alertGroupService;
         // GET: Home
         public HomeController()
         {
@@ -30,6 +33,9 @@ namespace TKM.WebApp.Controllers
             if (_heThongThamSoService == null) _heThongThamSoService = new HeThongThamSoService();
             if (_quyenService == null) _quyenService = new QuyenService();
             if (_baoCaoService == null) _baoCaoService = new BaoCaoService();
+            if (_websiteService == null) _websiteService = new WebsiteService();
+            if (_websiteScanService == null) _websiteScanService = new WebsiteScanService();
+            if (_alertGroupService == null) _alertGroupService = new AlertGroupService();
         }
         public ActionResult Index()
         {
@@ -47,9 +53,9 @@ namespace TKM.WebApp.Controllers
         public ActionResult ThongTinChung()
         {
             var viewModel = new HomeViewModel();
-            viewModel.TongNguyCo = "5,35,80";
-            viewModel.TongLuotRaQuet = "16";
-            viewModel.TongSoWebsite = "5";
+            viewModel.TongNguyCo = _alertGroupService.GetCountByFilter(x=>x.Severity.ToLower().Equals("high")) + "," + _alertGroupService.GetCountByFilter(x => x.Severity.ToLower().Equals("medium")) + "," + _alertGroupService.GetCountByFilter(x => x.Severity.ToLower().Equals("low"));
+            viewModel.TongLuotRaQuet = _websiteScanService.GetCountByFilter(null) + "";
+            viewModel.TongSoWebsite = _websiteService.GetCountByFilter(null) + "";
             return View(viewModel);
         }
 
@@ -57,28 +63,33 @@ namespace TKM.WebApp.Controllers
         {
             var viewModel = new HomeViewModel();
             viewModel.TitleNguyCoWebsite = "Danh sách website gặp nguy cơ nhiều nhất";
-            viewModel.TenWebsite = "test1.com,google.com,vnexpress.net";
-            viewModel.SoLuotScanWebsite = "16,1,5";
-            viewModel.NguyCoCao = "0,0,1";
-            viewModel.NguyCoTrungBinh = "1,1,19";
-            viewModel.NguyCoThap = "110,20,41";
+            var total = 0;
+            var lsWebsite = _websiteService.GetListTopNguyCo(null, 1, 10, ref total);
+            if(lsWebsite != null && lsWebsite.Count > 0)
+            {
+                foreach(var item in lsWebsite)
+                {
+                    viewModel.TenWebsite += item.Host + ",";
+                    viewModel.SoLuotScanWebsite += item.LuotQuet + ",";
+                    viewModel.NguyCoCao += item.TongNguyCoCao + ",";
+                    viewModel.NguyCoTrungBinh += item.TongNguyCoTrungBinh + ",";
+                    viewModel.NguyCoThap += item.TongNguyCoThap + ",";
+                }
+                viewModel.TenWebsite = viewModel.TenWebsite.Trim(',');
+                viewModel.SoLuotScanWebsite = viewModel.SoLuotScanWebsite.Trim(',');
+                viewModel.NguyCoCao = viewModel.NguyCoCao.Trim(',');
+                viewModel.NguyCoTrungBinh = viewModel.NguyCoTrungBinh.Trim(',');
+                viewModel.NguyCoThap = viewModel.NguyCoThap.Trim(',');
+            }
             return View(viewModel);
         }
 
         public ActionResult DanhSachTop()
         {
             var viewModel = new HomeViewModel();
-            viewModel.LsWebsite = new List<WebsiteViewModel>();
-            viewModel.LsWebsite.Add(new WebsiteViewModel() { Host = "www.google1.com", TongNguyCoCao = "5", TongNguyCoTrungBinh = "61" });
-            viewModel.LsWebsite.Add(new WebsiteViewModel() { Host = "www.gogle2.com", TongNguyCoCao = "2", TongNguyCoTrungBinh = "5" });
-            viewModel.LsWebsite.Add(new WebsiteViewModel() { Host = "www.goole3.com", TongNguyCoCao = "1", TongNguyCoTrungBinh = "1" });
-            viewModel.LsWebsite.Add(new WebsiteViewModel() { Host = "gogle4.com", TongNguyCoCao = "1", TongNguyCoTrungBinh = "26" });
-            viewModel.LsAlertGroup = new List<AlertGroupViewModel>();
-            viewModel.LsAlertGroup.Add(new AlertGroupViewModel() { AlertName = "WordPress &#39;wp-admin/admin.php&#39; Module Configuration Security Bypass Vulnerability (0.6.2 - 2.8)", TongWebsite = "7" });
-            viewModel.LsAlertGroup.Add(new AlertGroupViewModel() { AlertName = "Unencrypted __VIEWSTATE parameter", TongWebsite = "5" });
-            viewModel.LsAlertGroup.Add(new AlertGroupViewModel() { AlertName = "WordPress Cross-Site Scripting Vulnerability (0.70 - 4.1.1)", TongWebsite = "3" });
-            viewModel.LsAlertGroup.Add(new AlertGroupViewModel() { AlertName = "Development configuration file", TongWebsite = "3" });
-            viewModel.LsAlertGroup.Add(new AlertGroupViewModel() { AlertName = "Possible virtual host found", TongWebsite = "2" });
+            var total = 0;
+            viewModel.LsWebsite = _websiteService.GetListTopNguyCo(null, 1, 5, ref total);
+            viewModel.LsAlertGroup = _alertGroupService.GetListTopNguyCo(null, 1, 5, ref total);
             return View(viewModel);
         }
 

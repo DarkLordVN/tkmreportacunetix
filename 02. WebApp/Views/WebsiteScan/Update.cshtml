@@ -1,0 +1,104 @@
+﻿@model TKM.BLL.WebsiteScanViewModel
+@using TKM.DAO.EntityFramework
+@{
+    ViewBag.Title = "Cập nhật lượt quét";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/WebsiteScan/Index">Quản lý lượt quét</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            { <div class="alert @TempData["AlertType"]">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>@Html.Raw(@TempData["AlertData"])</strong>
+            <a id="lblMessage"></a>
+        </div>
+
+        }
+        <div class="row">
+            <div class="col">
+                <!-- Classic tabs -->
+                <div class="classic-tabs tabs-f-cl mx-2">
+                    <div class="tab-content py-0 card" id="myClassicTabContentShadow">
+                        <div class="tab-pane fade active show pt20" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
+                            @using (Ajax.BeginForm("Update", "WebsiteScan", null, new AjaxOptions
+                            {
+                                HttpMethod = "POST",
+                                OnSuccess = "onUpdateSuccess"
+                            }, new { @id = "fForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(m => m.ID)
+
+                                <div class="form-group row">
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Tên lượt quét</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.AlertName, new { @class = "form-control ", @id = "AlertName", @readonly = "readonly", @rows = "10" })
+                                        @Html.ValidationMessageFor(model => model.AlertName, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Việt hóa tên nhóm</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.AlertNameTrans, new { @class = "form-control ", @id = "AlertNameTrans", @rows = "10" })
+                                        @Html.ValidationMessageFor(model => model.AlertNameTrans, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Mô tả</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.AlertDescription, new { @class = "form-control ", @id = "AlertDescription", @readonly = "readonly", @rows = "10" })
+                                        @Html.ValidationMessageFor(model => model.AlertDescription, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Việt hóa mô tả</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.AlertDescriptionTrans, new { @class = "form-control ", @id = "AlertDescriptionTrans", @rows = "10" })
+                                        @Html.ValidationMessageFor(model => model.AlertDescriptionTrans, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Khuyến nghị</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.Recommendations, new { @class = "form-control ", @id = "Recommendations", @readonly = "readonly", @rows = "10" })
+                                        @Html.ValidationMessageFor(model => model.Recommendations, "", new { @class = "alert-danger" })
+                                    </div>
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Việt hóa khuyến nghị</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.RecommendationsTrans, new { @class = "form-control ", @id = "RecommendationsTrans", @rows = "10" })
+                                        @Html.ValidationMessageFor(model => model.RecommendationsTrans, "", new { @class = "alert-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Mức độ</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.Severity, new { @class = "form-control ", @id = "Severity", @readonly = "readonly" })
+                                    </div>
+                                    <label for="TenDangNhap" class="col-sm-2 col-form-label">Nhóm biến thể</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.AlertVariants, new { @class = "form-control ", @id = "AlertName", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="text-right col-sm-12">
+                                        <button type="submit" class="btn btn-primary" id="btn-luu">Lưu</button>
+                                        <a class="btn cur-p btn-light" href="/WebsiteScan/Index">Hủy bỏ</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

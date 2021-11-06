@@ -63,7 +63,7 @@ namespace TKM.WebApp.Controllers
             }
             int total = 0;
             var fullDataND = new List<AlertGroupViewModel>();
-            var lstResult = _AlertGroupService.GetList(viewModel.TuKhoa, viewModel.PageNumber.Value, viewModel.PageSize.Value, ref total, ref errorMess, viewModel.ColumnName, viewModel.OrderBy);
+            var lstResult = _AlertGroupService.GetList(viewModel.TuKhoa, viewModel.PhamViTimKiem, viewModel.PageNumber.Value, viewModel.PageSize.Value, ref total, ref errorMess, viewModel.ColumnName, viewModel.OrderBy);
             viewModel.lstAlertGroup = lstResult;
             viewModel.TotalItem = total;
 

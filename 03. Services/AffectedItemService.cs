@@ -16,9 +16,11 @@ namespace TKM.Services
     {
         private EFUnitOfWork oUnitOfWork = new EFUnitOfWork();
         private readonly AffectedItemRepository _AffectedItemResp;
+        private readonly v_AffectedItemRepository _vAffectedItemRepo;
         public AffectedItemService()
         {
             _AffectedItemResp = new AffectedItemRepository(new EFRepository<AffectedItem>(), oUnitOfWork);
+            _vAffectedItemRepo = new v_AffectedItemRepository(new EFRepository<v_AffectedItem>(), oUnitOfWork);
         }
         public List<AffectedItemViewModel> GetList(string tuKhoa, int pageIndex, int pageSize, ref int totalItem, ref string error, string columnName, string orderBy)
         {
@@ -65,6 +67,41 @@ namespace TKM.Services
                 return null;
             }
         }
+        public List<AffectedItemViewModel> GetListForWebsiteScan(string tuKhoa, int webSiteScannedID, int pageIndex, int pageSize, ref int totalItem, string columnName, string orderBy, int tab = 0)
+        {
+            try
+            {
+                var lsReturn = new List<AffectedItemViewModel>();
+                Expression<Func<v_AffectedItem, bool>> where;
+                where = x => x.WebiteScanID == webSiteScannedID;
+                //Đổ dữ liệu
+                var leResult = _vAffectedItemRepo.GetList(where, pageIndex, pageSize, ref totalItem,
+                     //Filter theo column
+                     x => (string.IsNullOrEmpty(columnName) ? x.ScanPath : (columnName.Equals("Severity") ? x.SeverityNum.ToString() : (columnName.Equals("AlertName") ? x.AlertName : x.ScanPath))),
+                     //Order by
+                     string.IsNullOrEmpty(orderBy) ? true : orderBy == null || (!string.IsNullOrEmpty(orderBy) && orderBy.Equals("desc")) ? true : false);
+                if(leResult != null && leResult.Count > 0)
+                {
+                    foreach(var item in leResult)
+                    {
+                        var vm = new AffectedItemViewModel() { ScanPath = item.ScanPath};
+                        vm.vmAlertGroup = new AlertGroupViewModel()
+                        {
+                            AlertName = item.AlertName,
+                            Severity = item.Severity
+                        };
+                        lsReturn.Add(vm);
+                    }
+                }
+                return lsReturn;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return null;
+            }
+        }
+
         public List<AffectedItemViewModel> GetListFive(Expression<Func<AffectedItem, bool>> where)
         {
             try

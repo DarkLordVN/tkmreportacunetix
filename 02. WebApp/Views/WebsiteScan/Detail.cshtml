@@ -1,0 +1,317 @@
+﻿@model TKM.BLL.WebsiteScanViewModel
+@using TKM.DAO.EntityFramework
+@{
+    ViewBag.Title = "Chi tiết lượt quét";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/WebsiteScan/Index">Quản lý lượt quét</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            { <div class="alert @TempData["AlertType"]">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>@Html.Raw(@TempData["AlertData"])</strong>
+            <a id="lblMessage"></a>
+        </div>
+
+        }
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            @if (Model.ThreatLevel.Contains("3"))
+                            {
+                            <div class="col-md-4 text-center">
+                                <img src="~/Assets/images/acunetix/threat-level-high.png">
+                            </div>
+                            <div class="col-md-8">
+                                <h3>Nguy cơ cấp độ 3</h3>
+                                <hr class="my-1">
+                                <a>Máy quét đã phát hiện ra một hoặc nhiều lỗ hổng loại có mức độ nghiêm trọng cao. Người dùng độc hại có thể khai thác các lỗ hổng này và xâm phạm cơ sở dữ liệu phụ trợ và / hoặc làm xấu mặt trang web của bạn.</a>
+                            </div>
+                            }
+                            else if (Model.ThreatLevel.Contains("2"))
+                            {
+                            <div class="col-md-4 text-center">
+                                <img src="~/Assets/images/acunetix/threat-level-medium.png">
+                            </div>
+                            <div class="col-md-8">
+                                <h3>Nguy cơ cấp độ 2</h3>
+                                <hr class="my-1">
+                                <a>Máy quét đã phát hiện ra một hoặc nhiều lỗ hổng loại có mức độ nghiêm trọng trung bình. Bạn nên điều tra từng lỗ hổng này để đảm bảo rằng chúng sẽ không chuyển sang các vấn đề nghiêm trọng hơn.</a>
+                            </div>
+                            }
+                            else if (Model.ThreatLevel.Contains("1"))
+                            {
+                            <div class="col-md-4 text-center">
+                                <img src="~/Assets/images/acunetix/threat-level-high.png">
+                            </div>
+                            <div class="col-md-8">
+                                <h3>Nguy cơ cấp độ 2</h3>
+                                <hr class="my-1">
+                                <a>Máy quét đã phát hiện ra một hoặc nhiều lỗ hổng loại có mức độ nghiêm trọng thấp.</a>
+                            </div>
+                            }
+                            else if (Model.ThreatLevel.Contains("0"))
+                            {
+                            <div class="col-md-4 text-center">
+                                <img src="~/Assets/images/acunetix/threat-level-high.png">
+                            </div>
+                            <div class="col-md-8">
+                                <h3>Nguy cơ cấp độ 0</h3>
+                                <hr class="my-1">
+                                <a>Không có lỗ hổng nào được phát hiện bởi máy quét.</a>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header text-uppercase font-weight-bold">Thông tin website</div>
+                    <div class="card-body">
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Website
+                            </div>
+                            <div class="col-md-4">
+                                @Model.vmWebsite.Host
+                            </div>
+                        </div>
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Thông tin máy chủ
+                            </div>
+                            <div class="col-md-4">
+                                @Model.vmWebsite.ServerInformation
+                            </div>
+                        </div>
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Công nghệ sử dụng
+                            </div>
+                            <div class="col-md-4">
+                                @Model.vmWebsite.ServerTechnologies
+                            </div>
+                        </div>
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Khả năng tương thích
+                            </div>
+                            <div class="col-md-4">
+                                @(Model.vmWebsite.Responsive == "True" ? "Có" : "Không")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-3 text-center">
+                                <a class="font-weight-bold">Thời gian bắt đầu</a>
+                                <hr />
+                                <a>@Model.StartTime</a>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <a class="font-weight-bold">Thời gian quét</a>
+                                <hr />
+                                <a>@Model.ScanTimeTrans</a>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <a class="font-weight-bold">Số mục quét</a>
+                                <hr />
+                                <a>@Model.TotalItemScan.ToString("N0")</a>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <a class="font-weight-bold">Số lượng nguy cơ</a>
+                                <hr />
+                                <a>@Model.TotalAlertFound.ToString("N0")</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header text-uppercase font-weight-bold">Mục rà quét</div>
+                    <div class="card-body">
+                        <div class="table-responsive-sm">
+                            <table id="tblScan" class="table table-hover table-bordered w-100" cellspacing="0">
+                                <thead class="indigo text-white lighten-1">
+                                    <tr>
+                                        <th style="width:50px">STT</th>
+                                        <th class="pointer" data-colname="FullPath" data-orderby="asc"><i class="fas fa-sort"></i> Đường dẫn</th>
+                                        <th class="pointer" data-colname="Status" data-orderby="asc" style="width:140px"><i class="fas fa-sort"></i> Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbKetQuaScanItem">
+                                    @{ Html.RenderAction("DetailScanItem", new TKM.BLL.ScannedItemListView() { WebsiteScanID = Model.ID }); }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header text-uppercase font-weight-bold">Danh sách nguy cơ phát hiện</div>
+                    <div class="card-body">
+                        <table id="tblAffect" class="table table-hover table-bordered w-100" cellspacing="0">
+                            <thead class="indigo text-white lighten-1">
+                                <tr>
+                                    <th style="width:50px">STT</th>
+                                    <th>Tên nguy cơ</th>
+                                    <th class="pointer" data-colname="FullPath" data-orderby="asc"><i class="fas fa-sort"></i> Mục quét</th>
+                                    <th style="width:90px" data-colname="Severity" data-orderby="asc"><i class="fas fa-sort"></i> Cấp độ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbKetQuaAffectItem">
+                                @{ Html.RenderAction("DetailAffectItem", new TKM.BLL.AffectedItemListView() { WebsiteScanID = Model.ID }); }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+
+        $(document).ready(function () {
+            loadPagingScanItem();
+            loadPagingAffectItem();
+        });
+        function loadDataScanItem(col, order, pnum, psize) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("DetailScanItem", "WebsiteScan")',
+                data: { WebsiteScanId: @Model.ID, ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSizeScanItem").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQuaScanItem").html(response);
+                    loadPagingScanItem();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+        function loadPagingScanItem() {
+            var total = Math.ceil($("#txtTotalScanItem").val() / $("#changePageSizeScanItem").val());
+            var pnum = $("#txtPageNumberScanItem").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadDataScanItem("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+
+        $("table#tblScan th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadDataScanItem(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        function loadDataAffectItem(col, order, pnum, psize) {
+            if(pnum < 1) {
+                pnum = 1;
+            }
+            var total = Math.ceil($("#txtTotalAffectItem").val() / $("#changePageSizeAffectItem").val());
+            if(pnum > total) {
+                pnum = total;
+            }
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("DetailAffectItem", "WebsiteScan")',
+                data: { WebsiteScanId: @Model.ID, ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSizeAffectItem").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQuaAffectItem").html(response);
+                    loadPagingAffectItem();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        }
+        function loadPagingAffectItem() {
+            var total = Math.ceil($("#txtTotalAffectItem").val() / $("#changePageSizeAffectItem").val());
+            var pnum = $("#txtPageNumberAffectItem").val();
+            $(".PagedList-pageCountAndLocation1").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation1").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunberAffectItem($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunberAffectItem(pagenumber, totalpagesize) {
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadDataAffectItem("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+
+        $("table#tblAffect th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadDataAffectItem(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+    </script>
+}

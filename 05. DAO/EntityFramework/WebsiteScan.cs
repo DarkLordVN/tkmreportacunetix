@@ -27,6 +27,7 @@ namespace TKM.DAO.EntityFramework
         public Nullable<int> LowAlert { get; set; }
         public Nullable<int> InforAlert { get; set; }
         public string ScanProfile { get; set; }
+        public string ScanStatus { get; set; }
         public string RootReportUrl { get; set; }
         public string NewReportUrl { get; set; }
         public string ReportHTML { get; set; }

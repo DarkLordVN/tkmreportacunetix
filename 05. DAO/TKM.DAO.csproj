@@ -232,6 +232,33 @@
     <Compile Include="EntityFramework\TuDienVietHoaRepository.Generated.cs">
       <DependentUpon>IRepository.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\v_AffectedItem.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_AffectedItemRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_AffectedItemRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_AlertGroup.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_AlertGroupRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_AlertGroupRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_Website.cs">
+      <DependentUpon>TKMReports.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_WebsiteRepository.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_WebsiteRepository.Generated.cs">
+      <DependentUpon>IRepository.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\Website.cs">
       <DependentUpon>TKMReports.tt</DependentUpon>
     </Compile>

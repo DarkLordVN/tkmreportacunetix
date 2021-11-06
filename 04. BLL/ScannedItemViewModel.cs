@@ -27,6 +27,7 @@ namespace TKM.BLL
         [StringLength(20, ErrorMessage = "Từ khóa không được quá 20 ký tự")]
         public string TuKhoa { get; set; }
         public string PhamViTimKiem { get; set; }
+        public int WebsiteScanID { get; set; }
         public List<ScannedItemViewModel> lstScannedItem { get; set; }
         public List<NguoiDungViewModel> lstNguoiDung { get; set; }
 

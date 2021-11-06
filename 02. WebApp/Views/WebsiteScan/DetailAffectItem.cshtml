@@ -1,0 +1,71 @@
+﻿@using PagedList.Mvc;
+@model TKM.BLL.AffectedItemListView
+@{
+    var pagesize = Model.PageSize;
+    var totalPageNumber = Model.TotalItem / pagesize;
+    if (Model.TotalItem % pagesize != 0)
+    {
+        totalPageNumber = totalPageNumber + 1;
+    }
+}
+<input type="hidden" id="txtTotalAffectItem" value="@Model.TotalItem" />
+<input type="hidden" id="txtPageNumberAffectItem" value="@Model.PageNumber" />
+@if (Model != null && Model.lstAffectedItem != null && Model.lstAffectedItem.Count() > 0)
+{
+    var index = Model.PageSize.Value * (Model.PageNumber.Value - 1);
+    foreach (var item in Model.lstAffectedItem)
+    {
+        index++;
+        <tr>
+            <td>@index</td>
+            <td class="tal text-break">
+                @item.vmAlertGroup.AlertName
+            </td>
+            <td class="tal text-break">
+                @item.ScanPath
+            </td>
+            <td class="tal text-center" style="text-align: center !important;">
+                @Html.Raw(item.vmAlertGroup.SeverityHtml)
+            </td>
+        </tr>
+    }
+}
+@if (Model != null && Model.lstAffectedItem == null || Model.lstAffectedItem.Count == 0)
+{
+    <tr>
+        <td colspan="11" class="text-center c-red-500"><b>Dữ liệu không tồn tại</b></td>
+    </tr>
+}
+else
+{
+    <tr class="pagination-ys" align="left">
+        <td colspan="13">
+            <div class="row col-md-12 p-0 m-0">
+                <div class="col-md-6">
+                    <div class="pagination-container">
+                        <ul class="pagination">
+                            <li class="PagedList-skipToPrevious1">
+                                <a onclick="loadDataAffectItem('@Model.ColumnName','@Model.OrderBy', @Model.PageNumber - 1, @Model.PageSize)">«</a>
+                            </li>
+                            <li class="PagedList-pageCountAndLocation1">
+                                <a style="padding: 5px"> Trang <input type="text" id="pageNumber" name="PageNunber" value="1" min="0" style="width: 40px;" onchange="onChangePageNunberAffectItem($(this).val(),@Model.TotalItem)"> / @Model.TotalItem </a>
+                            </li>
+                            <li class="PagedList-skipToNext1">
+                                <a onclick="loadDataAffectItem('@Model.ColumnName','@Model.OrderBy', @Model.PageNumber + 1, @Model.PageSize)">»</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right pt-2">
+                    @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {
+                        new SelectListItem() { Value = "5", Text = "5", Selected=true},
+                        new SelectListItem() { Value = "10", Text = "10"},
+                         new SelectListItem() { Value = "20", Text = "20"},
+                         new SelectListItem() { Value = "50", Text = "50"},
+                         new SelectListItem() { Value = "100", Text = "100"}
+                     }, new { @id = "changePageSizeAffectItem", @class = "custext w-60", @onchange = "loadDataAffectItem('', '');" }) kết quả / @Model.TotalItem bản ghi
+                </div>
+            </div>
+        </td>
+    </tr>
+}

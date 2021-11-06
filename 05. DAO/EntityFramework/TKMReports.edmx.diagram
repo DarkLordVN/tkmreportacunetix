@@ -21,6 +21,9 @@
         <EntityTypeShape EntityType="TKMReportsModel.Website" Width="1.5" PointX="11.75" PointY="0.75" />
         <EntityTypeShape EntityType="TKMReportsModel.WebsiteItem" Width="1.5" PointX="11.75" PointY="4.75" />
         <EntityTypeShape EntityType="TKMReportsModel.WebsiteScan" Width="1.5" PointX="11.75" PointY="8.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.v_AffectedItem" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.v_AlertGroup" Width="1.5" PointX="13.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TKMReportsModel.v_Website" Width="1.5" PointX="2.75" PointY="13.75" />
         <AssociationConnector Association="TKMReportsModel.FK_NhomQuyenQuyen_NhomQuyen" />
         <AssociationConnector Association="TKMReportsModel.FK_NhomQuyenQuyen_Quyen" />
       </Diagram>

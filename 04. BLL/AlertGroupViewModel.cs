@@ -16,6 +16,24 @@ namespace TKM.BLL
         public string AlertName { get; set; }
         public string AlertNameTrans { get; set; }
         public string Severity { get; set; }
+        public string SeverityHtml
+        {
+            get
+            {
+                var html = "";
+                if (!string.IsNullOrEmpty(this.Severity))
+                {
+                    switch (this.Severity.ToLower())
+                    {
+                        case "high": html = "<a class='text-danger text-uppercase font-weight-bold'>Cao</a>"; break;
+                        case "medium": html = "<a class='text-warning text-uppercase font-weight-bold'>Trung bình</a>"; break;
+                        case "low": html = "<a class='text-info text-uppercase font-weight-bold'>Thấp</a>"; break;
+                        case "informational": html = " <a class='text-uppercase font-weight-bold'>Thông tin</a>"; break;
+                    }
+                }
+                return html;
+            }
+        }
         public string AlertDescription { get; set; }
         public string AlertDescriptionTrans { get; set; }
         public string Recommendations { get; set; }

@@ -31,21 +31,27 @@ namespace TKM.Services
             _AffectedItemRepo = new AffectedItemRepository(new EFRepository<AffectedItem>(), oUnitOfWork);
             _ScannedItemRepo = new ScannedItemRepository(new EFRepository<ScannedItem>(), oUnitOfWork);
         }
-        public List<WebsiteScanViewModel> GetList(string tuKhoa, string phamViTimKiem, string tieuDe, int? nguoiTaoID, int? chucNangID, string tuNgayTaoTB, string denNgayTaoTB, int pageIndex, int pageSize, ref int totalItem, string columnName, string orderBy, int tab = 0, string action = "", string typeUser = "", int donvilogin = 0, int userloginid = 0, string tendangnhap = "")
+        public List<WebsiteScanViewModel> GetList(string tuKhoa, int websiteID, int pageIndex, int pageSize, ref int totalItem, ref string error, string columnName, string orderBy, int tab = 0)
         {
             try
             {
                 Expression<Func<WebsiteScan, bool>> where;
-                where = x =>
+                where = x =>(websiteID > 0 ? x.WebsiteID == websiteID : true) &&
                    (!string.IsNullOrEmpty(tuKhoa) ? x.ScanProfile.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) : true);
                 //Đổ dữ liệu
                 var leReturn = _WebsiteScanRepo.GetList(where, pageIndex, pageSize, ref totalItem,
                      //Filter theo column
-                     x => (string.IsNullOrEmpty(columnName) ? x.DateCreated.Value.ToString("yyyyMMddHHmmss") :
-                     columnName.Equals("ScanPath") ? x.ScanProfile.ToString() : x.DateCreated.Value.ToString("yyyyMMddHHmmss")),
+                     x => true,
                      //Order by
                      string.IsNullOrEmpty(orderBy) ? true : orderBy == null || (!string.IsNullOrEmpty(orderBy) && orderBy.Equals("desc")) ? true : false);
                 var lst = leReturn.ToListModel();
+                if(lst != null && lst.Count > 0)
+                {
+                    foreach (var item in lst)
+                    {
+                        item.vmWebsite = _WebsiteRepo.GetById(item.WebsiteID).ToModel();
+                    }
+                }
                 return lst;
             }
             catch (Exception ex)
@@ -126,6 +132,21 @@ namespace TKM.Services
                 return null;
             }
         }
+        public int GetCountByFilter(Expression<Func<WebsiteScan, bool>> where)
+        {
+            try
+            {
+                var leReturn = _WebsiteScanRepo.GetList(where);
+                if (leReturn != null && leReturn.Count > 0)
+                    return leReturn.Count;
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return 0;
+            }
+        }
         public WebsiteScanViewModel GetByFilter(Expression<Func<WebsiteScan, bool>> where)
         {
             try
@@ -165,7 +186,7 @@ namespace TKM.Services
                 return false;
             }
         }
-        public bool Add(List<WebsiteScanViewModel> lsModel, ScanViewModel vmScan)
+        public bool Add(List<WebsiteScanViewModel> lsModel)
         {
             if (lsModel != null && lsModel.Count > 0)
             {

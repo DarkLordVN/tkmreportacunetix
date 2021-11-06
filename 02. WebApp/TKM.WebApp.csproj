@@ -165,6 +165,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="CommonLib\TongHopDuLieu.cs" />
+    <Compile Include="Controllers\WebsiteController.cs" />
+    <Compile Include="Controllers\WebsiteScanController.cs" />
     <Compile Include="Controllers\Authenticate\AuthenticationController.cs" />
     <Compile Include="Controllers\Authenticate\BaseController.cs" />
     <Compile Include="Controllers\Authenticate\ErrorPagesController.cs" />
@@ -247,6 +249,11 @@
     <Content Include="Assets\fonts\fa-light-300.svg" />
     <Content Include="Assets\fonts\fa-regular-400.svg" />
     <Content Include="Assets\fonts\fa-solid-900.svg" />
+    <Content Include="Assets\images\acunetix\threat-level-high.png" />
+    <Content Include="Assets\images\acunetix\threat-level-low.png" />
+    <Content Include="Assets\images\acunetix\threat-level-medium.png" />
+    <Content Include="Assets\images\acunetix\threat-level-na.png" />
+    <Content Include="Assets\images\acunetix\threat-level-safe-0.png" />
     <Content Include="Assets\images\avt1.jpg" />
     <Content Include="Assets\images\avt2.jpg" />
     <Content Include="Assets\images\bg-index.jpg" />
@@ -790,6 +797,16 @@
     <Content Include="Views\Home\ThongTinChung.cshtml" />
     <Content Include="Views\Home\NguyCoWebsite.cshtml" />
     <Content Include="Views\Home\DanhSachTop.cshtml" />
+    <Content Include="Views\WebsiteScan\Detail.cshtml" />
+    <Content Include="Views\WebsiteScan\Index.cshtml" />
+    <Content Include="Views\WebsiteScan\IndexDetail.cshtml" />
+    <Content Include="Views\WebsiteScan\Update.cshtml" />
+    <Content Include="Views\WebsiteScan\DetailScanItem.cshtml" />
+    <Content Include="Views\WebsiteScan\DetailAffectItem.cshtml" />
+    <Content Include="Views\Website\Detail.cshtml" />
+    <Content Include="Views\Website\Index.cshtml" />
+    <Content Include="Views\Website\IndexDetail.cshtml" />
+    <Content Include="Views\Website\DetailScanItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

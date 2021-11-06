@@ -1,0 +1,254 @@
+﻿@model TKM.BLL.WebsiteViewModel
+@using TKM.DAO.EntityFramework
+@{
+    ViewBag.Title = "Chi tiết website";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<div class="row">
+    <div class="col right-content">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0 fwb">
+                        <li class="breadcrumb-item"><a href="/Home"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="/Website/Index">Quản lý website</a></li>
+                        <li class="breadcrumb-item">@ViewBag.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        @if (TempData["AlertData"] != null)
+            { <div class="alert @TempData["AlertType"]">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>@Html.Raw(@TempData["AlertData"])</strong>
+            <a id="lblMessage"></a>
+        </div>
+
+        }
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header text-uppercase font-weight-bold">Thông tin website</div>
+                    <div class="card-body pt-2 pb-2">
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Website
+                            </div>
+                            <div class="col-md-4">
+                                @Model.Host
+                            </div>
+                        </div>
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Thông tin máy chủ
+                            </div>
+                            <div class="col-md-4">
+                                @Model.ServerInformation
+                            </div>
+                        </div>
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Công nghệ sử dụng
+                            </div>
+                            <div class="col-md-4">
+                                @Model.ServerTechnologies
+                            </div>
+                        </div>
+                        <div class="form-group row p-0 mt-0 mb-0">
+                            <div class="col-md-5 font-weight-bold">
+                                Khả năng tương thích
+                            </div>
+                            <div class="col-md-4">
+                                @(Model.Responsive == "True" ? "Có" : "Không")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body pt-2 pb-2">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-12">
+                <div class="card h-100">
+                    <div class="card-header text-uppercase font-weight-bold">Danh sách đã quét</div>
+                    <div class="card-body">
+                        <div class="table-responsive-sm">
+                            <table id="tblScan" class="table table-hover table-bordered w-100" cellspacing="0">
+                                <thead class="indigo text-white lighten-1">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th class="pointer">Website</th>
+                                        <th class="pointer">URL</th>
+                                        <th class="pointer">Kiểu quét</th>
+                                        <th class="pointer">Thời gian quét</th>
+                                        <th class="pointer" style="width:140px">Trạng thái</th>
+                                        <th class="th-sm t_action dn-browser" style="width:120px">Xuất báo cáo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbKetQua">
+                                    @{ Html.RenderAction("IndexDetail", "WebsiteScan", new TKM.BLL.WebsiteScanListView() { WebsiteID = Model.ID.ToString() }); }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Assets/js/print.js"></script>
+<script>
+        $(document).ready(function () {
+            InitClickCheckAllInTable("chkall", function (res) {
+                $("#hdfID").val(res);
+            });
+        });
+
+        function onChangeStatus(id) {
+            swal({
+                title: "Thay đổi trạng thái?",
+                text: "Trạng thái sẽ được thay đổi, hãy nhấn OK!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/WebsiteScan/onChangeStatus',
+                        data: { id: id },
+                        dataType: "html",
+                        success: function (res) {
+                            res = JSON.parse(res);
+                            if (res.isSuccess)
+                                swal("Thay đổi trạng thái thành công!", {
+                                    icon: "success",
+                                });
+                            else
+                                swal("Có lỗi xảy ra", { icon: "error", });
+                            loadData("", "");
+                        },
+                        error: function (response) {
+                            swal("Đã có lỗi xảy ra", { icon: "error", });
+                        }
+                    });
+
+                }
+            });
+        }
+        function loadfrmView(id) {
+            modal.Render("/WebsiteScan/Detail/" + id, "Thông tin lượt quét", "modal-lg");
+        }
+        $(".keyenter").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+        $(".keyenterTuKhoa").on("keypress", function (e) {
+            if (e.which == 13) {
+                $("#btnSearchTuKhoa").click();
+            }
+        });
+        function setDeleteId(id) {
+            $("#delModalId").val(id);
+        };
+
+        $("#btnDel").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: '/WebsiteScan/DeleteWebsiteScan',
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ id: $("#delModalId").val() }),
+                cache: false,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert('Không thành công!');
+                }
+            });
+            $(window).scrollTop(0);
+        });
+        //Thêm event xử lý load ajax
+        $("#btnSearchTuKhoa").click(function () {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "WebsiteScan")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), ColumnName: '', OrderBy: '', PageNumber: 1, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", { icon: "error", });
+                }
+            });
+        });
+        $("#btnSearch").click(function () {
+            loadData("", "");
+        });
+
+        $("table th").click(function () {
+            var col = $(this).data("colname");
+            var orderby = $(this).data("orderby");
+            if (col != "" && orderby != null) {
+                loadData(col, orderby);
+                if (orderby == "desc") orderby = "asc";
+                else orderby = "desc";
+                $(this).data("orderby", orderby);
+            }
+        });
+
+        function loadData(col, order, pnum, psize) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("IndexDetail", "WebsiteScan")',
+                data: { TuKhoa: $("#txtTuKhoa").val(), WebsiteID: @Model.ID, ColumnName: col, OrderBy: order, PageNumber: pnum, PageSize: $("#changePageSize").val() },
+                dataType: "html",
+                success: function (response) {
+                    $("#tbKetQua").html(response);
+                    loadPaging();
+                },
+                error: function (response) {
+                    swal("Đã có lỗi xảy ra", {icon: "error",});
+                }
+            });
+        }
+        function loadPaging() {
+            var total = Math.ceil($("#txtTotal").val() / $("#changePageSize").val());
+            var pnum = $("#txtPageNumber").val();
+            $(".PagedList-pageCountAndLocation").removeClass("disabled");
+            $(".PagedList-pageCountAndLocation").html("<a style=\"padding: 5px\"> Trang <input type=\"text\" id=\"pageNumber\" name=\"PageNunber\" value=\"" + pnum + "\" min=\"0\" style=\"width: 40px;\" onchange=\"onChangePageNunber($(this).val()," + total + ")\"> / " + total + "</a>");
+        }
+
+        //Nhảy trang
+        function onChangePageNunber(pagenumber, totalpagesize) {
+
+            var reg = /^[0-9]+$/;
+            if (pagenumber.match(reg)) {
+                if (pagenumber <= 0) {
+                    swal("Giá trị của trang phải lớn hơn 0!", { icon: "error", });
+                }
+                else if (pagenumber > totalpagesize) {
+                    swal("Bạn đã nhập quá số trang hiện có!", { icon: "error", });
+                }
+                else {
+                    loadData("", "", pagenumber);
+                }
+            } else {
+                swal("Bạn đã nhập sai định dạng số", { icon: "error", });
+            }
+
+        }
+</script>
+}

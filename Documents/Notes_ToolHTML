@@ -55,9 +55,6 @@ Dashboard
 => Chia 1 ô => Biểu đồ cột top 10 có tổng số lượng nguy cơ theo website v
 => Chia 2 ô => Ô 1: Danh sách website có nguy cơ cao nhất [Tên website - sô lượng cao | trung bình] | Ô 2: Danh sách 5 nguy cơ mức cao gặp nhiều nhất [Tên - số lượng]
 
-+ Danh sách scan
-	=> Website tổng hợp
-	=> Kết xuất file
 
 + Danh sách website (Danh sách/Xem chi tiết) 
 => Chia 1 ô => Biểu đồ cột số lượng nguy cơ theo website (Dọc: Số lượng nguy cơ | Ngang: stacked bar theo website) => Cho tùy biến tick chọn tối đa 10 website
@@ -79,8 +76,6 @@ v_NguyCoWebsite - Tạo view lấy tổng số lượng theo nguy cơ của từ
 
 
 
-
-
 Module Báo cáo
 + Báo cáo thống kê số lượt rà quét
 + Báo cáo thống kê thời gian quét và thành phần website
@@ -91,9 +86,29 @@ Module Báo cáo
 
 
 
+DELETE FROM ScannedItem;
+DELETE FROM WebsiteItem;
+DELETE FROM WebsiteScan;
+DELETE FROM Website;
+DELETE FROM AffectedItem;
+DELETE FROM AlertGroup;
 
 
-	
+
+Acunetix Threat Level 0
+Threat level could not be determined because the scan failed.
+
+Acunetix Threat Level 0
+No vulnerabilities have been discovered by the scanner.
+
+Acunetix Threat Level 2
+One or more medium-severity type vulnerabilities have been discovered by the scanner. You should investigate each of these vulnerabilities to ensure they will not escalate to more severe problems.
+
+Acunetix Threat Level 3
+One or more high-severity type vulnerabilities have been discovered by the scanner. A malicious user can exploit these vulnerabilities and compromise the backend database and/or deface your website.
+
+
+
 =============Nhật ký===========
 1 ca hiện tại đang quản lý những thông tin gì?
 Sổ nhật ký vận hành mẫu như nào?

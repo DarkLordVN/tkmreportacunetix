@@ -43,6 +43,9 @@ namespace TKM.DAO.EntityFramework
         public virtual DbSet<Website> Websites { get; set; }
         public virtual DbSet<WebsiteItem> WebsiteItems { get; set; }
         public virtual DbSet<WebsiteScan> WebsiteScans { get; set; }
+        public virtual DbSet<v_AffectedItem> v_AffectedItem { get; set; }
+        public virtual DbSet<v_AlertGroup> v_AlertGroup { get; set; }
+        public virtual DbSet<v_Website> v_Website { get; set; }
     
         public virtual ObjectResult<CountHostsByGroup_Result> CountHostsByGroup(string p_listGroup, string p_trangThai, Nullable<System.DateTime> p_tuNgay, Nullable<System.DateTime> p_denNgay, Nullable<int> p_pageIndex, Nullable<int> p_pageSize, string p_columnName, string p_orderBy)
         {

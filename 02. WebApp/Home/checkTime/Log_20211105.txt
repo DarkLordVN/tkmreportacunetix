@@ -1,0 +1,18 @@
+--------- 20:39:53 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 20:41:04 ---------
+Ref URL: http://localhost:3939/AlertGroup/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 20:42:03 ---------
+Ref URL: http://localhost:3939/AlertGroup/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2

@@ -45,7 +45,7 @@
             type: 'column',
             data: $("#txtNguyCoThap").val().split(',').map(Number)
         }, {
-            name: 'Số lượt',
+            name: 'Số lượt quét',
             color: '#51D2CA',
             type: 'line',
             data: $("#txtSoLuotScanWebsite").val().split(',').map(Number)
@@ -75,7 +75,13 @@
             },
         },
         xaxis: {
+            type: 'category',
+            tickPlacement: 'between',
             categories: $("#txtTenWebsite").val().split(','),
+            labels: {
+                show: true,
+                rotate: -45,
+            }
         },
         yaxis: [
           {

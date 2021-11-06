@@ -36,7 +36,14 @@
                     <div class="tab-content py-0 card" id="myClassicTabContentShadow">
                         <div class="tab-pane fade active show" id="vb-lt-den" role="tabpanel" aria-labelledby="profile-tab-classic-shadow">
                             <div class="row lighten-4 border border-light border-top-0 border-right-0 border-left-0">
-                                <div class="col p-3">
+                                <div class="col-lg-2 pt-3 pr-0 text-center">
+                                    <select class="mdb-select md-form md-outline colorful-select dropdown-primary m-0 p-0" id="srPhamViTimKiem">
+                                        <option value="">--- Tất cả ---</option>
+                                        <option value="1">Đã việt hóa</option>
+                                        <option value="2">Chưa việt hóa</option>
+                                    </select>
+                                </div>
+                                <div class="col pt-3 pl-0">
                                     <div class="d-none d-lg-inline-flex form-inline my-0 px-lg-3 border-right">
                                         @Html.TextBoxFor(model => model.TuKhoa, new { @class = "form-control keyenterTuKhoa", @id = "txtTuKhoa", @placeholder = "Nhập từ khóa cần tìm ...", @style = "min-width: 31rem" })
                                         <button id="btnSearchTuKhoa" class="btn text-white default-color rounded-pill px-3 btn-sm my-0 waves-effect waves-light" type="button">Tìm</button>
@@ -163,7 +170,7 @@
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("IndexDetail", "AlertGroup")',
-                data: { TuKhoa: $("#txtTuKhoa").val(), ColumnName: '', OrderBy: '', PageNumber: 1, PageSize: $("#changePageSize").val() },
+                data: { TuKhoa: $("#txtTuKhoa").val(), PhamViTimKiem: $("#srPhamViTimKiem").val(), ColumnName: '', OrderBy: '', PageNumber: 1, PageSize: $("#changePageSize").val() },
                 dataType: "html",
                 success: function (response) {
                     $("#tbKetQua").html(response);

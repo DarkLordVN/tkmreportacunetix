@@ -1,0 +1,72 @@
+--------- 21:29:11 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:29:22 ---------
+Ref URL: http://localhost:3939/Quyen/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:29:43 ---------
+Ref URL: http://localhost:3939/WebsiteScan/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:31:28 ---------
+Ref URL: http://localhost:3939/WebsiteScan/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:34:16 ---------
+Ref URL: http://localhost:3939/AlertGroup
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 21:34:22 ---------
+Ref URL: http://localhost:3939/NguoiDung
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:17:52 ---------
+Ref URL: http://localhost:3939/
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:18:11 ---------
+Ref URL: http://localhost:3939/WebsiteScan/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:18:26 ---------
+Ref URL: http://localhost:3939/WebsiteScan/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:19:08 ---------
+Ref URL: http://localhost:3939/WebsiteScan/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:19:34 ---------
+Ref URL: http://localhost:3939/WebsiteScan/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:20:12 ---------
+Ref URL: http://localhost:3939/Quyen/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2

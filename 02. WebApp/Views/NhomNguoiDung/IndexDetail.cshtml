@@ -55,13 +55,13 @@ else
             <div class="row col-md-12 p-0 m-0">
                 <div class="col-md-6">
                     @Html.PagedListPager((PagedList.IPagedList<int>)ViewBag.PagedList, pnum => Url.Action("IndexDetail", "NhomNguoiDung", new
-           {
-               ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
-               PageSize = Model.PageSize,
-               TenNhom = Model.TenNhom,
-               srTrangThai = Model.srTrangThai
+               {
+                   ColumnName = Model.ColumnName, OrderBy = Model.OrderBy, PageNumber = pnum,
+                   PageSize = Model.PageSize,
+                   TenNhom = Model.TenNhom,
+                   srTrangThai = Model.srTrangThai
 
-           }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
+               }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.MinimalWithPageCountText, new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "tbKetQua", OnComplete = "loadPaging();" }))
                 </div>
                 <div class="col-md-6 text-right pt-2">
                     Hiển thị: @Html.DropDownListFor(m => m.PageSize, new List<SelectListItem>() {

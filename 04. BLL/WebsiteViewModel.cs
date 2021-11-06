@@ -25,8 +25,14 @@ namespace TKM.BLL
         public List<WebsiteScanViewModel> LsWebsiteScan { get; set; }
 
         //Them vao home
-        public string TongNguyCoCao { get; set; }
-        public string TongNguyCoTrungBinh { get; set; }
+        public int TongNguyCo { get; set; }
+        public int TongNguyCoCao { get; set; }
+        public int TongNguyCoTrungBinh { get; set; }
+        public int TongNguyCoThap { get; set; }
+        public int LuotQuet { get; set; }
+
+        public int TongItem { get; set; }
+        public DateTime LastScan { get; set; }
     }
     public class WebsiteListView : PagedListBase
     {

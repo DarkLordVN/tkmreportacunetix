@@ -259,11 +259,84 @@
           <Property Name="LowAlert" Type="int" />
           <Property Name="InforAlert" Type="int" />
           <Property Name="ScanProfile" Type="nvarchar" MaxLength="250" />
+          <Property Name="ScanStatus" Type="nvarchar" MaxLength="250" />
           <Property Name="RootReportUrl" Type="nvarchar" MaxLength="255" />
           <Property Name="NewReportUrl" Type="nvarchar" MaxLength="255" />
           <Property Name="ReportHTML" Type="text" />
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="Status" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Report_Acunetix.dbo.v_AffectedItem' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_AffectedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="WebsiteID" />
+            <PropertyRef Name="WebiteScanID" />
+            <PropertyRef Name="AlertGroupID" />
+            <PropertyRef Name="AlertName" />
+            <PropertyRef Name="SeverityNum" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="WebsiteID" Type="int" Nullable="false" />
+          <Property Name="WebiteScanID" Type="int" Nullable="false" />
+          <Property Name="AlertGroupID" Type="int" Nullable="false" />
+          <Property Name="ScanPath" Type="nvarchar" MaxLength="2000" />
+          <Property Name="Detail" Type="nvarchar(max)" />
+          <Property Name="SourceCode" Type="nvarchar(max)" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="AlertName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="AlertNameTrans" Type="nvarchar" MaxLength="250" />
+          <Property Name="Severity" Type="nvarchar" MaxLength="50" />
+          <Property Name="SeverityNum" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="AlertVariants" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Report_Acunetix.dbo.v_AlertGroup' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_AlertGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="AlertName" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlertName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="AlertNameTrans" Type="nvarchar" MaxLength="250" />
+          <Property Name="Severity" Type="nvarchar" MaxLength="50" />
+          <Property Name="AlertDescription" Type="nvarchar(max)" />
+          <Property Name="AlertDescriptionTrans" Type="nvarchar(max)" />
+          <Property Name="Recommendations" Type="nvarchar" MaxLength="2000" />
+          <Property Name="RecommendationsTrans" Type="nvarchar" MaxLength="2000" />
+          <Property Name="AlertVariants" Type="nvarchar" MaxLength="250" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="cTongAffectedItem" Type="int" />
+          <Property Name="cTongWebsite" Type="int" />
+          <Property Name="cTongWebsiteScan" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Report_Acunetix.dbo.v_Website' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_Website">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartURL" Type="nvarchar" MaxLength="250" />
+          <Property Name="Host" Type="nvarchar" MaxLength="250" />
+          <Property Name="Responsive" Type="nvarchar" MaxLength="250" />
+          <Property Name="ServerOS" Type="nvarchar" MaxLength="250" />
+          <Property Name="ServerInformation" Type="nvarchar" MaxLength="250" />
+          <Property Name="ServerTechnologies" Type="nvarchar" MaxLength="250" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="cLuotQuet" Type="int" />
+          <Property Name="cTongNguyCo" Type="int" />
+          <Property Name="cTongNguyCoCao" Type="int" />
+          <Property Name="cTongNguyCoTB" Type="int" />
+          <Property Name="cTongNguyCoThap" Type="int" />
+          <Property Name="cTongNguyCoInfor" Type="int" />
+          <Property Name="cTongItem" Type="int" />
+          <Property Name="LastScan" Type="datetime" />
         </EntityType>
         <Association Name="FK_NhomQuyenQuyen_NhomQuyen">
           <End Role="NhomQuyen" Type="Self.NhomQuyen" Multiplicity="1" />
@@ -306,6 +379,63 @@
           <EntitySet Name="Website" EntityType="Self.Website" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WebsiteItem" EntityType="Self.WebsiteItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WebsiteScan" EntityType="Self.WebsiteScan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="v_AffectedItem" EntityType="Self.v_AffectedItem" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_AffectedItem].[ID] AS [ID], 
+    [v_AffectedItem].[WebsiteID] AS [WebsiteID], 
+    [v_AffectedItem].[WebiteScanID] AS [WebiteScanID], 
+    [v_AffectedItem].[AlertGroupID] AS [AlertGroupID], 
+    [v_AffectedItem].[ScanPath] AS [ScanPath], 
+    [v_AffectedItem].[Detail] AS [Detail], 
+    [v_AffectedItem].[SourceCode] AS [SourceCode], 
+    [v_AffectedItem].[DateCreated] AS [DateCreated], 
+    [v_AffectedItem].[Status] AS [Status], 
+    [v_AffectedItem].[AlertName] AS [AlertName], 
+    [v_AffectedItem].[AlertNameTrans] AS [AlertNameTrans], 
+    [v_AffectedItem].[Severity] AS [Severity], 
+    [v_AffectedItem].[SeverityNum] AS [SeverityNum], 
+    [v_AffectedItem].[AlertVariants] AS [AlertVariants]
+    FROM [dbo].[v_AffectedItem] AS [v_AffectedItem]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_AlertGroup" EntityType="Self.v_AlertGroup" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_AlertGroup].[ID] AS [ID], 
+    [v_AlertGroup].[AlertName] AS [AlertName], 
+    [v_AlertGroup].[AlertNameTrans] AS [AlertNameTrans], 
+    [v_AlertGroup].[Severity] AS [Severity], 
+    [v_AlertGroup].[AlertDescription] AS [AlertDescription], 
+    [v_AlertGroup].[AlertDescriptionTrans] AS [AlertDescriptionTrans], 
+    [v_AlertGroup].[Recommendations] AS [Recommendations], 
+    [v_AlertGroup].[RecommendationsTrans] AS [RecommendationsTrans], 
+    [v_AlertGroup].[AlertVariants] AS [AlertVariants], 
+    [v_AlertGroup].[DateCreated] AS [DateCreated], 
+    [v_AlertGroup].[Status] AS [Status], 
+    [v_AlertGroup].[cTongAffectedItem] AS [cTongAffectedItem], 
+    [v_AlertGroup].[cTongWebsite] AS [cTongWebsite], 
+    [v_AlertGroup].[cTongWebsiteScan] AS [cTongWebsiteScan]
+    FROM [dbo].[v_AlertGroup] AS [v_AlertGroup]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_Website" EntityType="Self.v_Website" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_Website].[ID] AS [ID], 
+    [v_Website].[StartURL] AS [StartURL], 
+    [v_Website].[Host] AS [Host], 
+    [v_Website].[Responsive] AS [Responsive], 
+    [v_Website].[ServerOS] AS [ServerOS], 
+    [v_Website].[ServerInformation] AS [ServerInformation], 
+    [v_Website].[ServerTechnologies] AS [ServerTechnologies], 
+    [v_Website].[DateCreated] AS [DateCreated], 
+    [v_Website].[Status] AS [Status], 
+    [v_Website].[cLuotQuet] AS [cLuotQuet], 
+    [v_Website].[cTongNguyCo] AS [cTongNguyCo], 
+    [v_Website].[cTongNguyCoCao] AS [cTongNguyCoCao], 
+    [v_Website].[cTongNguyCoTB] AS [cTongNguyCoTB], 
+    [v_Website].[cTongNguyCoThap] AS [cTongNguyCoThap], 
+    [v_Website].[cTongNguyCoInfor] AS [cTongNguyCoInfor], 
+    [v_Website].[cTongItem] AS [cTongItem], 
+    [v_Website].[LastScan] AS [LastScan]
+    FROM [dbo].[v_Website] AS [v_Website]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_NhomQuyenQuyen_NhomQuyen" Association="Self.FK_NhomQuyenQuyen_NhomQuyen">
             <End Role="NhomQuyen" EntitySet="NhomQuyen" />
             <End Role="NhomQuyenQuyen" EntitySet="NhomQuyenQuyen" />
@@ -420,6 +550,9 @@
           <EntitySet Name="Websites" EntityType="TKMReportsModel.Website" />
           <EntitySet Name="WebsiteItems" EntityType="TKMReportsModel.WebsiteItem" />
           <EntitySet Name="WebsiteScans" EntityType="TKMReportsModel.WebsiteScan" />
+          <EntitySet Name="v_AffectedItem" EntityType="TKMReportsModel.v_AffectedItem" />
+          <EntitySet Name="v_AlertGroup" EntityType="TKMReportsModel.v_AlertGroup" />
+          <EntitySet Name="v_Website" EntityType="TKMReportsModel.v_Website" />
           <AssociationSet Name="FK_NhomQuyenQuyen_NhomQuyen" Association="TKMReportsModel.FK_NhomQuyenQuyen_NhomQuyen">
             <End Role="NhomQuyen" EntitySet="NhomQuyens" />
             <End Role="NhomQuyenQuyen" EntitySet="NhomQuyenQuyens" />
@@ -778,11 +911,78 @@
           <Property Name="LowAlert" Type="Int32" />
           <Property Name="InforAlert" Type="Int32" />
           <Property Name="ScanProfile" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ScanStatus" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="RootReportUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="NewReportUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ReportHTML" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="v_AffectedItem">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="WebsiteID" />
+            <PropertyRef Name="WebiteScanID" />
+            <PropertyRef Name="AlertGroupID" />
+            <PropertyRef Name="AlertName" />
+            <PropertyRef Name="SeverityNum" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="WebsiteID" Type="Int32" Nullable="false" />
+          <Property Name="WebiteScanID" Type="Int32" Nullable="false" />
+          <Property Name="AlertGroupID" Type="Int32" Nullable="false" />
+          <Property Name="ScanPath" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SourceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="AlertName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AlertNameTrans" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Severity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SeverityNum" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="AlertVariants" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="v_AlertGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="AlertName" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlertName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AlertNameTrans" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Severity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AlertDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlertDescriptionTrans" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Recommendations" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="RecommendationsTrans" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="AlertVariants" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="cTongAffectedItem" Type="Int32" />
+          <Property Name="cTongWebsite" Type="Int32" />
+          <Property Name="cTongWebsiteScan" Type="Int32" />
+        </EntityType>
+        <EntityType Name="v_Website">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartURL" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Host" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Responsive" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ServerOS" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ServerInformation" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ServerTechnologies" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="cLuotQuet" Type="Int32" />
+          <Property Name="cTongNguyCo" Type="Int32" />
+          <Property Name="cTongNguyCoCao" Type="Int32" />
+          <Property Name="cTongNguyCoTB" Type="Int32" />
+          <Property Name="cTongNguyCoThap" Type="Int32" />
+          <Property Name="cTongNguyCoInfor" Type="Int32" />
+          <Property Name="cTongItem" Type="Int32" />
+          <Property Name="LastScan" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_NhomQuyenQuyen_NhomQuyen">
           <End Type="TKMReportsModel.NhomQuyen" Role="NhomQuyen" Multiplicity="1" />
@@ -1073,6 +1273,7 @@
                 <ScalarProperty Name="ReportHTML" ColumnName="ReportHTML" />
                 <ScalarProperty Name="NewReportUrl" ColumnName="NewReportUrl" />
                 <ScalarProperty Name="RootReportUrl" ColumnName="RootReportUrl" />
+                <ScalarProperty Name="ScanStatus" ColumnName="ScanStatus" />
                 <ScalarProperty Name="ScanProfile" ColumnName="ScanProfile" />
                 <ScalarProperty Name="InforAlert" ColumnName="InforAlert" />
                 <ScalarProperty Name="LowAlert" ColumnName="LowAlert" />
@@ -1085,6 +1286,69 @@
                 <ScalarProperty Name="ScanTime" ColumnName="ScanTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="WebsiteID" ColumnName="WebsiteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_AffectedItem">
+            <EntityTypeMapping TypeName="TKMReportsModel.v_AffectedItem">
+              <MappingFragment StoreEntitySet="v_AffectedItem">
+                <ScalarProperty Name="AlertVariants" ColumnName="AlertVariants" />
+                <ScalarProperty Name="SeverityNum" ColumnName="SeverityNum" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="AlertNameTrans" ColumnName="AlertNameTrans" />
+                <ScalarProperty Name="AlertName" ColumnName="AlertName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="SourceCode" ColumnName="SourceCode" />
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="ScanPath" ColumnName="ScanPath" />
+                <ScalarProperty Name="AlertGroupID" ColumnName="AlertGroupID" />
+                <ScalarProperty Name="WebiteScanID" ColumnName="WebiteScanID" />
+                <ScalarProperty Name="WebsiteID" ColumnName="WebsiteID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_AlertGroup">
+            <EntityTypeMapping TypeName="TKMReportsModel.v_AlertGroup">
+              <MappingFragment StoreEntitySet="v_AlertGroup">
+                <ScalarProperty Name="cTongWebsiteScan" ColumnName="cTongWebsiteScan" />
+                <ScalarProperty Name="cTongWebsite" ColumnName="cTongWebsite" />
+                <ScalarProperty Name="cTongAffectedItem" ColumnName="cTongAffectedItem" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="AlertVariants" ColumnName="AlertVariants" />
+                <ScalarProperty Name="RecommendationsTrans" ColumnName="RecommendationsTrans" />
+                <ScalarProperty Name="Recommendations" ColumnName="Recommendations" />
+                <ScalarProperty Name="AlertDescriptionTrans" ColumnName="AlertDescriptionTrans" />
+                <ScalarProperty Name="AlertDescription" ColumnName="AlertDescription" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="AlertNameTrans" ColumnName="AlertNameTrans" />
+                <ScalarProperty Name="AlertName" ColumnName="AlertName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_Website">
+            <EntityTypeMapping TypeName="TKMReportsModel.v_Website">
+              <MappingFragment StoreEntitySet="v_Website">
+                <ScalarProperty Name="LastScan" ColumnName="LastScan" />
+                <ScalarProperty Name="cTongItem" ColumnName="cTongItem" />
+                <ScalarProperty Name="cTongNguyCoInfor" ColumnName="cTongNguyCoInfor" />
+                <ScalarProperty Name="cTongNguyCoThap" ColumnName="cTongNguyCoThap" />
+                <ScalarProperty Name="cTongNguyCoTB" ColumnName="cTongNguyCoTB" />
+                <ScalarProperty Name="cTongNguyCoCao" ColumnName="cTongNguyCoCao" />
+                <ScalarProperty Name="cTongNguyCo" ColumnName="cTongNguyCo" />
+                <ScalarProperty Name="cLuotQuet" ColumnName="cLuotQuet" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ServerTechnologies" ColumnName="ServerTechnologies" />
+                <ScalarProperty Name="ServerInformation" ColumnName="ServerInformation" />
+                <ScalarProperty Name="ServerOS" ColumnName="ServerOS" />
+                <ScalarProperty Name="Responsive" ColumnName="Responsive" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="StartURL" ColumnName="StartURL" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

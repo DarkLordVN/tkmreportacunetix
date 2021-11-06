@@ -15,27 +15,59 @@ namespace TKM.Services
     public class WebsiteService
     {
         private EFUnitOfWork oUnitOfWork = new EFUnitOfWork();
-        private readonly WebsiteRepository _WebsiteResp;
+        private readonly WebsiteRepository _WebsiteRepo;
+        private readonly v_WebsiteRepository _vWebsiteRepo;
         public WebsiteService()
         {
-            _WebsiteResp = new WebsiteRepository(new EFRepository<Website>(), oUnitOfWork);
+            _WebsiteRepo = new WebsiteRepository(new EFRepository<Website>(), oUnitOfWork);
+            _vWebsiteRepo = new v_WebsiteRepository(new EFRepository<v_Website>(), oUnitOfWork);
         }
-        public List<WebsiteViewModel> GetList(string tuKhoa, string phamViTimKiem, string tieuDe, int? nguoiTaoID, int? chucNangID, string tuNgayTaoTB, string denNgayTaoTB, int pageIndex, int pageSize, ref int totalItem, string columnName, string orderBy, int tab = 0, string action = "", string typeUser = "", int donvilogin = 0, int userloginid = 0, string tendangnhap = "")
+        public List<WebsiteViewModel> GetList(string tuKhoa, int pageIndex, int pageSize, ref int totalItem, string columnName, string orderBy)
         {
             try
             {
-                Expression<Func<Website, bool>> where;
+                var lsReturn = new List<WebsiteViewModel>();
+                Func<v_Website, object> colOrder = x => x.Host;
+                if (!string.IsNullOrEmpty(columnName))
+                {
+                    switch (columnName)
+                    {
+                        case "cLuotQuet": colOrder = x => x.cLuotQuet; break;
+                        case "cTongNguyCo": colOrder = x => x.cTongNguyCo; break;
+                        case "cTongNguyCoCao": colOrder = x => x.cTongNguyCoCao; break;
+                        case "cTongItem": colOrder = x => x.cTongItem; break;
+                    }
+                }
+                Expression<Func<v_Website, bool>> where;
                 where = x =>
                    (!string.IsNullOrEmpty(tuKhoa) ? x.Host.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) : true);
                 //Đổ dữ liệu
-                var leReturn = _WebsiteResp.GetList(where, pageIndex, pageSize, ref totalItem,
+                var lsResult = _vWebsiteRepo.GetList(where, pageIndex, pageSize, ref totalItem,
                      //Filter theo column
-                     x => (string.IsNullOrEmpty(columnName) ? x.DateCreated.Value.ToString("yyyyMMddHHmmss") :
-                     columnName.Equals("Host") ? x.Host.ToString() : x.DateCreated.Value.ToString("yyyyMMddHHmmss")),
+                     colOrder,
                      //Order by
                      string.IsNullOrEmpty(orderBy) ? true : orderBy == null || (!string.IsNullOrEmpty(orderBy) && orderBy.Equals("desc")) ? true : false);
-                var lst = leReturn.ToListModel();
-                return lst;
+                if (lsResult != null && lsResult.Count > 0)
+                {
+                    foreach (var item in lsResult)
+                    {
+                        var vmReturn = new WebsiteViewModel()
+                        {
+                            ID = item.ID,
+                            Host = item.Host,
+                            ServerInformation = item.ServerInformation,
+                            ServerOS = item.ServerOS,
+                            ServerTechnologies = item.ServerTechnologies,
+                            LuotQuet = item.cLuotQuet.HasValue ? item.cLuotQuet.Value : 0,
+                            TongNguyCo = item.cTongNguyCo.HasValue ? item.cTongNguyCo.Value : 0,
+                            TongNguyCoCao = item.cTongNguyCoCao.HasValue ? item.cTongNguyCoCao.Value : 0,
+                            TongItem = item.cTongItem.HasValue ? item.cTongItem.Value : 0,
+                            LastScan = item.LastScan.HasValue ? item.LastScan.Value : DateTime.Now,
+                        };
+                        lsReturn.Add(vmReturn);
+                    }
+                }
+                return lsReturn;
             }
             catch (Exception ex)
             {
@@ -48,13 +80,9 @@ namespace TKM.Services
         {
             try
             {
-                var leReturn = _WebsiteResp.GetList(where, pageIndex, pageSize, ref totalItem, x => x.DateCreated, true);
+                var leReturn = _WebsiteRepo.GetList(where, pageIndex, pageSize, ref totalItem, x => x.DateCreated, true);
                 if (leReturn != null && leReturn.Count > 0)
                 {
-                    foreach (var item in leReturn)
-                    {
-
-                    }
                     return leReturn.ToListModel();
                 }
                 return null;
@@ -70,11 +98,7 @@ namespace TKM.Services
             try
             {
                 var total = 0;
-                var leReturn = _WebsiteResp.GetList(where, 1, 5, ref total, x => x.DateCreated, true);
-                foreach (var item in leReturn)
-                {
-
-                }
+                var leReturn = _WebsiteRepo.GetList(where, 1, 5, ref total, x => x.DateCreated, true);
                 return leReturn.ToListModel();
             }
             catch (Exception ex)
@@ -89,7 +113,7 @@ namespace TKM.Services
             try
             {
                 //Expression<Func<Website, bool>> where = x => x.IsXoaTam == false;
-                var leReturn = _WebsiteResp.GetList(null, pageIndex, pageSize, ref totalItem,
+                var leReturn = _WebsiteRepo.GetList(null, pageIndex, pageSize, ref totalItem,
                      //Filter theo column
                      x => x.ID);
                 return leReturn.ToListModel();
@@ -106,7 +130,7 @@ namespace TKM.Services
             try
             {
                 //Expression<Func<Website, bool>> where = x => x.IsXoaTam == false;
-                var leReturn = _WebsiteResp.GetList(null, 0, 0, ref totalItem);
+                var leReturn = _WebsiteRepo.GetList(null, 0, 0, ref totalItem);
                 return leReturn.ToListModel();
             }
             catch (Exception ex)
@@ -115,11 +139,56 @@ namespace TKM.Services
                 return null;
             }
         }
+        public List<WebsiteViewModel> GetListTopNguyCo(Expression<Func<v_Website, bool>> where, int pageIndex, int pageSize, ref int totalItem)
+        {
+            try
+            {
+                var lsReturn = new List<WebsiteViewModel>();
+                var leResult = _vWebsiteRepo.GetList(where, pageIndex, pageSize, ref totalItem, x => x.cTongNguyCoCao, true, x => x.cTongNguyCoTB, true);
+                if (leResult != null && leResult.Count > 0)
+                {
+                    foreach (var item in leResult)
+                    {
+                        var eReturn = new WebsiteViewModel();
+                        eReturn.ID = item.ID;
+                        eReturn.Host = item.Host;
+                        eReturn.StartURL = item.StartURL;
+                        eReturn.TongNguyCoCao = item.cTongNguyCoCao.HasValue ? item.cTongNguyCoCao.Value : 0;
+                        eReturn.TongNguyCoTrungBinh = item.cTongNguyCoTB.HasValue ? item.cTongNguyCoTB.Value : 0;
+                        eReturn.TongNguyCoThap = item.cTongNguyCoThap.HasValue ? item.cTongNguyCoThap.Value : 0;
+                        eReturn.LuotQuet = item.cLuotQuet.HasValue ? item.cLuotQuet.Value : 0;
+                        lsReturn.Add(eReturn);
+                    }
+                    return lsReturn;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return null;
+            }
+        }
+        public int GetCountByFilter(Expression<Func<Website, bool>> where)
+        {
+            try
+            {
+                var leReturn = _WebsiteRepo.GetList(where);
+                if (leReturn != null && leReturn.Count > 0)
+                    return leReturn.Count;
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return 0;
+            }
+        }
         public WebsiteViewModel GetByFilter(Expression<Func<Website, bool>> where)
         {
             try
             {
-                var leReturn = _WebsiteResp.GetByFilter(where);
+                var leReturn = _WebsiteRepo.GetByFilter(where);
                 return leReturn.ToModel();
             }
             catch (Exception ex)
@@ -132,7 +201,7 @@ namespace TKM.Services
         {
             try
             {
-                var eReturn = _WebsiteResp.GetById(id);
+                var eReturn = _WebsiteRepo.GetById(id);
                 return eReturn.ToModel();
             }
             catch (Exception ex)
@@ -146,7 +215,7 @@ namespace TKM.Services
             try
             {
                 var entity = model.ToEntity();
-                return _WebsiteResp.Update(entity);
+                return _WebsiteRepo.Update(entity);
             }
             catch (Exception ex)
             {
@@ -160,7 +229,7 @@ namespace TKM.Services
             try
             {
                 var entity = model.ToEntity();
-                return _WebsiteResp.Add(entity);
+                return _WebsiteRepo.Add(entity);
             }
             catch (Exception ex)
             {
@@ -173,7 +242,7 @@ namespace TKM.Services
         {
             try
             {
-                return _WebsiteResp.DeleteList(listId);
+                return _WebsiteRepo.DeleteList(listId);
             }
             catch (Exception ex)
             {
@@ -185,7 +254,7 @@ namespace TKM.Services
         {
             try
             {
-                return _WebsiteResp.Delete(id);
+                return _WebsiteRepo.Delete(id);
             }
             catch (Exception ex)
             {

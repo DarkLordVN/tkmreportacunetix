@@ -1,0 +1,12 @@
+--------- 23:33:34 ---------
+Ref URL: http://localhost:3939/NhomQuyen
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2
+--------- 23:33:44 ---------
+Ref URL: http://localhost:3939/TuDienVietHoa/Index
+Host: localhost:3939
+URL: /Home/Index
+IP: ::1
+Text: timeToGo - 0:0:2

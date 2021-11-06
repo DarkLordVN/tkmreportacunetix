@@ -20,16 +20,16 @@ namespace TKM.Services
         {
             _ScannedItemResp = new ScannedItemRepository(new EFRepository<ScannedItem>(), oUnitOfWork);
         }
-        public List<ScannedItemViewModel> GetList(string tuKhoa, string phamViTimKiem, string tieuDe, int? nguoiTaoID, int? chucNangID, string tuNgayTaoTB, string denNgayTaoTB, int pageIndex, int pageSize, ref int totalItem, string columnName, string orderBy, int tab = 0, string action = "", string typeUser = "", int donvilogin = 0, int userloginid = 0, string tendangnhap = "")
+        public List<ScannedItemViewModel> GetList(string tuKhoa, int webSiteScannedID, int pageIndex, int pageSize, ref int totalItem, string columnName, string orderBy, int tab = 0)
         {
             try
             {
                 Expression<Func<ScannedItem, bool>> where;
-                where = x => true;
+                where = x => x.WebiteScanID == webSiteScannedID;
                 //Đổ dữ liệu
                 var leReturn = _ScannedItemResp.GetList(where, pageIndex, pageSize, ref totalItem,
                      //Filter theo column
-                     x => x.DateCreated.Value.ToString("yyyyMMddHHmmss"),
+                     x => (!string.IsNullOrEmpty(columnName) && columnName.Equals("Status") ? x.Status.ToString() : x.FullPath),
                      //Order by
                      string.IsNullOrEmpty(orderBy) ? true : orderBy == null || (!string.IsNullOrEmpty(orderBy) && orderBy.Equals("desc")) ? true : false);
                 var lst = leReturn.ToListModel();

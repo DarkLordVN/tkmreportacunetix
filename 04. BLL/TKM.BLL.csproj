@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScanViewModel.cs" />
     <Compile Include="WebsiteItemViewModel.cs" />
     <Compile Include="WebsiteViewModel.cs" />
     <Compile Include="WebiteScanViewModel.cs" />

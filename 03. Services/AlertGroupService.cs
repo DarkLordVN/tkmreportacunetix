@@ -17,23 +17,25 @@ namespace TKM.Services
         private EFUnitOfWork oUnitOfWork = new EFUnitOfWork();
         private readonly AlertGroupRepository _AlertGroupResp;
         private readonly TuDienVietHoaRepository _tuDienVietHoaRepo;
-        private readonly NhomNguoiDungRepository _nhomNguoiDungResp;
+        private readonly v_AlertGroupRepository _vAlertGroupRepo;
         public AlertGroupService()
         {
             _AlertGroupResp = new AlertGroupRepository(new EFRepository<AlertGroup>(), oUnitOfWork);
             _tuDienVietHoaRepo = new TuDienVietHoaRepository(new EFRepository<TuDienVietHoa>(), oUnitOfWork);
+            _vAlertGroupRepo = new v_AlertGroupRepository(new EFRepository<v_AlertGroup>(), oUnitOfWork);
         }
-        public List<AlertGroupViewModel> GetList(string tuKhoa, int pageIndex, int pageSize, ref int totalItem, ref string error, string columnName, string orderBy)
+        public List<AlertGroupViewModel> GetList(string tuKhoa, string vietHoa, int pageIndex, int pageSize, ref int totalItem, ref string error, string columnName, string orderBy)
         {
             try
             {
                 Expression<Func<AlertGroup, bool>> where;
                 where = x =>
-                   (!string.IsNullOrEmpty(tuKhoa) ? x.AlertName.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) || x.Severity.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) || x.AlertDescription.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) || x.AlertVariants.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) : true);
+                   (!string.IsNullOrEmpty(tuKhoa) ? x.AlertName.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) || x.Severity.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) || x.AlertDescription.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) || x.AlertVariants.ToLower().Trim().Contains(tuKhoa.ToLower().Trim()) : true) 
+                   && (!string.IsNullOrEmpty(vietHoa) ? (vietHoa.Equals("1") ? !string.IsNullOrEmpty(x.AlertNameTrans) : string.IsNullOrEmpty(x.AlertNameTrans)) : true);
                 //Đổ dữ liệu
                 var leReturn = _AlertGroupResp.GetList(where, pageIndex, pageSize, ref totalItem,
                      //Filter theo column
-                     x => (string.IsNullOrEmpty(columnName) ? x.AlertName:
+                     x => (string.IsNullOrEmpty(columnName) ? x.AlertName :
                      columnName.Equals("ScanPath") ? x.AlertName.ToString() : x.DateCreated.Value.ToString("yyyyMMddHHmmss")),
                      //Order by
                      string.IsNullOrEmpty(orderBy) ? true : orderBy == null || (!string.IsNullOrEmpty(orderBy) && orderBy.Equals("desc")) ? true : false);
@@ -46,7 +48,31 @@ namespace TKM.Services
                 return null;
             }
         }
-
+        public List<AlertGroupViewModel> GetListTopNguyCo(Expression<Func<v_AlertGroup, bool>> where, int pageIndex, int pageSize, ref int totalItem)
+        {
+            try
+            {
+                var lsReturn = new List<AlertGroupViewModel>();
+                var leResult = _vAlertGroupRepo.GetList(where, pageIndex, pageSize, ref totalItem, x => x.cTongWebsite, true);
+                if (leResult != null && leResult.Count > 0)
+                {
+                    foreach (var item in leResult)
+                    {
+                        var eReturn = new AlertGroupViewModel();
+                        eReturn.AlertName = item.AlertName;
+                        eReturn.TongWebsite = item.cTongWebsite + "";
+                        lsReturn.Add(eReturn);
+                    }
+                    return lsReturn;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return null;
+            }
+        }
         public List<AlertGroupViewModel> GetList(Expression<Func<AlertGroup, bool>> where, int pageIndex, int pageSize, ref int totalItem)
         {
             try
@@ -54,10 +80,6 @@ namespace TKM.Services
                 var leReturn = _AlertGroupResp.GetList(where, pageIndex, pageSize, ref totalItem, x => x.DateCreated, true);
                 if (leReturn != null && leReturn.Count > 0)
                 {
-                    foreach (var item in leReturn)
-                    {
-
-                    }
                     return leReturn.ToListModel();
                 }
                 return null;
@@ -116,6 +138,21 @@ namespace TKM.Services
             {
                 OutputLog.WriteOutputLog(ex);
                 return null;
+            }
+        }
+        public int GetCountByFilter(Expression<Func<AlertGroup, bool>> where)
+        {
+            try
+            {
+                var leReturn = _AlertGroupResp.GetList(where);
+                if (leReturn != null && leReturn.Count > 0)
+                    return leReturn.Count;
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                OutputLog.WriteOutputLog(ex);
+                return 0;
             }
         }
         public AlertGroupViewModel GetByFilter(Expression<Func<AlertGroup, bool>> where)
